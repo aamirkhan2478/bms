@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📗 Table of Contents
 
-## Getting Started
+- [📗 Table of Contents](#-table-of-contents)
+- [📖 BMS ](#about-project)
+  - [🛠 Built With](#built-with)
+    - [MERN Stack ](#tech-stack)
+  - [🚀 Live Demo](#live-demo)
+  - [💻 Getting Started ](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Install](#install)
+    - [Usage](#usage)
+  - [👥 Authors ](#authors)
+  - [🤝 Contributing ](#contributing)
+  - [⭐️ Show your support ](#support)
+  - [📝 License](#license)
 
-First, run the development server:
+<!-- PROJECT DESCRIPTION -->
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 📖 BMS <a name="about-project"></a>
+
+This `Building Management System` provides an online platform where the company manage the records of the tenant and owner details and also checks the history of payment records. It provides the functionality to maintain the company and apartment/shop/office’s records
+
+You can also checkout my backend repo:
+[My Backend Repo](https://github.com/aamirkhan2478/bms-backend)
+
+## 🛠 Built With <a name="built-with"></a>
+
+### MERN Stack <a name="tech-stack"></a>
+
+> This project is a Created by Following Technologies:
+
+<details>
+  <summary>Client</summary>
+  <ul>
+    <li><a href="https://reactjs.org/">React</a></li>
+    <li><a href="https://nextjs.org/">Next</a></li>
+  </ul>
+</details>
+
+<details>
+  <summary>Server</summary>
+  <ul>
+    <li><a href="https://nodejs.org/en/">NodeJS</a></li>
+    <li><a href="https://expressjs.com/">ExpressJS</a></li>
+  </ul>
+</details>
+
+<details>
+<summary>Database</summary>
+  <ul>
+    <li><a href="https://www.mongodb.com/">MongoDB</a></li>
+  </ul>
+</details>
+
+<!-- LIVE DEMO -->
+
+## 🚀 Live Demo <a name="live-demo"></a>
+
+> See my live demo for more information
+
+- Coming Soon! 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- GETTING STARTED -->
+
+## 💻 Getting Started <a name="getting-started"></a>
+
+
+To get a local copy up and running, follow these steps.
+
+### Prerequisites <a name="prerequisites"></a>
+
+In order to run this project you need:
+
+ Install from this website [NodeJS](https://nodejs.org/en/)
+
+
+### Setup <a name="setup"></a>
+
+Clone this repository to your desired folder: git@github.com:aamirkhan2478/bms-frontend.git
+
+commands:
+
+```sh
+  cd Sites
+  git clone @github.com:aamirkhan2478/bms-frontend.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install <a name="install"></a>
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Install this project with:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+command:
 
-## Learn More
+```sh
+  cd bms-frontend
+  npm i
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Usage <a name="usage"></a>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run the project, execute the following command:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+command:
 
-## Deploy on Vercel
+```sh
+  npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- AUTHORS -->
+
+## 👥 Authors <a name="authors"></a>
+
+👤 **Aamir Khan**
+
+- GitHub: [@aamirkhan2478](https://github.com/aamirkhan2478)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/aamir-khan-302a44237/)
+
+
+<!-- CONTRIBUTING -->
+
+## 🤝 Contributing <a name="contributing"></a>
+
+Contributions, issues, and feature requests are welcome!
+
+Feel free to check the [issues page](https://github.com/aamirkhan2478/bms-frontend/issues).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- SUPPORT -->
+
+## ⭐️ Show your support <a name="support"></a>
+
+If you like this project you can give me a star
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LICENSE -->
+
+## 📝 License <a name="license"></a>
+
+This project is [MIT](./MIT.md) licensed.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
