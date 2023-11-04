@@ -1,9 +1,137 @@
-import React from 'react'
+"use client";
 
-const Login = () => {
+import Footer from "@/components/Footer";
+import TextField from "@/components/TextField";
+import {
+  Button,
+  Flex,
+  Text,
+  FormControl,
+  FormLabel,
+  Heading,
+  Box,
+  Switch,
+  useColorModeValue,
+  InputRightElement,
+  IconButton,
+  useColorMode,
+} from "@chakra-ui/react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FiSun, FiMoon, FiEye, FiEyeOff } from "react-icons/fi";
+import loginImage from "../../public/login_image.jpg";
+import CustomButton from "@/components/CustomButton";
+export default function SignIn() {
+  const router = useRouter();
+  const titleColor = useColorModeValue("teal.300", "teal.200");
+  const textColor = useColorModeValue("gray.400", "white");
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
-    <div>Login</div>
-  )
+    <>
+      <Flex position="relative" mb="40px">
+        <Flex
+          h={{ sm: "initial", md: "75vh", lg: "85vh" }}
+          w="100%"
+          maxW="1044px"
+          mx="auto"
+          justifyContent="space-between"
+          mb="30px"
+          pt={{ sm: "100px", md: "0px" }}
+        >
+          <Flex
+            alignItems="center"
+            justifyContent="start"
+            style={{ userSelect: "none" }}
+            w={{ base: "100%", md: "50%", lg: "42%" }}
+          >
+            <Flex
+              direction="column"
+              w="100%"
+              background="transparent"
+              p="48px"
+              mt={{ md: "150px", lg: "80px" }}
+            >
+              <Heading color={titleColor} fontSize="32px" mb="10px">
+                Welcome Back
+              </Heading>
+              <Text
+                mb="36px"
+                ms="4px"
+                color={textColor}
+                fontWeight="bold"
+                fontSize="14px"
+              >
+                Enter your email and password to sign in
+              </Text>
+              <FormControl>
+                <TextField placeholder={"Your Email Address"} type={"email"} />
+                <TextField
+                  placeholder={"Your password"}
+                  type={show ? "text" : "password"}
+                  groupField={true}
+                  inputGroupSize={"md"}
+                  rightElement={
+                    <InputRightElement
+                      width="4.5rem"
+                      height="2.9rem"
+                      onClick={handleClick}
+                      cursor={"pointer"}
+                      _focus={{ outlineColor: "teal.300" }}
+                    >
+                      {show ? <FiEyeOff /> : <FiEye />}
+                    </InputRightElement>
+                  }
+                />
+                <FormControl display="flex" alignItems="center">
+                  <Switch id="remember-login" colorScheme="teal" me="10px" />
+                  <FormLabel
+                    htmlFor="remember-login"
+                    mb="0"
+                    ms="1"
+                    fontWeight="normal"
+                  >
+                    Remember me
+                  </FormLabel>
+                </FormControl>
+                <CustomButton
+                  text={"SIGN IN"}
+                  onClick={() => router.push("/dashboard")}
+                />
+              </FormControl>
+              <IconButton
+                onClick={toggleColorMode}
+                variant="solid"
+                icon={colorMode === "light" ? <FiMoon /> : <FiSun />}
+                rounded="full"
+              />
+            </Flex>
+          </Flex>
+          <Box
+            display={{ base: "none", md: "block" }}
+            overflowX="hidden"
+            h="100%"
+            w="40vw"
+            position="absolute"
+            right="0px"
+          >
+            <Box
+              as={Image}
+              src={loginImage}
+              alt="login-image"
+              height={"100%"}
+              width={"100%"}
+              bgSize="cover"
+              bgPosition="50%"
+              position="absolute"
+              borderBottomLeftRadius="20px"
+            ></Box>
+          </Box>
+        </Flex>
+      </Flex>
+      <Footer />
+    </>
+  );
 }
-
-export default Login
