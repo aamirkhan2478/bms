@@ -3,7 +3,6 @@
 import Footer from "@/components/Footer";
 import TextField from "@/components/TextField";
 import {
-  Button,
   Flex,
   Text,
   FormControl,
@@ -123,9 +122,6 @@ export default function SignIn() {
               alt="login-image"
               height={"100%"}
               width={"100%"}
-              bgSize="cover"
-              bgPosition="50%"
-              position="absolute"
               borderBottomLeftRadius="20px"
             ></Box>
           </Box>
