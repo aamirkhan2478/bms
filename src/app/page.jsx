@@ -66,11 +66,11 @@ export default function SignIn() {
                 Enter your email and password to sign in
               </Text>
               <FormControl>
-                <TextField placeholder={"Your Email Address"} type={"email"} />
+                <TextField placeholder={"Your Email Address"} type={"email"} fieldType={'input'}/>
                 <TextField
                   placeholder={"Your password"}
                   type={show ? "text" : "password"}
-                  groupField={true}
+                  fieldType={'group'}
                   inputGroupSize={"md"}
                   rightElement={
                     <InputRightElement
