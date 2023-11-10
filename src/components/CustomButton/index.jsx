@@ -7,7 +7,7 @@ const CustomButton = ({ text, ...rest }) => {
       type="submit"
       bg="teal.300"
       w="100%"
-      h="45"
+      h="45px"
       mb="20px"
       color="white"
       mt="20px"
