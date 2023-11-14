@@ -329,7 +329,6 @@ const Form3 = ({
   errors,
   touched,
 }) => {
-  console.log(errors);
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontWeight="normal">
