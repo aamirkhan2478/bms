@@ -14,6 +14,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
+import { useEffect } from "react";
 import { number, object, string } from "yup";
 
 const AddInventory = () => {
@@ -47,6 +48,10 @@ const AddInventory = () => {
   const clickHandler = (values) => {
     console.log(values);
   };
+
+  useEffect(() => {
+    document.title = "Add Inventory";
+  }, []);
   return (
     <Layout>
       <Heading>Add Inventory</Heading>
