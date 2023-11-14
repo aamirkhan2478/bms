@@ -4,6 +4,7 @@ import {
   Input,
   InputGroup,
   Select,
+  Textarea,
 } from "@chakra-ui/react";
 
 const TextField = ({
@@ -16,6 +17,10 @@ const TextField = ({
   data,
   placeHolder,
   helperText,
+  lml,
+  lmr,
+  lmx,
+  lmy,
   ...rest
 }) => {
   return (
@@ -34,12 +39,24 @@ const TextField = ({
               {...rest}
             />
             {rightElement}
-            {helperText && <FormHelperText color={'gray.500'} ml={3}>{helperText}</FormHelperText>}
+            {helperText && (
+              <FormHelperText color={"gray.500"} ml={3}>
+                {helperText}
+              </FormHelperText>
+            )}
           </InputGroup>
         </>
       ) : fieldType === "input" ? (
         <>
-          <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+          <FormLabel
+            ms="4px"
+            fontSize="sm"
+            fontWeight="normal"
+            ml={lml}
+            mr={lmr}
+            mx={lmx}
+            my={lmy}
+          >
             {label}
           </FormLabel>
           <Input
@@ -52,7 +69,26 @@ const TextField = ({
             _placeholder={{ color: "gray.500" }}
             {...rest}
           />
-          {helperText && <FormHelperText color={'gray.500'} ml={3}>{helperText}</FormHelperText>}
+          {helperText && (
+            <FormHelperText color={"gray.500"} ml={3}>
+              {helperText}
+            </FormHelperText>
+          )}
+        </>
+      ) : fieldType === "textArea" ? (
+        <>
+          <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+            {label}
+          </FormLabel>
+          <Textarea
+            placeholder={placeHolder}
+            borderRadius="15px"
+            fontSize="sm"
+            size="lg"
+            _focus={{ outlineColor: "teal.300" }}
+            _placeholder={{ color: "gray.500" }}
+            {...rest}
+          />
         </>
       ) : (
         <>
@@ -74,7 +110,11 @@ const TextField = ({
               </option>
             ))}
           </Select>
-          {helperText && <FormHelperText color={'gray.500'} ml={3}>{helperText}</FormHelperText>}
+          {helperText && (
+            <FormHelperText color={"gray.500"} ml={3}>
+              {helperText}
+            </FormHelperText>
+          )}
         </>
       )}
     </>
