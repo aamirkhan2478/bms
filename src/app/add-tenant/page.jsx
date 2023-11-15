@@ -32,7 +32,7 @@ import CustomBox from "@/components/CustomBox";
 import TextField from "@/components/TextField";
 import ImageUploader from "@/components/ImageUploader";
 import { Field, FieldArray, Formik } from "formik";
-import { array, date, mixed,  object, string } from "yup";
+import { array, date, mixed, object, string } from "yup";
 import { MdAdd, MdRemove } from "react-icons/md";
 
 const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
@@ -467,7 +467,7 @@ const AddTenant = () => {
                 /^(?=.{3,20}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
                 "Father/Husband Name should have at least 3 characters, not any number and first letter capital!"
               )
-              .required("Father Name is Required!"),
+              .required("Father/Husband Name is Required!"),
             cnic: string()
               .required("CNIC is required!")
               .matches(/^[0-9+]{13}$/, "CNIC must be 13 characters!"),
@@ -475,30 +475,23 @@ const AddTenant = () => {
             whatsapp: string()
               .required("Whatsapp Number is required!")
               .matches(/^[0-9]{11}$/, "Invalid phone number!"),
-            email: string().email("Invalid Email").required("Required"),
-            currentAddress: string().required("Required"),
-            permanentAddress: string().required("Required"),
-            jobTitle: string().required("Required"),
-            jobOrganization: string().required("Required"),
-            jobLocation: string().required("Required"),
-            images: array()
-              .of(
-                mixed().test("fileType", "Invalid file type!", (value) => {
-                  if (value) {
-                    const supportedTypes = ["image/jpeg", "image/png"];
-                    return supportedTypes.includes(value.type);
-                  }
-                  return true;
-                })
-              )
-              .required("Image is required!"),
+            email: string()
+              .email("Invalid Email")
+              .required("Email is Required!"),
+            currentAddress: string().required("Current Address is Required!"),
+            permanentAddress: string().required(
+              "Permanent Address is Required!"
+            ),
+            jobTitle: string().required("Job Title is Required!"),
+            jobOrganization: string().required("Job Organization is Required!"),
+            jobLocation: string().required("Job Location is Required!"),
             contacts: array(
               object({
                 phoneNumber: string()
                   .required("Phone Number is required!")
                   .matches(/^[0-9]{11}$/, "Invalid phone number!"),
                 emergencyNumber: string()
-                  .required("Emergency Number Number is required!")
+                  .required("Emergency Number is required!")
                   .matches(/^[0-9]{11}$/, "Invalid phone number!"),
               })
             ),
