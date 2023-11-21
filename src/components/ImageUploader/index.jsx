@@ -1,6 +1,7 @@
 import { Box, Button, IconButton, Stack } from "@chakra-ui/react";
 import Image from "next/image";
 import { FiTrash } from "react-icons/fi";
+import { MdUpload } from "react-icons/md";
 
 function ImageUploader({ selectedFiles, setSelectedFiles, name, onBlur }) {
   // Function to handle file selection
@@ -28,7 +29,7 @@ function ImageUploader({ selectedFiles, setSelectedFiles, name, onBlur }) {
         onBlur={onBlur}
       />
       <label htmlFor="fileInput">
-        <Button as="span" colorScheme="teal">
+        <Button as="span" colorScheme="teal" leftIcon={<MdUpload />}>
           Upload Image
         </Button>
       </label>

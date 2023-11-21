@@ -1,17 +1,19 @@
 import { Box, CloseButton, Flex, useColorModeValue } from "@chakra-ui/react";
 import NavItem from "./NavItem";
-import { FiTrendingUp, FiCompass, FiStar } from "react-icons/fi";
-import { MdDashboard, MdSell } from "react-icons/md";
+import { IoMdPersonAdd } from "react-icons/io";
+import { BsBuildingFillAdd, BsPersonFillAdd } from "react-icons/bs";
+import { MdAssignment, MdDashboard, MdSell } from "react-icons/md";
 import Image from "next/image";
 import logo from "@/../public/bms_logo.png";
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const LinkItems = [
     { name: "Dashboard", icon: MdDashboard, path: "/dashboard" },
-    { name: "Add Inventory", icon: FiTrendingUp, path: "/add-inventory" },
-    { name: "Add Owner", icon: FiCompass, path: "/add-owner" },
-    { name: "Add Tenant", icon: FiStar, path: "/add-tenant" },
+    { name: "Add Inventory", icon: BsBuildingFillAdd, path: "/add-inventory" },
+    { name: "Add Owner", icon: IoMdPersonAdd, path: "/add-owner" },
+    { name: "Add Tenant", icon: BsPersonFillAdd, path: "/add-tenant" },
     { name: "Sell Inventory", icon: MdSell, path: "/sell-inventory" },
+    { name: "Add Contract", icon: MdAssignment, path: "/add-contract" },
   ];
   return (
     <Box
