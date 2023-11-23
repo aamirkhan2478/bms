@@ -34,22 +34,49 @@ import ImageUploader from "@/components/ImageUploader";
 import { Field, FieldArray, Formik } from "formik";
 import { array, date, object, string } from "yup";
 import { MdAdd, MdRemove } from "react-icons/md";
+import { PatternFormat } from "react-number-format";
 
-const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
+const Form1 = ({
+  handleBlur,
+  handleChange,
+  errors,
+  touched,
+  values,
+  setFieldValue,
+}) => {
+  const capitalizeFirstLetter = (value) => {
+    return value && value.length > 0
+      ? value
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ")
+      : value;
+  };
+
+  const changeHandle = (name) => (event) => {
+    let value = event.target.value;
+    if (name === "name" || name === "father") {
+      value = capitalizeFirstLetter(value);
+    }
+    setFieldValue(name, value);
+  };
+
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
         Personal Info
       </Heading>
       <Flex flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="name">
-          <TextField
+        <FormControl mr="5%" id="name" isRequired>
+          <Field
+            as={TextField}
             placeHolder="Enter Owner Name"
             fieldType={"input"}
             label={"Owner Name"}
             name="name"
+            defaultValue={values.name}
             onBlur={handleBlur}
-            onChange={handleChange("name")}
+            onChange={changeHandle("name")}
             isInvalid={Boolean(errors.name) && Boolean(touched.name)}
           />
           <FormHelperText color="red">
@@ -57,14 +84,16 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
           </FormHelperText>
         </FormControl>
 
-        <FormControl id="father">
-          <TextField
+        <FormControl id="father" isRequired>
+          <Field
+            as={TextField}
             placeHolder="Enter Owner Father/Husband Name"
             fieldType={"input"}
             label={"Father/Husband Name"}
             name="father"
+            defaultValue={values.father}
             onBlur={handleBlur}
-            onChange={handleChange("father")}
+            onChange={changeHandle("father")}
             isInvalid={Boolean(errors.father) && Boolean(touched.father)}
           />
           <FormHelperText color="red">
@@ -73,12 +102,16 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
         </FormControl>
       </Flex>
       <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="cnic">
+        <FormControl mr="5%" id="cnic" isRequired>
           <TextField
+            as={PatternFormat}
+            format="#####-#######-#"
+            mask="_"
             placeHolder="Enter Owner CNIC No."
             fieldType={"input"}
             label={"CNIC N0."}
             name="cnic"
+            defaultValue={values.cnic}
             onBlur={handleBlur}
             onChange={handleChange("cnic")}
             isInvalid={Boolean(errors.cnic) && Boolean(touched.cnic)}
@@ -87,13 +120,14 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
             {Boolean(touched.cnic) && errors.cnic}
           </FormHelperText>
         </FormControl>
-        <FormControl id="cnic-expiry">
+        <FormControl id="cnic-expiry" isRequired>
           <TextField
             placeHolder="Enter Owner CNIC Expire Date"
             fieldType={"input"}
             type="date"
             label={"CNIC Expire Date"}
             name="cnicExpiry"
+            defaultValue={values.cnicExpiry}
             onBlur={handleBlur}
             onChange={handleChange("cnicExpiry")}
             isInvalid={
@@ -118,11 +152,14 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
                   justifyContent={{ base: "flex-start", sm: "center" }}
                   alignItems={{ base: "flex-start", sm: "center" }}
                 >
-                  <FormControl id="phoneNumber">
-                    <Field
-                      as={TextField}
+                  <FormControl id="phoneNumber" isRequired>
+                    <TextField
+                      as={PatternFormat}
+                      format="####-#######"
+                      mask="_"
                       fieldType={"input"}
                       name={`contacts[${index}].phoneNumber`}
+                      defaultValue={values.contacts[index]?.phoneNumber}
                       label={"Phone Number"}
                       onBlur={handleBlur}
                       onChange={handleChange(`contacts[${index}].phoneNumber`)}
@@ -146,10 +183,13 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
                     </FormHelperText>
                   </FormControl>
                   <FormControl id="emergencyNumber">
-                    <Field
-                      as={TextField}
+                    <TextField
+                      as={PatternFormat}
+                      format="####-#######"
+                      mask="_"
                       fieldType={"input"}
                       name={`contacts[${index}].emergencyNumber`}
+                      defaultValue={values.contacts[index]?.emergencyNumber}
                       label={"Emergency Number"}
                       onBlur={handleBlur}
                       onChange={handleChange(
@@ -197,12 +237,13 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
         </FieldArray>
       </Flex>
       <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="whatsapp">
+        <FormControl mr="5%" id="whatsapp" isRequired>
           <TextField
             placeHolder="Enter Owner Whatsapp Number"
             fieldType={"input"}
             label={"Whatsapp Number"}
             name="whatsapp"
+            defaultValue={values.whatsapp}
             onBlur={handleBlur}
             onChange={handleChange("whatsapp")}
             isInvalid={Boolean(errors.whatsapp) && Boolean(touched.whatsapp)}
@@ -211,7 +252,7 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
             {Boolean(touched.whatsapp) && errors.whatsapp}
           </FormHelperText>
         </FormControl>
-        <FormControl id="email">
+        <FormControl id="email" isRequired>
           <TextField
             placeHolder="Enter Owner Email Address"
             fieldType={"input"}
@@ -219,6 +260,7 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
             type="email"
             name="email"
             onBlur={handleBlur}
+            defaultValue={values.email}
             onChange={handleChange("email")}
             isInvalid={Boolean(errors.email) && Boolean(touched.email)}
           />
@@ -228,12 +270,13 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
         </FormControl>
       </Flex>
       <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="current">
+        <FormControl mr="5%" id="current" isRequired>
           <TextField
             placeHolder="Enter Owner Current Address"
             fieldType={"textArea"}
             label={"Current Address"}
             name="currentAddress"
+            defaultValue={values.currentAddress}
             onBlur={handleBlur}
             onChange={handleChange("currentAddress")}
             isInvalid={
@@ -244,12 +287,13 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
             {Boolean(touched.currentAddress) && errors.currentAddress}
           </FormHelperText>
         </FormControl>
-        <FormControl id="permanent">
+        <FormControl id="permanent" isRequired>
           <TextField
             placeHolder="Enter Owner Permanent Address"
             fieldType={"textArea"}
             label={"Permanent Address"}
             name="permanentAddress"
+            defaultValue={values.permanentAddress}
             onBlur={handleBlur}
             onChange={handleChange("permanentAddress")}
             isInvalid={
@@ -266,18 +310,19 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
   );
 };
 
-const Form2 = ({ handleBlur, handleChange, errors, touched }) => {
+const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
         Job Details
       </Heading>
-      <FormControl mb={5} id="title">
+      <FormControl mb={5} id="title" isRequired>
         <TextField
           placeHolder="Enter Owner Job Title"
           fieldType={"input"}
           label={"Title"}
           name="jobTitle"
+          defaultValue={values.jobTitle}
           onBlur={handleBlur}
           onChange={handleChange("jobTitle")}
           isInvalid={Boolean(errors.jobTitle) && Boolean(touched.jobTitle)}
@@ -286,12 +331,13 @@ const Form2 = ({ handleBlur, handleChange, errors, touched }) => {
           {Boolean(touched.jobTitle) && errors.jobTitle}
         </FormHelperText>
       </FormControl>
-      <FormControl mb={5} id="organization">
+      <FormControl mb={5} id="organization" isRequired>
         <TextField
           placeHolder="Enter Owner Organization Name"
           fieldType={"input"}
           label={"Organization Name"}
           name="jobOrganization"
+          defaultValue={values.jobOrganization}
           onBlur={handleBlur}
           onChange={handleChange("jobOrganization")}
           isInvalid={
@@ -302,12 +348,13 @@ const Form2 = ({ handleBlur, handleChange, errors, touched }) => {
           {Boolean(touched.jobOrganization) && errors.jobOrganization}
         </FormHelperText>
       </FormControl>
-      <FormControl id="location">
+      <FormControl id="location" isRequired>
         <TextField
           placeHolder="Enter Owner Organization Location"
           fieldType={"input"}
           label={"Organization Location"}
           name="jobLocation"
+          defaultValue={values.jobLocation}
           onBlur={handleBlur}
           onChange={handleChange("jobLocation")}
           isInvalid={
@@ -323,24 +370,26 @@ const Form2 = ({ handleBlur, handleChange, errors, touched }) => {
 };
 
 const Form3 = ({
-  selectedFiles,
-  setSelectedFiles,
   handleBlur,
   errors,
   touched,
+  handleChange,
+  setFieldValue,
+  values,
 }) => {
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontWeight="normal">
         Attachments
       </Heading>
-      <FormControl mb={5} id="images">
+      <FormControl mb={5} id="images" isRequired>
         <FormLabel>Upload Owner Front and Back CNIC Image</FormLabel>
         <ImageUploader
-          selectedFiles={selectedFiles}
-          setSelectedFiles={setSelectedFiles}
+          handleChange={handleChange}
           name={"images"}
           onBlur={handleBlur}
+          values={values}
+          setFieldValue={setFieldValue}
         />
         <FormHelperText color="red">
           {Boolean(touched.images) && errors.images}
@@ -366,9 +415,6 @@ const AddOwner = () => {
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.200");
 
-  const [phoneNumbers, setPhoneNumbers] = useState([]);
-  const [emergencyNumber, setEmergencyNumber] = useState([]);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const initialValues = {
     name: "",
     father: "",
@@ -387,7 +433,7 @@ const AddOwner = () => {
         emergencyNumber: "",
       },
     ],
-    images: selectedFiles,
+    images: [],
   };
 
   const handleSubmit = (values) => {
@@ -404,7 +450,7 @@ const AddOwner = () => {
       jobOrganization: values.jobOrganization,
       jobLocation: values.jobLocation,
       contacts: values.contacts,
-      images: selectedFiles,
+      images: values.images,
     };
     console.log(newValues);
   };
@@ -470,11 +516,14 @@ const AddOwner = () => {
               .required("Father/Husband Name is Required!"),
             cnic: string()
               .required("CNIC is required!")
-              .matches(/^[0-9+]{13}$/, "CNIC must be 13 characters!"),
+              .matches(
+                /^[0-9]{5}-[0-9]{7}-[0-9]$/,
+                "CNIC must be 13 characters!"
+              ),
             cnicExpiry: date().required("CNIC expiry date is Required!"),
             whatsapp: string()
               .required("Whatsapp Number is required!")
-              .matches(/^[0-9]{11}$/, "Invalid phone number!"),
+              .matches(/^[0-9]{4}-[0-9]{7}$/, "Invalid phone number!"),
             email: string()
               .email("Invalid Email")
               .required("Email is Required!"),
@@ -489,12 +538,14 @@ const AddOwner = () => {
               object({
                 phoneNumber: string()
                   .required("Phone Number is required!")
-                  .matches(/^[0-9]{11}$/, "Invalid phone number!"),
-                emergencyNumber: string()
-                  .required("Emergency Number is required!")
-                  .matches(/^[0-9]{11}$/, "Invalid phone number!"),
+                  .matches(/^[0-9]{4}-[0-9]{7}$/, "Invalid phone number!"),
+                emergencyNumber: string().matches(
+                  /^[0-9]{4}-[0-9]{7}$/,
+                  "Invalid phone number!"
+                ),
               })
             ),
+            images: array().min(2, "At least two image is required"),
           })}
         >
           {({
@@ -506,19 +557,17 @@ const AddOwner = () => {
             handleChange,
             handleBlur,
             handleSubmit,
+            setFieldValue,
           }) => (
             <>
               {step === 0 && (
                 <Form1
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  emergencyNumber={emergencyNumber}
-                  setEmergencyNumber={setEmergencyNumber}
-                  phoneNumbers={phoneNumbers}
-                  setPhoneNumbers={setPhoneNumbers}
                   errors={errors}
                   touched={touched}
                   values={values}
+                  setFieldValue={setFieldValue}
                 />
               )}
               {step === 1 && (
@@ -527,15 +576,17 @@ const AddOwner = () => {
                   handleBlur={handleBlur}
                   errors={errors}
                   touched={touched}
+                  values={values}
                 />
               )}
               {step === 2 && (
                 <Form3
-                  selectedFiles={selectedFiles}
-                  setSelectedFiles={setSelectedFiles}
                   errors={errors}
                   touched={touched}
                   handleBlur={handleBlur}
+                  handleChange={handleChange}
+                  values={values}
+                  setFieldValue={setFieldValue}
                 />
               )}
 
@@ -548,7 +599,7 @@ const AddOwner = () => {
                   <Flex>
                     <Button
                       onClick={() => {
-                        setStep(step - 1);
+                        setStep(step === 3 ? step - 2 : step - 1);
                         goToPrevious();
                       }}
                       isDisabled={step === 0}
