@@ -3,18 +3,25 @@ import Image from "next/image";
 import { FiTrash } from "react-icons/fi";
 import { MdUpload } from "react-icons/md";
 
-function ImageUploader({ selectedFiles, setSelectedFiles, name, onBlur }) {
+function ImageUploader({
+  name,
+  onBlur,
+  handleChange,
+  values,
+  setFieldValue,
+}) {
   // Function to handle file selection
   const handleFileSelect = (e) => {
+    handleChange("images");
     const files = Array.from(e.target.files);
-    setSelectedFiles([...selectedFiles, ...files]);
+    setFieldValue("images", [...values.images, ...files]);
   };
 
   // Function to handle image deletion
   const handleDelete = (index) => {
-    const newFiles = [...selectedFiles];
+    const newFiles = [...values.images];
     newFiles.splice(index, 1);
-    setSelectedFiles(newFiles);
+    setFieldValue("images", newFiles);
   };
   return (
     <Box>
@@ -34,7 +41,7 @@ function ImageUploader({ selectedFiles, setSelectedFiles, name, onBlur }) {
         </Button>
       </label>
       <Stack mt={4} spacing={4} direction={"row"} wrap={"wrap"}>
-        {selectedFiles?.map((file, index) => (
+        {values?.images?.map((file, index) => (
           <Box key={index}>
             <Image
               src={URL.createObjectURL(file)}
