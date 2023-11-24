@@ -39,7 +39,6 @@ const AddInventory = () => {
     inventoryType: "",
     floor: "",
     flatShopOfficeNo: "",
-    wapdaMeterNo: "",
     wapdaSubMeterNo: "",
     generatorMeterNo: "",
     waterMeterNo: "",
@@ -94,15 +93,10 @@ const AddInventory = () => {
               )
               .integer("The flat/shop/office should be integer")
               .required("The flat/shop/office number is required!"),
-            wapdaMeterNo: number()
-              .typeError("That doesn't look like a number")
-              .positive("Wapda meter number must be a positive number!")
-              .integer("Wapda meter number should be integer"),
             wapdaSubMeterNo: number()
               .typeError("That doesn't look like a number")
               .positive("Wapda submeter number must be a positive number!")
               .integer("Wapda submeter number should be integer"),
-
             generatorMeterNo: number()
               .typeError("That doesn't look like a number")
               .positive("Generator meter number must be a positive number!")
@@ -169,24 +163,6 @@ const AddInventory = () => {
                     <FormHelperText color="red">
                       {Boolean(touched.flatShopOfficeNo) &&
                         errors.flatShopOfficeNo}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl id="wapda-meter-number">
-                    <Field
-                      as={TextField}
-                      placeHolder={"Enter Wapda meter no."}
-                      name={"wapdaMeterNo"}
-                      fieldType={"input"}
-                      label={"Wapda Meter No."}
-                      isInvalid={
-                        Boolean(errors.wapdaMeterNo) &&
-                        Boolean(touched.wapdaMeterNo)
-                      }
-                      onBlur={handleBlur}
-                      onChange={handleChange("wapdaMeterNo")}
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(touched.wapdaMeterNo) && errors.wapdaMeterNo}
                     </FormHelperText>
                   </FormControl>
                   <FormControl id="wapda-submeter-number">

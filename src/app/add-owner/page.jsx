@@ -316,7 +316,7 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
       <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
         Job Details
       </Heading>
-      <FormControl mb={5} id="title" isRequired>
+      <FormControl mb={5} id="title">
         <TextField
           placeHolder="Enter Owner Job Title"
           fieldType={"input"}
@@ -331,7 +331,7 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
           {Boolean(touched.jobTitle) && errors.jobTitle}
         </FormHelperText>
       </FormControl>
-      <FormControl mb={5} id="organization" isRequired>
+      <FormControl mb={5} id="organization">
         <TextField
           placeHolder="Enter Owner Organization Name"
           fieldType={"input"}
@@ -348,7 +348,7 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
           {Boolean(touched.jobOrganization) && errors.jobOrganization}
         </FormHelperText>
       </FormControl>
-      <FormControl id="location" isRequired>
+      <FormControl id="location">
         <TextField
           placeHolder="Enter Owner Organization Location"
           fieldType={"input"}
@@ -369,7 +369,67 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
   );
 };
 
-const Form3 = ({
+const Form3 = ({ handleBlur, handleChange, errors, touched, values }) => {
+  return (
+    <>
+      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
+        Bank Details
+      </Heading>
+      <FormControl mb={5} id="bank-name">
+        <TextField
+          placeHolder="Enter Owner Bank Name"
+          fieldType={"input"}
+          label={"Name"}
+          name="bankName"
+          defaultValue={values.bankName}
+          onBlur={handleBlur}
+          onChange={handleChange("bankName")}
+          isInvalid={Boolean(errors.bankName) && Boolean(touched.bankName)}
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankName) && errors.bankName}
+        </FormHelperText>
+      </FormControl>
+      <FormControl mb={5} id="bank Account Number">
+        <TextField
+          placeHolder="Enter Owner Bank Account Number"
+          fieldType={"input"}
+          label={"Account Number"}
+          name="bankAccountNumber"
+          defaultValue={values.bankAccountNumber}
+          onBlur={handleBlur}
+          onChange={handleChange("bankAccountNumber")}
+          isInvalid={
+            Boolean(errors.bankAccountNumber) &&
+            Boolean(touched.bankAccountNumber)
+          }
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankAccountNumber) && errors.bankAccountNumber}
+        </FormHelperText>
+      </FormControl>
+      <FormControl id="bank-ibn-number">
+        <TextField
+          placeHolder="Enter Owner bank IBN Number"
+          fieldType={"input"}
+          label={"IBN Number"}
+          name="bankIbnNumber"
+          defaultValue={values.bankIbnNumber}
+          onBlur={handleBlur}
+          onChange={handleChange("bankIbnNumber")}
+          isInvalid={
+            Boolean(errors.bankIbnNumber) && Boolean(touched.bankIbnNumber)
+          }
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankIbnNumber) && errors.bankIbnNumber}
+        </FormHelperText>
+      </FormControl>
+    </>
+  );
+};
+
+const Form4 = ({
   handleBlur,
   errors,
   touched,
@@ -404,7 +464,8 @@ const AddOwner = () => {
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
-    { title: "Third", description: "Attachments" },
+    { title: "Third", description: "Bank Details" },
+    { title: "Forth", description: "Attachments" },
   ];
 
   const { activeStep, goToNext, goToPrevious } = useSteps({
@@ -434,6 +495,9 @@ const AddOwner = () => {
       },
     ],
     images: [],
+    bankName: "",
+    bankAccountNumber: "",
+    bankIbnNumber: "",
   };
 
   const handleSubmit = (values) => {
@@ -531,9 +595,6 @@ const AddOwner = () => {
             permanentAddress: string().required(
               "Permanent Address is Required!"
             ),
-            jobTitle: string().required("Job Title is Required!"),
-            jobOrganization: string().required("Job Organization is Required!"),
-            jobLocation: string().required("Job Location is Required!"),
             contacts: array(
               object({
                 phoneNumber: string()
@@ -581,6 +642,15 @@ const AddOwner = () => {
               )}
               {step === 2 && (
                 <Form3
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                  touched={touched}
+                  values={values}
+                />
+              )}
+              {step === 3 && (
+                <Form4
                   errors={errors}
                   touched={touched}
                   handleBlur={handleBlur}
@@ -599,7 +669,7 @@ const AddOwner = () => {
                   <Flex>
                     <Button
                       onClick={() => {
-                        setStep(step === 3 ? step - 2 : step - 1);
+                        setStep(step - 1);
                         goToPrevious();
                       }}
                       isDisabled={step === 0}
@@ -612,7 +682,7 @@ const AddOwner = () => {
                     </Button>
                     <Button
                       w="7rem"
-                      isDisabled={step === 2}
+                      isDisabled={step === 3}
                       onClick={() => {
                         setStep(step + 1);
                         goToNext();
@@ -623,7 +693,7 @@ const AddOwner = () => {
                       Next
                     </Button>
                   </Flex>
-                  {step === 2 && (
+                  {step === 3 && (
                     <Button
                       w="7rem"
                       mt={{ base: "5%", sm: "0" }}

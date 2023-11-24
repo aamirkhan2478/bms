@@ -60,6 +60,7 @@ const Form1 = ({
     }
     setFieldValue(name, value);
   };
+
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
@@ -72,8 +73,8 @@ const Form1 = ({
             placeHolder="Enter Tenant Name"
             fieldType={"input"}
             label={"Tenant Name"}
-            defaultValue={values.name}
             name="name"
+            defaultValue={values.name}
             onBlur={handleBlur}
             onChange={changeHandle("name")}
             isInvalid={Boolean(errors.name) && Boolean(touched.name)}
@@ -124,7 +125,6 @@ const Form1 = ({
             placeHolder="Enter Tenant CNIC Expire Date"
             fieldType={"input"}
             type="date"
-            TextField
             label={"CNIC Expire Date"}
             name="cnicExpiry"
             defaultValue={values.cnicExpiry}
@@ -216,47 +216,9 @@ const Form1 = ({
                         errors.contacts[index]?.emergencyNumber}
                     </FormHelperText>
                   </FormControl>
-                  <FormControl id="landlineNumber">
-                    <TextField
-                      as={PatternFormat}
-                      format="####-#######"
-                      mask="_"
-                      fieldType={"input"}
-                      name={`contacts[${index}].landlineNumber`}
-                      defaultValue={values.contacts[index]?.landlineNumber}
-                      label={"Landline Number"}
-                      onBlur={handleBlur}
-                      onChange={handleChange(
-                        `contacts[${index}].landlineNumber`
-                      )}
-                      placeHolder={"Enter Tenant Landline Number"}
-                      isInvalid={
-                        Boolean(
-                          errors.contacts &&
-                            errors.contacts[index]?.landlineNumber
-                        ) &&
-                        Boolean(
-                          touched.contacts &&
-                            touched.contacts[index]?.landlineNumber
-                        )
-                      }
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(
-                        touched.contacts &&
-                          touched.contacts[index]?.landlineNumber
-                      ) &&
-                        errors.contacts &&
-                        errors.contacts[index]?.landlineNumber}
-                    </FormHelperText>
-                  </FormControl>
                   <IconButton
                     onClick={() =>
-                      push({
-                        phoneNumber: "",
-                        emergencyNumber: "",
-                        landlineNumber: "",
-                      })
+                      push({ phoneNumber: "", emergencyNumber: "" })
                     }
                     icon={<MdAdd />}
                     mt={5}
@@ -277,9 +239,6 @@ const Form1 = ({
       <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
         <FormControl mr="5%" id="whatsapp" isRequired>
           <TextField
-            as={PatternFormat}
-            format="####-#######"
-            mask="_"
             placeHolder="Enter Tenant Whatsapp Number"
             fieldType={"input"}
             label={"Whatsapp Number"}
@@ -300,8 +259,8 @@ const Form1 = ({
             label={"Email Address"}
             type="email"
             name="email"
-            defaultValue={values.email}
             onBlur={handleBlur}
+            defaultValue={values.email}
             onChange={handleChange("email")}
             isInvalid={Boolean(errors.email) && Boolean(touched.email)}
           />
@@ -357,7 +316,7 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
       <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
         Job Details
       </Heading>
-      <FormControl mb={5} id="title" isRequired>
+      <FormControl mb={5} id="title">
         <TextField
           placeHolder="Enter Tenant Job Title"
           fieldType={"input"}
@@ -372,7 +331,7 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
           {Boolean(touched.jobTitle) && errors.jobTitle}
         </FormHelperText>
       </FormControl>
-      <FormControl mb={5} id="organization" isRequired>
+      <FormControl mb={5} id="organization">
         <TextField
           placeHolder="Enter Tenant Organization Name"
           fieldType={"input"}
@@ -389,7 +348,7 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
           {Boolean(touched.jobOrganization) && errors.jobOrganization}
         </FormHelperText>
       </FormControl>
-      <FormControl id="location" isRequired>
+      <FormControl id="location">
         <TextField
           placeHolder="Enter Tenant Organization Location"
           fieldType={"input"}
@@ -410,7 +369,67 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
   );
 };
 
-const Form3 = ({
+const Form3 = ({ handleBlur, handleChange, errors, touched, values }) => {
+  return (
+    <>
+      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
+        Bank Details
+      </Heading>
+      <FormControl mb={5} id="bank-name">
+        <TextField
+          placeHolder="Enter Tenant Bank Name"
+          fieldType={"input"}
+          label={"Name"}
+          name="bankName"
+          defaultValue={values.bankName}
+          onBlur={handleBlur}
+          onChange={handleChange("bankName")}
+          isInvalid={Boolean(errors.bankName) && Boolean(touched.bankName)}
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankName) && errors.bankName}
+        </FormHelperText>
+      </FormControl>
+      <FormControl mb={5} id="bank Account Number">
+        <TextField
+          placeHolder="Enter Tenant Bank Account Number"
+          fieldType={"input"}
+          label={"Account Number"}
+          name="bankAccountNumber"
+          defaultValue={values.bankAccountNumber}
+          onBlur={handleBlur}
+          onChange={handleChange("bankAccountNumber")}
+          isInvalid={
+            Boolean(errors.bankAccountNumber) &&
+            Boolean(touched.bankAccountNumber)
+          }
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankAccountNumber) && errors.bankAccountNumber}
+        </FormHelperText>
+      </FormControl>
+      <FormControl id="bank-ibn-number">
+        <TextField
+          placeHolder="Enter Tenant bank IBN Number"
+          fieldType={"input"}
+          label={"IBN Number"}
+          name="bankIbnNumber"
+          defaultValue={values.bankIbnNumber}
+          onBlur={handleBlur}
+          onChange={handleChange("bankIbnNumber")}
+          isInvalid={
+            Boolean(errors.bankIbnNumber) && Boolean(touched.bankIbnNumber)
+          }
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankIbnNumber) && errors.bankIbnNumber}
+        </FormHelperText>
+      </FormControl>
+    </>
+  );
+};
+
+const Form4 = ({
   handleBlur,
   errors,
   touched,
@@ -445,7 +464,8 @@ const AddTenant = () => {
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
-    { title: "Third", description: "Attachments" },
+    { title: "Third", description: "Bank Details" },
+    { title: "Forth", description: "Attachments" },
   ];
 
   const { activeStep, goToNext, goToPrevious } = useSteps({
@@ -471,11 +491,13 @@ const AddTenant = () => {
     contacts: [
       {
         phoneNumber: "",
-        landlineNumber: "",
         emergencyNumber: "",
       },
     ],
     images: [],
+    bankName: "",
+    bankAccountNumber: "",
+    bankIbnNumber: "",
   };
 
   const handleSubmit = (values) => {
@@ -573,19 +595,12 @@ const AddTenant = () => {
             permanentAddress: string().required(
               "Permanent Address is Required!"
             ),
-            jobTitle: string().required("Job Title is Required!"),
-            jobOrganization: string().required("Job Organization is Required!"),
-            jobLocation: string().required("Job Location is Required!"),
             contacts: array(
               object({
                 phoneNumber: string()
                   .required("Phone Number is required!")
                   .matches(/^[0-9]{4}-[0-9]{7}$/, "Invalid phone number!"),
                 emergencyNumber: string().matches(
-                  /^[0-9]{4}-[0-9]{7}$/,
-                  "Invalid phone number!"
-                ),
-                landlineNumber: string().matches(
                   /^[0-9]{4}-[0-9]{7}$/,
                   "Invalid phone number!"
                 ),
@@ -627,12 +642,21 @@ const AddTenant = () => {
               )}
               {step === 2 && (
                 <Form3
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                  touched={touched}
+                  values={values}
+                />
+              )}
+              {step === 3 && (
+                <Form4
                   errors={errors}
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
-                  setFieldValue={setFieldValue}
                   values={values}
+                  setFieldValue={setFieldValue}
                 />
               )}
 
@@ -658,7 +682,7 @@ const AddTenant = () => {
                     </Button>
                     <Button
                       w="7rem"
-                      isDisabled={step === 2}
+                      isDisabled={step === 3}
                       onClick={() => {
                         setStep(step + 1);
                         goToNext();
@@ -669,7 +693,7 @@ const AddTenant = () => {
                       Next
                     </Button>
                   </Flex>
-                  {step === 2 && (
+                  {step === 3 && (
                     <Button
                       w="7rem"
                       mt={{ base: "5%", sm: "0" }}

@@ -52,6 +52,7 @@ export default function SignIn() {
               background="transparent"
               p="48px"
               mt={{ md: "150px", lg: "80px" }}
+              gap={4}
             >
               <Heading color={titleColor} fontSize="32px" mb="10px">
                 Welcome Back
@@ -66,11 +67,17 @@ export default function SignIn() {
                 Enter your email and password to sign in
               </Text>
               <FormControl>
-                <TextField placeholder={"Your Email Address"} type={"email"} fieldType={'input'}/>
+                <TextField
+                  placeholder={"Your Email Address"}
+                  type={"email"}
+                  fieldType={"input"}
+                />
+              </FormControl>
+              <FormControl>
                 <TextField
                   placeholder={"Your password"}
                   type={show ? "text" : "password"}
-                  fieldType={'group'}
+                  fieldType={"group"}
                   inputGroupSize={"md"}
                   rightElement={
                     <InputRightElement
@@ -84,22 +91,22 @@ export default function SignIn() {
                     </InputRightElement>
                   }
                 />
-                <FormControl display="flex" alignItems="center">
-                  <Switch id="remember-login" colorScheme="teal" me="10px" />
-                  <FormLabel
-                    htmlFor="remember-login"
-                    mb="0"
-                    ms="1"
-                    fontWeight="normal"
-                  >
-                    Remember me
-                  </FormLabel>
-                </FormControl>
-                <CustomButton
-                  text={"SIGN IN"}
-                  onClick={() => router.push("/dashboard")}
-                />
               </FormControl>
+              <FormControl display="flex" alignItems="center">
+                <Switch id="remember-login" colorScheme="teal" me="10px" />
+                <FormLabel
+                  htmlFor="remember-login"
+                  mb="0"
+                  ms="1"
+                  fontWeight="normal"
+                >
+                  Remember me
+                </FormLabel>
+              </FormControl>
+              <CustomButton
+                text={"SIGN IN"}
+                onClick={() => router.push("/dashboard")}
+              />
               <IconButton
                 onClick={toggleColorMode}
                 variant="solid"

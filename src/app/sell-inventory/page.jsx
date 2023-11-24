@@ -32,6 +32,7 @@ const SellInventory = () => {
       text: "Office",
     },
   ];
+
   const ownerData = [
     {
       value: "Zeshan",
@@ -44,6 +45,36 @@ const SellInventory = () => {
     {
       value: "Talha",
       text: "Talha",
+    },
+  ];
+
+  const floorNoData = [
+    {
+      value: "1",
+      text: "1",
+    },
+    {
+      value: "2",
+      text: "2",
+    },
+    {
+      value: "3",
+      text: "3",
+    },
+  ];
+
+  const inventoryNumberData = [
+    {
+      value: "01",
+      text: "01",
+    },
+    {
+      value: "02",
+      text: "02",
+    },
+    {
+      value: "03",
+      text: "03",
     },
   ];
 
@@ -91,22 +122,10 @@ const SellInventory = () => {
           onSubmit={clickHandler}
           validationSchema={object({
             inventoryType: string().required("Inventory Type is required!"),
-            floor: number()
-              .typeError("That doesn't look like a number!")
-              .positive("Floor number must be a positive number!")
-              .integer("Floor number should be integer")
-              .required("Floor number is required!"),
-            flatShopOfficeNo: number()
-              .typeError("That doesn't look like a number!")
-              .positive(
-                "The flat/shop/office number should be positive number!"
-              )
-              .moreThan(
-                2,
-                "The flat/shop/office number should be positive and greater then 2 digits!"
-              )
-              .integer("The flat/shop/office should be integer")
-              .required("The flat/shop/office number is required!"),
+            floor: number().required("Floor number is required!"),
+            flatShopOfficeNo: number().required(
+              "The flat/shop/office number is required!"
+            ),
             owner: string().required("Owner is required!"),
             purchaseDate: date().required("Purchase Date is required!"),
           })}
@@ -136,8 +155,8 @@ const SellInventory = () => {
                   <FormControl id="Floor-no" isRequired>
                     <Field
                       as={TextField}
-                      fieldType={"input"}
-                      placeHolder={"Enter floor no."}
+                      data={floorNoData}
+                      placeHolder={"Select floor no."}
                       name={"floor"}
                       label={"Floor No."}
                       isInvalid={
@@ -153,9 +172,9 @@ const SellInventory = () => {
                   <FormControl id="inventory-number" isRequired>
                     <Field
                       as={TextField}
-                      placeHolder={"Enter flat/shop/office no."}
+                      placeHolder={"Select flat/shop/office no."}
                       name={"flatShopOfficeNo"}
-                      fieldType={"input"}
+                      data={inventoryNumberData}
                       label={"Flat/Shop/Office No."}
                       isInvalid={
                         Boolean(errors.flatShopOfficeNo) &&
