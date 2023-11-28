@@ -24,17 +24,16 @@ import {
   BreadcrumbLink,
   useColorModeValue,
   FormHelperText,
-  IconButton,
 } from "@chakra-ui/react";
 
 import Layout from "@/components/Layout";
 import CustomBox from "@/components/CustomBox";
 import TextField from "@/components/TextField";
 import ImageUploader from "@/components/ImageUploader";
-import { Field, FieldArray, Formik } from "formik";
+import { Field, Formik } from "formik";
 import { array, date, object, string } from "yup";
-import { MdAdd, MdRemove } from "react-icons/md";
 import { PatternFormat } from "react-number-format";
+import ArrayPhoneNumber from "@/components/ArrayPhoneNumber";
 
 const Form1 = ({
   handleBlur,
@@ -61,6 +60,7 @@ const Form1 = ({
     setFieldValue(name, value);
   };
 
+  const [number, setNumber] = useState([]);
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
@@ -139,120 +139,37 @@ const Form1 = ({
           </FormHelperText>
         </FormControl>
       </Flex>
-      <Flex direction={"column"} mb={5}>
-        <FieldArray name="contacts">
-          {({ push, remove }) => (
-            <>
-              {values.contacts.map((_phoneNumber, index) => (
-                <Flex
-                  key={index}
-                  gap={{ base: 0, sm: 3 }}
-                  mb={2}
-                  direction={{ base: "column", sm: "row" }}
-                  justifyContent={{ base: "flex-start", sm: "center" }}
-                  alignItems={{ base: "flex-start", sm: "center" }}
-                >
-                  <FormControl id="phoneNumber" isRequired>
-                    <TextField
-                      as={PatternFormat}
-                      format="####-#######"
-                      mask="_"
-                      fieldType={"input"}
-                      name={`contacts[${index}].phoneNumber`}
-                      defaultValue={values.contacts[index]?.phoneNumber}
-                      label={"Phone Number"}
-                      onBlur={handleBlur}
-                      onChange={handleChange(`contacts[${index}].phoneNumber`)}
-                      placeHolder={"Enter Owner Phone Number"}
-                      isInvalid={
-                        Boolean(
-                          errors.contacts && errors.contacts[index]?.phoneNumber
-                        ) &&
-                        Boolean(
-                          touched.contacts &&
-                            touched.contacts[index]?.phoneNumber
-                        )
-                      }
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(
-                        touched.contacts && touched.contacts[index]?.phoneNumber
-                      ) &&
-                        errors.contacts &&
-                        errors.contacts[index]?.phoneNumber}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl id="emergencyNumber">
-                    <TextField
-                      as={PatternFormat}
-                      format="####-#######"
-                      mask="_"
-                      fieldType={"input"}
-                      name={`contacts[${index}].emergencyNumber`}
-                      defaultValue={values.contacts[index]?.emergencyNumber}
-                      label={"Emergency Number"}
-                      onBlur={handleBlur}
-                      onChange={handleChange(
-                        `contacts[${index}].emergencyNumber`
-                      )}
-                      placeHolder={"Enter Owner Emergency Number"}
-                      isInvalid={
-                        Boolean(
-                          errors.contacts &&
-                            errors.contacts[index]?.emergencyNumber
-                        ) &&
-                        Boolean(
-                          touched.contacts &&
-                            touched.contacts[index]?.emergencyNumber
-                        )
-                      }
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(
-                        touched.contacts &&
-                          touched.contacts[index]?.emergencyNumber
-                      ) &&
-                        errors.contacts &&
-                        errors.contacts[index]?.emergencyNumber}
-                    </FormHelperText>
-                  </FormControl>
-                  <IconButton
-                    onClick={() =>
-                      push({ phoneNumber: "", emergencyNumber: "" })
-                    }
-                    icon={<MdAdd />}
-                    mt={5}
-                  />
-                  {index > 0 && (
-                    <IconButton
-                      onClick={() => remove(index)}
-                      icon={<MdRemove />}
-                      mt={5}
-                    />
-                  )}
-                </Flex>
-              ))}
-            </>
-          )}
-        </FieldArray>
+      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
+        <FormControl mr="5%" id="phoneNumber" isRequired>
+          <ArrayPhoneNumber
+            label="Phone Number"
+            data={values}
+            setData={setFieldValue}
+            onBlur={handleBlur}
+            value={"phoneNumber"}
+          />
+        </FormControl>
+        <FormControl id="emergencyNumber">
+          <ArrayPhoneNumber
+            label="Emergency Number"
+            data={values}
+            setData={setFieldValue}
+            onBlur={handleBlur}
+            value={"emergencyNumber"}
+          />
+        </FormControl>
       </Flex>
       <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
         <FormControl mr="5%" id="whatsapp" isRequired>
-          <TextField
-            placeHolder="Enter Owner Whatsapp Number"
-            fieldType={"input"}
-            label={"Whatsapp Number"}
-            name="whatsapp"
-            defaultValue={values.whatsapp}
+          <ArrayPhoneNumber
+            label="Whatsapp Number"
+            data={values}
+            setData={setFieldValue}
             onBlur={handleBlur}
-            onChange={handleChange("whatsapp")}
-            isInvalid={Boolean(errors.whatsapp) && Boolean(touched.whatsapp)}
+            value={"whatsapp"}
           />
-          <FormHelperText color="red">
-            {Boolean(touched.whatsapp) && errors.whatsapp}
-          </FormHelperText>
         </FormControl>
-        <FormControl id="email" isRequired>
+        <FormControl id="email">
           <TextField
             placeHolder="Enter Owner Email Address"
             fieldType={"input"}
@@ -390,6 +307,39 @@ const Form3 = ({ handleBlur, handleChange, errors, touched, values }) => {
           {Boolean(touched.bankName) && errors.bankName}
         </FormHelperText>
       </FormControl>
+      <FormControl mb={5} id="bank-branch-address">
+        <TextField
+          placeHolder="Enter Owner Bank Branch Address"
+          fieldType={"textArea"}
+          label={"Branch Address"}
+          name="bankBranch Address"
+          defaultValue={values.bankBranchAddress}
+          onBlur={handleBlur}
+          onChange={handleChange("bankBranchAddress")}
+          isInvalid={
+            Boolean(errors.bankBranchAddress) &&
+            Boolean(touched.bankBranchAddress)
+          }
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankBranchAddress) && errors.bankBranchAddress}
+        </FormHelperText>
+      </FormControl>
+      <FormControl mb={5} id="bank-title">
+        <TextField
+          placeHolder="Enter Owner Bank Title"
+          fieldType={"input"}
+          label={"Title"}
+          name="bankTitle"
+          defaultValue={values.bankTitle}
+          onBlur={handleBlur}
+          onChange={handleChange("bankTitle")}
+          isInvalid={Boolean(errors.bankTitle) && Boolean(touched.bankTitle)}
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.bankTitle) && errors.bankTitle}
+        </FormHelperText>
+      </FormControl>
       <FormControl mb={5} id="bank Account Number">
         <TextField
           placeHolder="Enter Owner Bank Account Number"
@@ -423,6 +373,21 @@ const Form3 = ({ handleBlur, handleChange, errors, touched, values }) => {
         />
         <FormHelperText color="red">
           {Boolean(touched.bankIbnNumber) && errors.bankIbnNumber}
+        </FormHelperText>
+      </FormControl>
+      <FormControl id="remarks">
+        <TextField
+          placeHolder="Enter Remarks"
+          fieldType={"textArea"}
+          label={"Remarks"}
+          name="remarks"
+          defaultValue={values.remarks}
+          onBlur={handleBlur}
+          onChange={handleChange("remarks")}
+          isInvalid={Boolean(errors.remarks) && Boolean(touched.remarks)}
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.remarks) && errors.remarks}
         </FormHelperText>
       </FormControl>
     </>
@@ -481,23 +446,22 @@ const AddOwner = () => {
     father: "",
     cnic: "",
     cnicExpiry: "",
-    whatsapp: "",
+    whatsapp: [],
     email: "",
     currentAddress: "",
     permanentAddress: "",
     jobTitle: "",
     jobOrganization: "",
     jobLocation: "",
-    contacts: [
-      {
-        phoneNumber: "",
-        emergencyNumber: "",
-      },
-    ],
+    phoneNumber: [],
+    emergencyNumber: [],
     images: [],
     bankName: "",
+    bankTitle: "",
+    bankBranchAddress: "",
     bankAccountNumber: "",
     bankIbnNumber: "",
+    remarks: "",
   };
 
   const handleSubmit = (values) => {
@@ -513,8 +477,15 @@ const AddOwner = () => {
       jobTitle: values.jobTitle,
       jobOrganization: values.jobOrganization,
       jobLocation: values.jobLocation,
-      contacts: values.contacts,
+      phoneNumber: values.phoneNumber,
+      emergencyNumber: values.emergencyNumber,
       images: values.images,
+      bankName: values.bankName,
+      bankTitle: values.bankTitle,
+      bankAddress: values.bankAddress,
+      bankAccountNumber: values.bankAccountNumber,
+      bankIbnNumber: values.bankIbnNumber,
+      remarks: values.remarks,
     };
     console.log(newValues);
   };
@@ -568,13 +539,13 @@ const AddOwner = () => {
           validationSchema={object({
             name: string()
               .matches(
-                /^(?=.{3,20}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
+                /^(?=.{3,70}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
                 "Name should have at least 3 characters, not any number and first letter capital!"
               )
               .required("Name is Required!"),
             father: string()
               .matches(
-                /^(?=.{3,20}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
+                /^(?=.{3,70}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
                 "Father/Husband Name should have at least 3 characters, not any number and first letter capital!"
               )
               .required("Father/Husband Name is Required!"),
@@ -585,28 +556,19 @@ const AddOwner = () => {
                 "CNIC must be 13 characters!"
               ),
             cnicExpiry: date().required("CNIC expiry date is Required!"),
-            whatsapp: string()
-              .required("Whatsapp Number is required!")
-              .matches(/^[0-9]{4}-[0-9]{7}$/, "Invalid phone number!"),
-            email: string()
-              .email("Invalid Email")
-              .required("Email is Required!"),
+            whatsapp: array().required("Whatsapp Number is required!"),
+            email: string().email("Invalid Email"),
             currentAddress: string().required("Current Address is Required!"),
             permanentAddress: string().required(
               "Permanent Address is Required!"
             ),
-            contacts: array(
-              object({
-                phoneNumber: string()
-                  .required("Phone Number is required!")
-                  .matches(/^[0-9]{4}-[0-9]{7}$/, "Invalid phone number!"),
-                emergencyNumber: string().matches(
-                  /^[0-9]{4}-[0-9]{7}$/,
-                  "Invalid phone number!"
-                ),
-              })
-            ),
+            phoneNumber: array().required("Phone is required!"),
+            emergencyNumber: array(),
             images: array().min(2, "At least two image is required"),
+            bankIbnNumber: string().matches(
+              /^[a-zA-Z0-9]{24}$/,
+              "IBN number should be 24 character long and not contain any special character and spaces!"
+            ),
           })}
         >
           {({

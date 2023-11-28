@@ -24,7 +24,6 @@ import {
   BreadcrumbLink,
   useColorModeValue,
   FormHelperText,
-  IconButton,
   RadioGroup,
   Stack,
   Radio,
@@ -54,18 +53,22 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
     },
   ];
 
-  const inventoryData = [
+  const ownerData = [
     {
-      value: "Flat",
-      text: "Flat",
+      value: "Atif Mustafa Khan",
+      text: "Atif Mustafa Khan",
     },
     {
-      value: "Shop",
-      text: "Shop",
+      value: "Ruman",
+      text: "Ruman",
     },
     {
-      value: "Office",
-      text: "Office",
+      value: "Saqib",
+      text: "Saqib",
+    },
+    {
+      value: "Sohaib",
+      text: "Sohaib",
     },
   ];
   return (
@@ -92,21 +95,19 @@ const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
           </FormHelperText>
         </FormControl>
 
-        <FormControl id="inventory-type">
+        <FormControl id="owner-name">
           <TextField
-            placeHolder="Select Inventory Type"
-            data={inventoryData}
-            label={"Inventory Type"}
-            defaultValue={values.inventoryType}
-            name="inventoryType"
+            placeHolder="Select Owner Name"
+            data={ownerData}
+            label={"Owner Name"}
+            defaultValue={values.ownerName}
+            name="ownerName"
             onBlur={handleBlur}
-            onChange={handleChange("inventoryType")}
-            isInvalid={
-              Boolean(errors.inventoryType) && Boolean(touched.inventoryType)
-            }
+            onChange={handleChange("ownerName")}
+            isInvalid={Boolean(errors.ownerName) && Boolean(touched.ownerName)}
           />
           <FormHelperText color="red">
-            {Boolean(touched.inventoryType) && errors.inventoryType}
+            {Boolean(touched.ownerName) && errors.ownerName}
           </FormHelperText>
         </FormControl>
       </Flex>
@@ -428,7 +429,7 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
           {Boolean(touched.terminationNotice) && errors.terminationNotice}
         </FormHelperText>
       </FormControl>
-      <RadioGroup defaultValue={values.monthSecurityAmount}>
+      <RadioGroup defaultValue={values.monthSecurityAmount} my={4}>
         <FormLabel>
           One Month Security amount will not be refunded if apartment will be
           vacated within 6 months?
@@ -452,16 +453,32 @@ const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
           </Radio>
         </Stack>
       </RadioGroup>
+      <FormControl id="remarks">
+        <TextField
+          placeHolder="Enter Remarks"
+          fieldType={"textArea"}
+          label={"Remarks"}
+          name="remarks"
+          defaultValue={values.remarks}
+          onBlur={handleBlur}
+          onChange={handleChange("remarks")}
+          isInvalid={Boolean(errors.remarks) && Boolean(touched.remarks)}
+        />
+        <FormHelperText color="red">
+          {Boolean(touched.remarks) && errors.remarks}
+        </FormHelperText>
+      </FormControl>
     </>
   );
 };
 
 const Form3 = ({
-  selectedFiles,
-  setSelectedFiles,
   handleBlur,
   errors,
   touched,
+  handleChange,
+  setFieldValue,
+  values,
 }) => {
   return (
     <>
@@ -471,10 +488,11 @@ const Form3 = ({
       <FormControl mb={5} id="images">
         <FormLabel>Upload Contract Copy Image</FormLabel>
         <ImageUploader
-          selectedFiles={selectedFiles}
-          setSelectedFiles={setSelectedFiles}
+          handleChange={handleChange}
           name={"images"}
           onBlur={handleBlur}
+          values={values}
+          setFieldValue={setFieldValue}
         />
         <FormHelperText color="red">
           {Boolean(touched.images) && errors.images}
@@ -499,13 +517,9 @@ const AddContract = () => {
 
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.200");
-
-  const [phoneNumbers, setPhoneNumbers] = useState([]);
-  const [emergencyNumber, setEmergencyNumber] = useState([]);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const initialValues = {
     tenantName: "",
-    inventoryType: "",
+    ownerName: "",
     signingDate: "",
     startDate: "",
     endDate: "",
@@ -523,7 +537,8 @@ const AddContract = () => {
     agentName: "",
     terminationNotice: "",
     monthSecurityAmount: "yes",
-    images: selectedFiles,
+    images: [],
+    remarks: "",
   };
 
   const handleSubmit = (values) => {
@@ -538,7 +553,7 @@ const AddContract = () => {
 
     const newValues = {
       tenantName: values.tenantName,
-      inventoryType: values.inventoryType,
+      ownerName: values.ownerName,
       signingDate: values.signingDate,
       startDate: values.startDate,
       endDate: values.endDate,
@@ -556,7 +571,7 @@ const AddContract = () => {
       agentName: values.agentName,
       terminationNotice: values.terminationNotice,
       monthSecurityAmount: values.monthSecurityAmount,
-      images: selectedFiles,
+      images: values.images,
     };
     console.log(newValues);
   };
@@ -609,7 +624,7 @@ const AddContract = () => {
           onSubmit={handleSubmit}
           validationSchema={object({
             tenantName: string().required("Tenant Name is Required!"),
-            inventoryType: string().required("Inventory Type is Required!"),
+            ownerName: string().required("Owner Name is Required!"),
             signingDate: date().required("Signing Date is Required!"),
             startDate: date().required("Start Date is Required!"),
             endDate: date().required("End Date is Required!"),
@@ -655,16 +670,13 @@ const AddContract = () => {
             handleChange,
             handleBlur,
             handleSubmit,
+            setFieldValue,
           }) => (
             <>
               {step === 0 && (
                 <Form1
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  emergencyNumber={emergencyNumber}
-                  setEmergencyNumber={setEmergencyNumber}
-                  phoneNumbers={phoneNumbers}
-                  setPhoneNumbers={setPhoneNumbers}
                   errors={errors}
                   touched={touched}
                   values={values}
@@ -681,11 +693,12 @@ const AddContract = () => {
               )}
               {step === 2 && (
                 <Form3
-                  selectedFiles={selectedFiles}
-                  setSelectedFiles={setSelectedFiles}
                   errors={errors}
                   touched={touched}
                   handleBlur={handleBlur}
+                  handleChange={handleChange}
+                  values={values}
+                  setFieldValue={setFieldValue}
                 />
               )}
 

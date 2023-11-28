@@ -4,6 +4,7 @@ import ChakraUIProvider from "@/components/providers/ChakraUIProvider";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { ColorModeScript } from "@chakra-ui/react";
 import theme from "@/constants/theme";
+import "react-phone-input-2/lib/style.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
