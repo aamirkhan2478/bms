@@ -104,15 +104,14 @@ const Dashboard = () => {
         </Box>
       </Flex>
       <SimpleGrid columns={{ sm: 1, md: 2, xl: 3 }} spacing="15px" mt={"20px"}>
-        {items.map((item) => (
-          <>
+        {items.map((item, index) => (
+          <Flex key={index} justifyContent={"center"}>
             <SmallCard
-              key={item.title}
               title={item.title}
               amount={item.amount}
               icon={item.icon}
             />
-          </>
+          </Flex>
         ))}
       </SimpleGrid>
     </Layout>
