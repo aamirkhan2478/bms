@@ -9,7 +9,6 @@ import {
   IconButton,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
   Text,
@@ -17,88 +16,135 @@ import {
   useColorMode,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import SidebarContent from "../Sidebar/SidebarContent";
 import { FiChevronDown, FiMenu, FiMoon, FiSun } from "react-icons/fi";
 import Image from "next/image";
 import logo from "@/../public/bms_logo.png";
+import { useRef } from "react";
+import AlertDialog from "../AlertDialog";
+import { useRouter } from "next/navigation";
+import { useCurrentUser, useLogout } from "@/hooks/useAuth";
 
 const Navbar = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { isOpen, onOpen: openDialog, onClose } = useDisclosure();
+  const cancelRef = useRef();
+  const router = useRouter();
+  const { data } = useCurrentUser();
+  const { mutate } = useLogout(onSuccess, onError);
+  const toast = useToast();
+
+  const logoutHandler = () => {
+    mutate();
+  };
+
+  function onError(error) {
+    console.log("error");
+    toast({
+      title: "An error occurred.",
+      description: error?.response?.data?.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      position: "top-left",
+    });
+  }
+
+  function onSuccess() {
+    localStorage.removeItem("token");
+    router.push("/");
+  }
+
   return (
-    <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 4 }}
-      height="20"
-      alignItems="center"
-      bg={useColorModeValue("white", "dark")}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.200", "dark")}
-      justifyContent={{ base: "space-between", md: "flex-end" }}
-      shadow={"lg"}
-      {...rest}
-    >
-      <IconButton
-        display={{ base: "flex", md: "none" }}
-        onClick={onOpen}
-        variant="outline"
-        aria-label="open menu"
-        icon={<FiMenu />}
+    <>
+      <AlertDialog
+        isOpen={isOpen}
+        cancelRef={cancelRef}
+        confirmButtonText={"Logout"}
+        dialogBody={"Are you sure you want to logout yourself?"}
+        dialogHeader={"Logout User"}
+        onClose={onClose}
+        onConfirm={logoutHandler}
       />
-      <Box
-        as={Image}
-        src={logo}
-        h={100}
-        w={100}
-        display={{ base: "flex", md: "none" }}
-        filter={useColorModeValue("", "saturate(10)")}
-      />
-      <HStack>
+      <Flex
+        ml={{ base: 0, md: 60 }}
+        px={{ base: 4, md: 4 }}
+        height="20"
+        alignItems="center"
+        bg={useColorModeValue("white", "dark")}
+        borderBottomWidth="1px"
+        borderBottomColor={useColorModeValue("gray.200", "dark")}
+        justifyContent={{ base: "space-between", md: "flex-end" }}
+        shadow={"lg"}
+        {...rest}
+      >
         <IconButton
-          onClick={toggleColorMode}
-          variant="solid"
-          icon={colorMode === "light" ? <FiMoon /> : <FiSun />}
-          rounded="full"
+          display={{ base: "flex", md: "none" }}
+          onClick={onOpen}
+          variant="outline"
+          aria-label="open menu"
+          icon={<FiMenu />}
         />
-        <HStack spacing={{ base: "0", md: "6" }}>
-          <Flex alignItems={"center"}>
-            <Menu>
-              <MenuButton
-                py={2}
-                transition="all 0.3s"
-                _focus={{ boxShadow: "none" }}
-              >
-                <HStack>
-                  <Avatar
-                    size={"sm"}
-                    backgroundColor={useColorModeValue("gray.500", "gray.700")}
-                  />
-                  <VStack
-                    display={{ base: "none", md: "flex" }}
-                    alignItems="flex-start"
-                    spacing="1px"
-                    ml="2"
-                  >
-                    <Text fontSize="sm">User Name</Text>
-                    
-                  </VStack>
-                  <Box display={{ base: "none", md: "flex" }}>
-                    <FiChevronDown />
-                  </Box>
-                </HStack>
-              </MenuButton>
-              <MenuList
-                bg={useColorModeValue("white", "gray.900")}
-                borderColor={useColorModeValue("gray.200", "gray.700")}
-              >
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>Sign out</MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
+        <Box
+          as={Image}
+          src={logo}
+          alt="logo"
+          h={100}
+          w={100}
+          display={{ base: "flex", md: "none" }}
+          filter={useColorModeValue("", "saturate(10)")}
+        />
+        <HStack>
+          <IconButton
+            onClick={toggleColorMode}
+            variant="solid"
+            icon={colorMode === "light" ? <FiMoon /> : <FiSun />}
+            rounded="full"
+          />
+          <HStack spacing={{ base: "0", md: "6" }}>
+            <Flex alignItems={"center"}>
+              <Menu>
+                <MenuButton
+                  py={2}
+                  transition="all 0.3s"
+                  _focus={{ boxShadow: "none" }}
+                >
+                  <HStack>
+                    <Avatar
+                      size={"sm"}
+                      backgroundColor={useColorModeValue(
+                        "gray.500",
+                        "gray.700"
+                      )}
+                    />
+                    <VStack
+                      display={{ base: "none", md: "flex" }}
+                      alignItems="flex-start"
+                      spacing="1px"
+                      ml="2"
+                    >
+                      <Text fontSize="sm">{data?.name}</Text>
+                    </VStack>
+                    <Box display={{ base: "none", md: "flex" }}>
+                      <FiChevronDown />
+                    </Box>
+                  </HStack>
+                </MenuButton>
+                <MenuList
+                  bg={useColorModeValue("white", "gray.900")}
+                  borderColor={useColorModeValue("gray.200", "gray.700")}
+                >
+                  <MenuItem>Profile</MenuItem>
+                  <MenuItem onClick={openDialog}>Sign out</MenuItem>
+                </MenuList>
+              </Menu>
+            </Flex>
+          </HStack>
         </HStack>
-      </HStack>
-    </Flex>
+      </Flex>
+    </>
   );
 };
 const Layout = ({ children }) => {
