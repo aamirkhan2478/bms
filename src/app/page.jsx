@@ -20,7 +20,7 @@ import { useState } from "react";
 import { FiSun, FiMoon, FiEye, FiEyeOff } from "react-icons/fi";
 import loginImage from "../../public/login_image.jpg";
 import CustomButton from "@/components/CustomButton";
-import { useCurrentUser, useLogin } from "@/hooks/useAuth";
+import { useLogin } from "@/hooks/useAuth";
 import { useToast } from "@chakra-ui/react";
 
 export default function SignIn() {

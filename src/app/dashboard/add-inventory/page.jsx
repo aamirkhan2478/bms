@@ -3,6 +3,7 @@ import CustomBox from "@/components/CustomBox";
 import CustomButton from "@/components/CustomButton";
 import Layout from "@/components/Layout";
 import TextField from "@/components/TextField";
+import { useAddInventory } from "@/hooks/useInventory";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,10 +13,11 @@ import {
   FormHelperText,
   Heading,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
-import { number, object, string } from "yup";
+import { object, string } from "yup";
 
 const AddInventory = () => {
   const data = [
@@ -35,19 +37,44 @@ const AddInventory = () => {
 
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.400");
+  const { mutate } = useAddInventory(onSuccess, onError);
+  const toast = useToast();
+
   const initialValues = {
     inventoryType: "",
     floor: "",
-    flatShopOfficeNo: "",
+    flatNo: "",
   };
 
   const clickHandler = (values) => {
-    console.log(values);
+    mutate(values);
   };
 
   useEffect(() => {
     document.title = "Add Inventory";
   }, []);
+
+  function onSuccess(data) {
+    toast({
+      title: "Congratulation",
+      description: data?.data?.message,
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+      position: "top-left",
+    });
+  }
+  function onError(error) {
+    console.log(error);
+    toast({
+      title: "An error occurred.",
+      description: error?.response?.data?.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      position: "top-left",
+    });
+  }
   return (
     <Layout>
       <Heading>Add Inventory</Heading>
@@ -75,7 +102,7 @@ const AddInventory = () => {
           validationSchema={object({
             inventoryType: string().required("Inventory Type is required!"),
             floor: string().required("Floor number is required!"),
-            flatShopOfficeNo: string()
+            flatNo: string()
               .matches(
                 /^([0-9]{2,})$/gm,
                 "The flat/shop/office number should be positive and greater then 2 digits!"
@@ -126,19 +153,17 @@ const AddInventory = () => {
                     <Field
                       as={TextField}
                       placeHolder={"Enter flat/shop/office no."}
-                      name={"flatShopOfficeNo"}
+                      name={"flatNo"}
                       fieldType={"input"}
                       label={"Flat/Shop/Office No."}
                       isInvalid={
-                        Boolean(errors.flatShopOfficeNo) &&
-                        Boolean(touched.flatShopOfficeNo)
+                        Boolean(errors.flatNo) && Boolean(touched.flatNo)
                       }
                       onBlur={handleBlur}
-                      onChange={handleChange("flatShopOfficeNo")}
+                      onChange={handleChange("flatNo")}
                     />
                     <FormHelperText color="red">
-                      {Boolean(touched.flatShopOfficeNo) &&
-                        errors.flatShopOfficeNo}
+                      {Boolean(touched.flatNo) && errors.flatNo}
                     </FormHelperText>
                   </FormControl>
 
