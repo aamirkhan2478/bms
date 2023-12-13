@@ -1,5 +1,4 @@
 "use client";
-
 import Footer from "@/components/Footer";
 import TextField from "@/components/TextField";
 import {
@@ -21,13 +20,71 @@ import { useState } from "react";
 import { FiSun, FiMoon, FiEye, FiEyeOff } from "react-icons/fi";
 import loginImage from "../../public/login_image.jpg";
 import CustomButton from "@/components/CustomButton";
+import { useCurrentUser, useLogin } from "@/hooks/useAuth";
+import { useToast } from "@chakra-ui/react";
+
 export default function SignIn() {
   const router = useRouter();
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.400", "white");
   const [show, setShow] = useState(false);
+  const [remember, setRemember] = useState(false);
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
   const handleClick = () => setShow(!show);
   const { colorMode, toggleColorMode } = useColorMode();
+  const { mutate, isLoading } = useLogin(onSuccess, onError);
+  const toast = useToast();
+
+  //Handle input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value.trim() }));
+  };
+
+  // Implement remember me feature
+  const handleRemember = () => {
+    setRemember(!remember);
+    if (!remember) {
+      // If the user unchecks "Remember Me," clear saved credentials
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userPassword");
+    }
+  };
+
+  const handleLogin = () => {
+    if (remember) {
+      localStorage.setItem("remember", remember);
+      localStorage.setItem("userEmail", user.email);
+      localStorage.setItem("userPassword", user.password);
+    } else {
+      localStorage.removeItem("remember");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userPassword");
+    }
+    mutate(user);
+  };
+
+  console.log(currentUser);
+  function onSuccess(data) {
+    localStorage.setItem("token", data?.data?.accessToken);
+    router.push("/dashboard");
+  }
+
+  function onError(error) {
+    console.log(error);
+    toast({
+      title: "An error occurred.",
+      description: error?.response?.data?.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      position: "top-left",
+    });
+  }
+
   return (
     <>
       <Flex position="relative" mb="40px">
@@ -71,6 +128,9 @@ export default function SignIn() {
                   placeholder={"Your Email Address"}
                   type={"email"}
                   fieldType={"input"}
+                  onChange={handleInputChange}
+                  name={"email"}
+                  value={user.email}
                 />
               </FormControl>
               <FormControl>
@@ -90,10 +150,23 @@ export default function SignIn() {
                       {show ? <FiEyeOff /> : <FiEye />}
                     </InputRightElement>
                   }
+                  onChange={handleInputChange}
+                  name={"password"}
+                  value={user.password}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleLogin();
+                    }
+                  }}
                 />
               </FormControl>
               <FormControl display="flex" alignItems="center">
-                <Switch id="remember-login" colorScheme="teal" me="10px" />
+                <Switch
+                  id="remember-login"
+                  colorScheme="teal"
+                  me="10px"
+                  onChange={handleRemember}
+                />
                 <FormLabel
                   htmlFor="remember-login"
                   mb="0"
@@ -105,7 +178,8 @@ export default function SignIn() {
               </FormControl>
               <CustomButton
                 text={"SIGN IN"}
-                onClick={() => router.push("/dashboard")}
+                onClick={handleLogin}
+                isLoading={isLoading}
               />
               <IconButton
                 onClick={toggleColorMode}
