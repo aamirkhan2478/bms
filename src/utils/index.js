@@ -1,12 +1,14 @@
-import axios from "axios";
+import Axios from "axios";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-const axiosInstance = axios.create({
+const axios = Axios.create({
   baseURL,
 });
 
-axiosInstance.interceptors.response.use(
+axios.defaults.withCredentials = true;
+
+axios.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
@@ -16,9 +18,10 @@ axiosInstance.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     if (error.response.status === 401) {
+      localStorage.removeItem("token");
     }
 
     return Promise.reject(error);
   }
 );
-export default axiosInstance;
+export default axios;
