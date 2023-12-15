@@ -10,6 +10,7 @@ const CustomButton = ({ text, ...rest }) => {
       h="45px"
       mb="20px"
       color="white"
+      variant={"outline"}
       mt="20px"
       _hover={{
         bg: "teal.200",

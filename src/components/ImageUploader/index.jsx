@@ -6,13 +6,11 @@ import { MdUpload } from "react-icons/md";
 function ImageUploader({
   name,
   onBlur,
-  handleChange,
   values,
   setFieldValue,
 }) {
   // Function to handle file selection
   const handleFileSelect = (e) => {
-    handleChange("images");
     const files = Array.from(e.target.files);
     setFieldValue("images", [...values.images, ...files]);
   };

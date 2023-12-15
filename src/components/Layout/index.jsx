@@ -22,19 +22,31 @@ import SidebarContent from "../Sidebar/SidebarContent";
 import { FiChevronDown, FiMenu, FiMoon, FiSun } from "react-icons/fi";
 import Image from "next/image";
 import logo from "@/../public/bms_logo.png";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AlertDialog from "../AlertDialog";
 import { useRouter } from "next/navigation";
-import { useCurrentUser, useLogout } from "@/hooks/useAuth";
+import { useLogout } from "@/hooks/useAuth";
 
 const Navbar = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen: openDialog, onClose } = useDisclosure();
+  const [currentUser, setCurrentUser] = useState(null);
   const cancelRef = useRef();
   const router = useRouter();
-  const { data } = useCurrentUser();
   const { mutate } = useLogout(onSuccess, onError);
   const toast = useToast();
+
+  const getUserFromLocalStorage = () => {
+    const getUser = localStorage.getItem("user");
+
+    if (getUser) {
+      setCurrentUser(JSON.parse(getUser));
+    }
+  };
+
+  useEffect(() => {
+    getUserFromLocalStorage();
+  }, []);
 
   const logoutHandler = () => {
     mutate();
@@ -53,7 +65,7 @@ const Navbar = ({ onOpen, ...rest }) => {
   }
 
   function onSuccess() {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     router.push("/");
   }
 
@@ -125,7 +137,7 @@ const Navbar = ({ onOpen, ...rest }) => {
                       spacing="1px"
                       ml="2"
                     >
-                      <Text fontSize="sm">{data?.name}</Text>
+                      <Text fontSize="sm">{currentUser?.name}</Text>
                     </VStack>
                     <Box display={{ base: "none", md: "flex" }}>
                       <FiChevronDown />

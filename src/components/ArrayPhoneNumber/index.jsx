@@ -5,10 +5,8 @@ import {
   TagLabel,
   TagCloseButton,
   FormLabel,
-  Text,
 } from "@chakra-ui/react";
 import PhoneInput from "react-phone-input-2";
-import { ErrorMessage } from "formik";
 
 const ArrayPhoneNumber = ({
   setData,

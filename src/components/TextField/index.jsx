@@ -6,6 +6,7 @@ import {
   Select,
   Textarea,
 } from "@chakra-ui/react";
+import ArrayPhoneNumber from "../ArrayPhoneNumber";
 
 const TextField = ({
   label,
@@ -90,6 +91,8 @@ const TextField = ({
             {...rest}
           />
         </>
+      ) : fieldType === "array" ? (
+        <ArrayPhoneNumber label={label} data={data} {...rest} />
       ) : (
         <>
           <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
