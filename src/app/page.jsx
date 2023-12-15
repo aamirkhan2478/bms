@@ -67,9 +67,8 @@ export default function SignIn() {
     mutate(user);
   };
 
-  console.log(currentUser);
   function onSuccess(data) {
-    localStorage.setItem("token", data?.data?.accessToken);
+    localStorage.setItem("user", JSON.stringify(data?.data?.data?.user));
     router.push("/dashboard");
   }
 
