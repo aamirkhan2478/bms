@@ -7,8 +7,6 @@ import {
   Button,
   Heading,
   Flex,
-  FormControl,
-  FormLabel,
   Step,
   StepDescription,
   StepIcon,
@@ -23,409 +21,27 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   useColorModeValue,
-  FormHelperText,
+  useToast,
 } from "@chakra-ui/react";
 
 import Layout from "@/components/Layout";
 import CustomBox from "@/components/CustomBox";
-import TextField from "@/components/TextField";
-import ImageUploader from "@/components/ImageUploader";
-import { Field, Formik } from "formik";
-import { array, date, object, string } from "yup";
-import { PatternFormat } from "react-number-format";
-import ArrayPhoneNumber from "@/components/ArrayPhoneNumber";
-
-const Form1 = ({
-  handleBlur,
-  handleChange,
-  errors,
-  touched,
-  values,
-  setFieldValue,
-}) => {
-  const capitalizeFirstLetter = (value) => {
-    return value && value.length > 0
-      ? value
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ")
-      : value;
-  };
-
-  const changeHandle = (name) => (event) => {
-    let value = event.target.value;
-    if (name === "name" || name === "father") {
-      value = capitalizeFirstLetter(value);
-    }
-    setFieldValue(name, value);
-  };
-
-  const [number, setNumber] = useState([]);
-  return (
-    <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
-        Personal Info
-      </Heading>
-      <Flex flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="name" isRequired>
-          <Field
-            as={TextField}
-            placeHolder="Enter Owner Name"
-            fieldType={"input"}
-            label={"Owner Name"}
-            name="name"
-            defaultValue={values.name}
-            onBlur={handleBlur}
-            onChange={changeHandle("name")}
-            isInvalid={Boolean(errors.name) && Boolean(touched.name)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.name) && errors.name}
-          </FormHelperText>
-        </FormControl>
-
-        <FormControl id="father" isRequired>
-          <Field
-            as={TextField}
-            placeHolder="Enter Owner Father/Husband Name"
-            fieldType={"input"}
-            label={"Father/Husband Name"}
-            name="father"
-            defaultValue={values.father}
-            onBlur={handleBlur}
-            onChange={changeHandle("father")}
-            isInvalid={Boolean(errors.father) && Boolean(touched.father)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.father) && errors.father}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="cnic" isRequired>
-          <TextField
-            as={PatternFormat}
-            format="#####-#######-#"
-            mask="_"
-            placeHolder="Enter Owner CNIC No."
-            fieldType={"input"}
-            label={"CNIC N0."}
-            name="cnic"
-            defaultValue={values.cnic}
-            onBlur={handleBlur}
-            onChange={handleChange("cnic")}
-            isInvalid={Boolean(errors.cnic) && Boolean(touched.cnic)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.cnic) && errors.cnic}
-          </FormHelperText>
-        </FormControl>
-        <FormControl id="cnic-expiry" isRequired>
-          <TextField
-            placeHolder="Enter Owner CNIC Expire Date"
-            fieldType={"input"}
-            type="date"
-            label={"CNIC Expire Date"}
-            name="cnicExpiry"
-            defaultValue={values.cnicExpiry}
-            onBlur={handleBlur}
-            onChange={handleChange("cnicExpiry")}
-            isInvalid={
-              Boolean(errors.cnicExpiry) && Boolean(touched.cnicExpiry)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.cnicExpiry) && errors.cnicExpiry}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="phoneNumber" isRequired>
-          <ArrayPhoneNumber
-            label="Phone Number"
-            data={values}
-            setData={setFieldValue}
-            onBlur={handleBlur}
-            value={"phoneNumber"}
-          />
-        </FormControl>
-        <FormControl id="emergencyNumber">
-          <ArrayPhoneNumber
-            label="Emergency Number"
-            data={values}
-            setData={setFieldValue}
-            onBlur={handleBlur}
-            value={"emergencyNumber"}
-          />
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="whatsapp" isRequired>
-          <ArrayPhoneNumber
-            label="Whatsapp Number"
-            data={values}
-            setData={setFieldValue}
-            onBlur={handleBlur}
-            value={"whatsapp"}
-          />
-        </FormControl>
-        <FormControl id="email">
-          <TextField
-            placeHolder="Enter Owner Email Address"
-            fieldType={"input"}
-            label={"Email Address"}
-            type="email"
-            name="email"
-            onBlur={handleBlur}
-            defaultValue={values.email}
-            onChange={handleChange("email")}
-            isInvalid={Boolean(errors.email) && Boolean(touched.email)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.email) && errors.email}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="current" isRequired>
-          <TextField
-            placeHolder="Enter Owner Current Address"
-            fieldType={"textArea"}
-            label={"Current Address"}
-            name="currentAddress"
-            defaultValue={values.currentAddress}
-            onBlur={handleBlur}
-            onChange={handleChange("currentAddress")}
-            isInvalid={
-              Boolean(errors.currentAddress) && Boolean(touched.currentAddress)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.currentAddress) && errors.currentAddress}
-          </FormHelperText>
-        </FormControl>
-        <FormControl id="permanent" isRequired>
-          <TextField
-            placeHolder="Enter Owner Permanent Address"
-            fieldType={"textArea"}
-            label={"Permanent Address"}
-            name="permanentAddress"
-            defaultValue={values.permanentAddress}
-            onBlur={handleBlur}
-            onChange={handleChange("permanentAddress")}
-            isInvalid={
-              Boolean(errors.permanentAddress) &&
-              Boolean(touched.permanentAddress)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.permanentAddress) && errors.permanentAddress}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-    </>
-  );
-};
-
-const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
-  return (
-    <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
-        Job Details
-      </Heading>
-      <FormControl mb={5} id="title">
-        <TextField
-          placeHolder="Enter Owner Job Title"
-          fieldType={"input"}
-          label={"Title"}
-          name="jobTitle"
-          defaultValue={values.jobTitle}
-          onBlur={handleBlur}
-          onChange={handleChange("jobTitle")}
-          isInvalid={Boolean(errors.jobTitle) && Boolean(touched.jobTitle)}
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.jobTitle) && errors.jobTitle}
-        </FormHelperText>
-      </FormControl>
-      <FormControl mb={5} id="organization">
-        <TextField
-          placeHolder="Enter Owner Organization Name"
-          fieldType={"input"}
-          label={"Organization Name"}
-          name="jobOrganization"
-          defaultValue={values.jobOrganization}
-          onBlur={handleBlur}
-          onChange={handleChange("jobOrganization")}
-          isInvalid={
-            Boolean(errors.jobOrganization) && Boolean(touched.jobOrganization)
-          }
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.jobOrganization) && errors.jobOrganization}
-        </FormHelperText>
-      </FormControl>
-      <FormControl id="location">
-        <TextField
-          placeHolder="Enter Owner Organization Location"
-          fieldType={"input"}
-          label={"Organization Location"}
-          name="jobLocation"
-          defaultValue={values.jobLocation}
-          onBlur={handleBlur}
-          onChange={handleChange("jobLocation")}
-          isInvalid={
-            Boolean(errors.jobLocation) && Boolean(touched.jobLocation)
-          }
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.jobLocation) && errors.jobLocation}
-        </FormHelperText>
-      </FormControl>
-    </>
-  );
-};
-
-const Form3 = ({ handleBlur, handleChange, errors, touched, values }) => {
-  return (
-    <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
-        Bank Details
-      </Heading>
-      <FormControl mb={5} id="bank-name">
-        <TextField
-          placeHolder="Enter Owner Bank Name"
-          fieldType={"input"}
-          label={"Name"}
-          name="bankName"
-          defaultValue={values.bankName}
-          onBlur={handleBlur}
-          onChange={handleChange("bankName")}
-          isInvalid={Boolean(errors.bankName) && Boolean(touched.bankName)}
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.bankName) && errors.bankName}
-        </FormHelperText>
-      </FormControl>
-      <FormControl mb={5} id="bank-branch-address">
-        <TextField
-          placeHolder="Enter Owner Bank Branch Address"
-          fieldType={"textArea"}
-          label={"Branch Address"}
-          name="bankBranch Address"
-          defaultValue={values.bankBranchAddress}
-          onBlur={handleBlur}
-          onChange={handleChange("bankBranchAddress")}
-          isInvalid={
-            Boolean(errors.bankBranchAddress) &&
-            Boolean(touched.bankBranchAddress)
-          }
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.bankBranchAddress) && errors.bankBranchAddress}
-        </FormHelperText>
-      </FormControl>
-      <FormControl mb={5} id="bank-title">
-        <TextField
-          placeHolder="Enter Owner Bank Title"
-          fieldType={"input"}
-          label={"Title"}
-          name="bankTitle"
-          defaultValue={values.bankTitle}
-          onBlur={handleBlur}
-          onChange={handleChange("bankTitle")}
-          isInvalid={Boolean(errors.bankTitle) && Boolean(touched.bankTitle)}
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.bankTitle) && errors.bankTitle}
-        </FormHelperText>
-      </FormControl>
-      <FormControl mb={5} id="bank Account Number">
-        <TextField
-          placeHolder="Enter Owner Bank Account Number"
-          fieldType={"input"}
-          label={"Account Number"}
-          name="bankAccountNumber"
-          defaultValue={values.bankAccountNumber}
-          onBlur={handleBlur}
-          onChange={handleChange("bankAccountNumber")}
-          isInvalid={
-            Boolean(errors.bankAccountNumber) &&
-            Boolean(touched.bankAccountNumber)
-          }
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.bankAccountNumber) && errors.bankAccountNumber}
-        </FormHelperText>
-      </FormControl>
-      <FormControl id="bank-ibn-number">
-        <TextField
-          placeHolder="Enter Owner bank IBN Number"
-          fieldType={"input"}
-          label={"IBN Number"}
-          name="bankIbnNumber"
-          defaultValue={values.bankIbnNumber}
-          onBlur={handleBlur}
-          onChange={handleChange("bankIbnNumber")}
-          isInvalid={
-            Boolean(errors.bankIbnNumber) && Boolean(touched.bankIbnNumber)
-          }
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.bankIbnNumber) && errors.bankIbnNumber}
-        </FormHelperText>
-      </FormControl>
-      <FormControl id="remarks">
-        <TextField
-          placeHolder="Enter Remarks"
-          fieldType={"textArea"}
-          label={"Remarks"}
-          name="remarks"
-          defaultValue={values.remarks}
-          onBlur={handleBlur}
-          onChange={handleChange("remarks")}
-          isInvalid={Boolean(errors.remarks) && Boolean(touched.remarks)}
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.remarks) && errors.remarks}
-        </FormHelperText>
-      </FormControl>
-    </>
-  );
-};
-
-const Form4 = ({
-  handleBlur,
-  errors,
-  touched,
-  handleChange,
-  setFieldValue,
-  values,
-}) => {
-  return (
-    <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal">
-        Attachments
-      </Heading>
-      <FormControl mb={5} id="images" isRequired>
-        <FormLabel>Upload Owner Front and Back CNIC Image</FormLabel>
-        <ImageUploader
-          handleChange={handleChange}
-          name={"images"}
-          onBlur={handleBlur}
-          values={values}
-          setFieldValue={setFieldValue}
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.images) && errors.images}
-        </FormHelperText>
-      </FormControl>
-    </>
-  );
-};
+import { Formik } from "formik";
+import {
+  BankInfoForm,
+  ImageUploadForm,
+  JobInfoForm,
+  PersonalInfoForm,
+} from "@/components/OwnerAndTenantForms";
+import { ownerTenantSchema } from "@/validators/owner_tenant.validator";
+import { useAddOwner } from "@/hooks/useOwner";
+import CustomButton from "@/components/CustomButton";
+import appendArrayField from "@/utils/appendArrayField";
 
 const AddOwner = () => {
   const [step, setStep] = useState(0);
+  const { mutate, isLoading } = useAddOwner(onSuccess, onError);
+  const toast = useToast();
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
@@ -433,7 +49,7 @@ const AddOwner = () => {
     { title: "Forth", description: "Attachments" },
   ];
 
-  const { activeStep, goToNext, goToPrevious } = useSteps({
+  const { activeStep, goToNext, goToPrevious, setActiveStep } = useSteps({
     index: step,
     count: steps.length,
   });
@@ -464,34 +80,68 @@ const AddOwner = () => {
     remarks: "",
   };
 
-  const handleSubmit = (values) => {
-    const newValues = {
-      name: values.name,
-      father: values.father,
-      cnic: values.cnic,
-      cnicExpiry: values.cnicExpiry,
-      whatsapp: values.whatsapp,
-      email: values.email,
-      currentAddress: values.currentAddress,
-      permanentAddress: values.permanentAddress,
-      jobTitle: values.jobTitle,
-      jobOrganization: values.jobOrganization,
-      jobLocation: values.jobLocation,
-      phoneNumber: values.phoneNumber,
-      emergencyNumber: values.emergencyNumber,
-      images: values.images,
-      bankName: values.bankName,
-      bankTitle: values.bankTitle,
-      bankAddress: values.bankAddress,
-      bankAccountNumber: values.bankAccountNumber,
-      bankIbnNumber: values.bankIbnNumber,
-      remarks: values.remarks,
-    };
-    console.log(newValues);
+  const handleSubmit = (values, { resetForm }) => {
+    // Convert the values to FormData and append the files
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("father", values.father);
+    formData.append("cnic", values.cnic);
+    formData.append("cnicExpiry", values.cnicExpiry);
+    formData.append("email", values.email);
+    formData.append("currentAddress", values.currentAddress);
+    formData.append("permanentAddress", values.permanentAddress);
+    formData.append("jobTitle", values.jobTitle);
+    formData.append("jobOrganization", values.jobOrganization);
+    formData.append("jobLocation", values.jobLocation);
+    formData.append("bankName", values.bankName);
+    formData.append("bankTitle", values.bankTitle);
+    formData.append("bankBranchAddress", values.bankBranchAddress);
+    formData.append("bankAccountNumber", values.bankAccountNumber);
+    formData.append("bankIbnNumber", values.bankIbnNumber);
+    formData.append("remarks", values.remarks);
+
+    // Append the arrays
+    appendArrayField(values.whatsapp, "whatsapp", formData);
+    appendArrayField(values.phoneNumber, "phoneNumber", formData);
+    appendArrayField(values.emergencyNumber, "emergencyNumber", formData);
+    appendArrayField(values.images, "images", formData);
+
+    // Call the mutation
+    mutate(formData, {
+      onSuccess: () => {
+        setStep(0);
+        setActiveStep(0);
+        resetForm();
+      },
+    });
   };
+
+  function onSuccess(data) {
+    toast({
+      title: "Congratulation!",
+      description: data?.data?.message,
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+      position: "top",
+    });
+  }
+
+  function onError(error) {
+    toast({
+      title: "An error occurred.",
+      description: error?.response?.data?.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      position: "top",
+    });
+  }
+
   useEffect(() => {
     document.title = "Add Owner";
   }, []);
+
   return (
     <Layout>
       <Heading>Add Owner</Heading>
@@ -536,40 +186,7 @@ const AddOwner = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          validationSchema={object({
-            name: string()
-              .matches(
-                /^(?=.{3,70}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
-                "Name should have at least 3 characters, not any number and first letter capital!"
-              )
-              .required("Name is Required!"),
-            father: string()
-              .matches(
-                /^(?=.{3,70}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
-                "Father/Husband Name should have at least 3 characters, not any number and first letter capital!"
-              )
-              .required("Father/Husband Name is Required!"),
-            cnic: string()
-              .required("CNIC is required!")
-              .matches(
-                /^[0-9]{5}-[0-9]{7}-[0-9]$/,
-                "CNIC must be 13 characters!"
-              ),
-            cnicExpiry: date().required("CNIC expiry date is Required!"),
-            whatsapp: array().required("Whatsapp Number is required!"),
-            email: string().email("Invalid Email"),
-            currentAddress: string().required("Current Address is Required!"),
-            permanentAddress: string().required(
-              "Permanent Address is Required!"
-            ),
-            phoneNumber: array().required("Phone is required!"),
-            emergencyNumber: array(),
-            images: array().min(2, "At least two image is required"),
-            bankIbnNumber: string().matches(
-              /^[a-zA-Z0-9]{24}$/,
-              "IBN number should be 24 character long and not contain any special character and spaces!"
-            ),
-          })}
+          validationSchema={ownerTenantSchema}
         >
           {({
             errors,
@@ -584,41 +201,45 @@ const AddOwner = () => {
           }) => (
             <>
               {step === 0 && (
-                <Form1
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
+                <PersonalInfoForm
                   errors={errors}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                   touched={touched}
                   values={values}
                   setFieldValue={setFieldValue}
+                  formHolder={"Owner"}
                 />
               )}
               {step === 1 && (
-                <Form2
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
+                <JobInfoForm
                   errors={errors}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                   touched={touched}
                   values={values}
+                  formHolder={"Owner"}
                 />
               )}
               {step === 2 && (
-                <Form3
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
+                <BankInfoForm
                   errors={errors}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                   touched={touched}
                   values={values}
+                  formHolder={"Owner"}
                 />
               )}
               {step === 3 && (
-                <Form4
+                <ImageUploadForm
                   errors={errors}
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
                   values={values}
                   setFieldValue={setFieldValue}
+                  label={"Upload Owner Front and Back CNIC Image"}
                 />
               )}
 
@@ -629,37 +250,35 @@ const AddOwner = () => {
                   flexDirection={{ base: "column", sm: "row" }}
                 >
                   <Flex>
-                    <Button
+                    <CustomButton
                       onClick={() => {
                         setStep(step - 1);
                         goToPrevious();
                       }}
                       isDisabled={step === 0}
-                      colorScheme="teal"
+                      colorScheme="teal.300"
                       variant="solid"
                       w="7rem"
                       mr="5%"
-                    >
-                      Back
-                    </Button>
-                    <Button
+                      text={"Back"}
+                    />
+                    <CustomButton
                       w="7rem"
                       isDisabled={step === 3}
                       onClick={() => {
                         setStep(step + 1);
                         goToNext();
                       }}
-                      colorScheme="teal"
+                      colorScheme="teal.300"
                       variant="outline"
-                    >
-                      Next
-                    </Button>
+                      text={"Next"}
+                    />
                   </Flex>
                   {step === 3 && (
                     <Button
                       w="7rem"
                       mt={{ base: "5%", sm: "0" }}
-                      colorScheme="green"
+                      colorScheme="blue"
                       variant="solid"
                       type="submit"
                       isDisabled={!isValid || !dirty}
@@ -667,6 +286,7 @@ const AddOwner = () => {
                         goToNext();
                         handleSubmit(values);
                       }}
+                      isLoading={isLoading}
                     >
                       Submit
                     </Button>
