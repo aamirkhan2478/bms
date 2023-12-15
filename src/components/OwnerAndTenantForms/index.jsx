@@ -46,6 +46,7 @@ export const PersonalInfoForm = ({
       isRequired: true,
       flexBasis: { md: "48%", sm: "100%" },
       numberField: true,
+      defaultValue: values.cnic,
     },
     {
       id: "cnic-expiry",

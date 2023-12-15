@@ -75,6 +75,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
           h={150}
           w={150}
           filter={useColorModeValue("", "saturate(10)")}
+          priority={true}
         />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>

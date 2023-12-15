@@ -107,6 +107,7 @@ const Navbar = ({ onOpen, ...rest }) => {
           w={100}
           display={{ base: "flex", md: "none" }}
           filter={useColorModeValue("", "saturate(10)")}
+          priority={true}
         />
         <HStack>
           <IconButton
