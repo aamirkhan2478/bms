@@ -1,13 +1,8 @@
-import axios from "@/utils";
+import axios from "@/utils/axiosInstance";
 import { useMutation } from "react-query";
 
 const inventory = (values) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
-  return axios.post("/inventory/add", values, config);
+  return axios.post("/inventory/add", values);
 };
 
 export const useAddInventory = (onSuccess, onError) => {
