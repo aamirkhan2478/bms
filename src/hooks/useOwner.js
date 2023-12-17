@@ -1,8 +1,12 @@
 import axios from "@/utils/axiosInstance";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 const owner = (values) => {
   return axios.post("/owner/add", values);
+};
+
+const showOwners = () => {
+  return axios.get("/owner/all");
 };
 
 export const useAddOwner = (onSuccess, onError) => {
@@ -10,4 +14,8 @@ export const useAddOwner = (onSuccess, onError) => {
     onSuccess,
     onError,
   });
+};
+
+export const useShowOwners = () => {
+  return useQuery("show-owners", showOwners);
 };
