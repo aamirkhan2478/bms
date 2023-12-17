@@ -3,9 +3,9 @@ import {
   FormLabel,
   Input,
   InputGroup,
-  Select,
   Textarea,
 } from "@chakra-ui/react";
+import { Select } from "chakra-react-select";
 import ArrayPhoneNumber from "../ArrayPhoneNumber";
 
 const TextField = ({
@@ -100,19 +100,18 @@ const TextField = ({
           </FormLabel>
           <Select
             placeholder={placeHolder}
-            borderRadius="15px"
-            fontSize="sm"
             size="lg"
-            _focus={{ outlineColor: "teal.300" }}
-            _placeholder={{ color: "gray.500" }}
+            options={data}
+            chakraStyles={{
+              borderRadius: "15px",
+              fontSize: "sm",
+              _focus: { outlineColor: "teal.300" },
+              _placeholder: { color: "gray.500" },
+            }}
+            focusBorderColor="teal.300"
+            colorScheme="teal"
             {...rest}
-          >
-            {data.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.text}
-              </option>
-            ))}
-          </Select>
+          />
           {helperText && (
             <FormHelperText color={"gray.500"} ml={3}>
               {helperText}
