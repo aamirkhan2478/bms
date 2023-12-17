@@ -3,6 +3,8 @@ import CustomBox from "@/components/CustomBox";
 import CustomButton from "@/components/CustomButton";
 import Layout from "@/components/Layout";
 import TextField from "@/components/TextField";
+import { useSellInventory, useShowInventories } from "@/hooks/useInventory";
+import { useShowOwners } from "@/hooks/useOwner";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,86 +14,74 @@ import {
   FormHelperText,
   Heading,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
-import { date, number, object, string } from "yup";
+import { array, date, object } from "yup";
 
 const SellInventory = () => {
-  const data = [
-    {
-      value: "Flat",
-      text: "Flat",
-    },
-    {
-      value: "Shop",
-      text: "Shop",
-    },
-    {
-      value: "Office",
-      text: "Office",
-    },
-  ];
-
-  const ownerData = [
-    {
-      value: "Zeshan",
-      text: "Zeshan",
-    },
-    {
-      value: "Aqib",
-      text: "Aqib",
-    },
-    {
-      value: "Talha",
-      text: "Talha",
-    },
-  ];
-
-  const floorNoData = [
-    {
-      value: "1",
-      text: "1",
-    },
-    {
-      value: "2",
-      text: "2",
-    },
-    {
-      value: "3",
-      text: "3",
-    },
-  ];
-
-  const inventoryNumberData = [
-    {
-      value: "01",
-      text: "01",
-    },
-    {
-      value: "02",
-      text: "02",
-    },
-    {
-      value: "03",
-      text: "03",
-    },
-  ];
+  const { data: inventories, isLoading: inventoryLoading } =
+    useShowInventories();
+  const { data: owners, isLoading: ownerLoading } = useShowOwners();
+  const { mutate, isLoading } = useSellInventory(onSuccess, onError);
+  const toast = useToast();
 
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.400");
   const initialValues = {
-    inventoryType: "",
-    floor: "",
-    flatShopOfficeNo: "",
-    owner: "",
+    inventories: [],
+    owners: [],
     purchaseDate: "",
   };
 
-  const clickHandler = (values) => {
-    console.log(values);
+  const mappingInventories = inventories?.data?.data?.inventories?.map(
+    (item) => ({
+      value: item._id,
+      label: `${item.inventoryType} - ${item.floor}${item.flatNo}`,
+    })
+  );
+
+  const mappingOwners = owners?.data?.data?.owners?.map((item) => ({
+    value: item._id,
+    label: `${item.name}`,
+  }));
+
+  const clickHandler = (values, { resetForm }) => {
+    const newData = {
+      inventories: values.inventories.map((item) => item.value),
+      owners: values.owners.map((item) => item.value),
+      purchaseDate: values.purchaseDate,
+    };
+
+    mutate(newData, {
+      onSuccess: () => {
+        resetForm();
+      },
+    });
   };
 
+  function onSuccess(data) {
+    toast({
+      title: "Congratulation!",
+      description: data?.data?.message,
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+      position: "top",
+    });
+  }
+
+  function onError(error) {
+    toast({
+      title: "An error occurred.",
+      description: error?.response?.data?.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      position: "top",
+    });
+  }
   useEffect(() => {
     document.title = "Sell Inventory";
   }, []);
@@ -121,88 +111,62 @@ const SellInventory = () => {
           initialValues={initialValues}
           onSubmit={clickHandler}
           validationSchema={object({
-            inventoryType: string().required("Inventory Type is required!"),
-            floor: number().required("Floor number is required!"),
-            flatShopOfficeNo: number().required(
-              "The flat/shop/office number is required!"
-            ),
-            owner: string().required("Owner is required!"),
+            inventories: array().required("Inventories is required!"),
+            owners: array().required("Owner is required!"),
             purchaseDate: date().required("Purchase Date is required!"),
           })}
         >
-          {({ touched, dirty, isValid, errors, handleBlur, handleChange }) => (
+          {({
+            touched,
+            dirty,
+            isValid,
+            errors,
+            handleBlur,
+            handleChange,
+            setFieldValue,
+          }) => (
             <>
               <Form>
                 <Flex direction={"column"} gap={5}>
                   <FormControl id="inventory" isRequired>
                     <Field
-                      as={TextField}
-                      data={data}
-                      placeHolder={"Select Inventory Type"}
-                      name={"inventoryType"}
+                      component={TextField}
+                      data={mappingInventories}
+                      placeHolder={"Select Inventory"}
+                      name={"inventories"}
                       label={"Inventory Type"}
                       isInvalid={
-                        Boolean(errors.inventoryType) &&
-                        Boolean(touched.inventoryType)
+                        Boolean(errors.inventories) &&
+                        Boolean(touched.inventories)
                       }
                       onBlur={handleBlur}
-                      onChange={handleChange("inventoryType")}
+                      onChange={(e) => setFieldValue("inventories", e)}
+                      isMulti
+                      isLoading={inventoryLoading}
+                      isDisabled={inventoryLoading}
                     />
                     <FormHelperText color="red">
-                      {Boolean(touched.inventoryType) && errors.inventoryType}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl id="Floor-no" isRequired>
-                    <Field
-                      as={TextField}
-                      data={floorNoData}
-                      placeHolder={"Select floor no."}
-                      name={"floor"}
-                      label={"Floor No."}
-                      isInvalid={
-                        Boolean(errors.floor) && Boolean(touched.floor)
-                      }
-                      onBlur={handleBlur}
-                      onChange={handleChange("floor")}
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(touched.floor) && errors.floor}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl id="inventory-number" isRequired>
-                    <Field
-                      as={TextField}
-                      placeHolder={"Select flat/shop/office no."}
-                      name={"flatShopOfficeNo"}
-                      data={inventoryNumberData}
-                      label={"Flat/Shop/Office No."}
-                      isInvalid={
-                        Boolean(errors.flatShopOfficeNo) &&
-                        Boolean(touched.flatShopOfficeNo)
-                      }
-                      onBlur={handleBlur}
-                      onChange={handleChange("flatShopOfficeNo")}
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(touched.flatShopOfficeNo) &&
-                        errors.flatShopOfficeNo}
+                      {Boolean(touched.inventories) && errors.inventories}
                     </FormHelperText>
                   </FormControl>
                   <FormControl id="owner" isRequired>
                     <Field
-                      as={TextField}
-                      data={ownerData}
+                      component={TextField}
+                      data={mappingOwners}
                       placeHolder={"Select Owner"}
-                      name={"owner"}
+                      name={"owners"}
                       label={"Owner"}
                       isInvalid={
-                        Boolean(errors.owner) && Boolean(touched.owner)
+                        Boolean(errors.owners) && Boolean(touched.owners)
                       }
                       onBlur={handleBlur}
-                      onChange={handleChange("owner")}
+                      onChange={(e) => setFieldValue("owners", e)}
+                      isMulti
+                      isLoading={ownerLoading}
+                      isDisabled={ownerLoading}
                     />
                     <FormHelperText color="red">
-                      {Boolean(touched.owner) && errors.owner}
+                      {Boolean(touched.owners) && errors.owners}
                     </FormHelperText>
                   </FormControl>
                   <FormControl id="purchaseDate" isRequired>
@@ -231,6 +195,7 @@ const SellInventory = () => {
                     alignSelf={"start"}
                     type="submit"
                     isDisabled={!isValid || !dirty}
+                    isLoading={isLoading}
                   />
                 </Flex>
               </Form>
