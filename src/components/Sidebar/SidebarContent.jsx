@@ -24,21 +24,21 @@ const SidebarContent = ({ onClose, ...rest }) => {
       icon: BsBuildingFillAdd,
       path: "/dashboard/add-inventory",
     },
-    {
-      name: "Add Wapda Submeter",
-      icon: BsSpeedometer,
-      path: "/dashboard/add-wapda-submeter",
-    },
-    {
-      name: "Add Generator Submeter",
-      icon: MdOutlineElectricMeter,
-      path: "/dashboard/add-generator-submeter",
-    },
-    {
-      name: "Add Water Submeter",
-      icon: FaMeteor,
-      path: "/dashboard/add-water-submeter",
-    },
+    // {
+    //   name: "Add Wapda Submeter",
+    //   icon: BsSpeedometer,
+    //   path: "/dashboard/add-wapda-submeter",
+    // },
+    // {
+    //   name: "Add Generator Submeter",
+    //   icon: MdOutlineElectricMeter,
+    //   path: "/dashboard/add-generator-submeter",
+    // },
+    // {
+    //   name: "Add Water Submeter",
+    //   icon: FaMeteor,
+    //   path: "/dashboard/add-water-submeter",
+    // },
     { name: "Add Owner", icon: IoMdPersonAdd, path: "/dashboard/add-owner" },
     {
       name: "Add Tenant",
