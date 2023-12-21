@@ -1,7 +1,22 @@
-import { FormHelperText, FormControl } from "@chakra-ui/react";
+import {
+  FormHelperText,
+  FormControl,
+  Checkbox,
+  Flex,
+  RadioGroup,
+  FormLabel,
+  Stack,
+  Radio,
+  Thead,
+  Th,
+  Tr,
+  Table,
+  Tbody,
+  Td,
+} from "@chakra-ui/react";
 import { Field } from "formik";
 import TextField from "../TextField";
-import { PatternFormat } from "react-number-format";
+import { NumericFormat, PatternFormat } from "react-number-format";
 import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
 
 const Form = ({
@@ -11,6 +26,7 @@ const Form = ({
   handleChange,
   handleBlur,
   setFieldValue,
+  setOwnerName,
 }) => {
   const changeHandle = (name) => (event) => {
     let value = event.target.value;
@@ -19,10 +35,37 @@ const Form = ({
     }
     setFieldValue(name, value);
   };
+
+  const changeSelect = (name) => (event) => {
+    setFieldValue(name, event);
+  };
+
+  const handleSelect = (name) => (event) => {
+    setOwnerName(event.value);
+    setFieldValue(name, event);
+  };
+
   return (
     <>
       {formFields.map(
-        ({ id, name, isRequired, flexBasis, numberField, ...props }, index) => (
+        (
+          {
+            id,
+            name,
+            isRequired,
+            flexBasis,
+            numberField,
+            selectChange,
+            comboSelect,
+            isCheckbox,
+            checkboxData,
+            radioData,
+            isRadio,
+            numberFormat,
+            ...props
+          },
+          index
+        ) => (
           <FormControl
             key={index}
             id={id}
@@ -30,10 +73,10 @@ const Form = ({
             flexBasis={flexBasis}
             mb={4}
           >
-            {numberField ? (
+            {numberField || numberFormat ? (
               <>
                 <TextField
-                  as={PatternFormat}
+                  as={numberField ? PatternFormat : NumericFormat}
                   format="#####-#######-#"
                   mask="_"
                   name={name}
@@ -46,6 +89,66 @@ const Form = ({
                   {Boolean(touched[name]) && errors[name]}
                 </FormHelperText>
               </>
+            ) : isCheckbox ? (
+              <Flex gap={"1rem"} wrap={"wrap"}>
+                {checkboxData && (
+                  <Table>
+                    <Thead>
+                      <Tr>
+                        <Th>Office(s)/Shop(s)/Flat(s)</Th>
+                        <Th>Owner(s)</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {checkboxData &&
+                        checkboxData.map((item, index) => {
+                          return (
+                            <Tr>
+                              <Td>
+                                <Checkbox
+                                  key={index}
+                                  colorScheme={item.colorScheme}
+                                  value={item.value}
+                                  name={name}
+                                  onChange={handleChange(name)}
+                                  defaultChecked={item.defaultChecked}
+                                  {...props}
+                                >
+                                  {item.label}
+                                </Checkbox>
+                              </Td>
+                              <Td>
+                                {item.owners ? item.owners.join(", ") : "N/A"}
+                              </Td>
+                            </Tr>
+                          );
+                        })}
+                    </Tbody>
+                  </Table>
+                )}
+              </Flex>
+            ) : isRadio ? (
+              <RadioGroup my={4}>
+                <FormLabel>{props.label}</FormLabel>
+                <Stack spacing={5} direction="row">
+                  {radioData &&
+                    radioData.map((item, index) => {
+                      return (
+                        <Radio
+                          key={index}
+                          colorScheme={item.colorScheme}
+                          value={item.value}
+                          name={name}
+                          onChange={handleChange(name)}
+                          defaultChecked={item.defaultChecked}
+                          {...props}
+                        >
+                          {item.label}
+                        </Radio>
+                      );
+                    })}
+                </Stack>
+              </RadioGroup>
             ) : (
               <>
                 <Field
@@ -55,6 +158,10 @@ const Form = ({
                   onChange={
                     name === "name" || name === "father"
                       ? changeHandle(name)
+                      : selectChange || name === "tenants" || name === "agents"
+                      ? changeSelect(name)
+                      : selectChange || name === "owners"
+                      ? handleSelect(name)
                       : handleChange(name)
                   }
                   isInvalid={Boolean(errors[name]) && Boolean(touched[name])}
