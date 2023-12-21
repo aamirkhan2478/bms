@@ -7,8 +7,6 @@ import {
   Button,
   Heading,
   Flex,
-  FormControl,
-  FormLabel,
   Step,
   StepDescription,
   StepIcon,
@@ -23,558 +21,175 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   useColorModeValue,
-  FormHelperText,
-  RadioGroup,
-  Stack,
-  Radio,
+  useToast,
 } from "@chakra-ui/react";
 
 import Layout from "@/components/Layout";
 import CustomBox from "@/components/CustomBox";
-import TextField from "@/components/TextField";
-import ImageUploader from "@/components/ImageUploader";
 import { Formik } from "formik";
-import { date, number, object, string } from "yup";
-import { NumericFormat } from "react-number-format";
-
-const Form1 = ({ handleBlur, handleChange, errors, touched, values }) => {
-  const tenantData = [
-    {
-      value: "Ruman",
-      text: "Ruman",
-    },
-    {
-      value: "Saqib",
-      text: "Saqib",
-    },
-    {
-      value: "Sohaib",
-      text: "Sohaib",
-    },
-  ];
-
-  const ownerData = [
-    {
-      value: "Atif Mustafa Khan",
-      text: "Atif Mustafa Khan",
-    },
-    {
-      value: "Ruman",
-      text: "Ruman",
-    },
-    {
-      value: "Saqib",
-      text: "Saqib",
-    },
-    {
-      value: "Sohaib",
-      text: "Sohaib",
-    },
-  ];
-  return (
-    <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
-        Contract Info
-      </Heading>
-      <Flex flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="tenant-name">
-          <TextField
-            placeHolder="Select Tenant Name"
-            label={"Tenant Name"}
-            data={tenantData}
-            name="tenantName"
-            onBlur={handleBlur}
-            onChange={handleChange("tenantName")}
-            defaultValue={values.tenantName}
-            isInvalid={
-              Boolean(errors.tenantName) && Boolean(touched.tenantName)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.tenantName) && errors.tenantName}
-          </FormHelperText>
-        </FormControl>
-
-        <FormControl id="owner-name">
-          <TextField
-            placeHolder="Select Owner Name"
-            data={ownerData}
-            label={"Owner Name"}
-            defaultValue={values.ownerName}
-            name="ownerName"
-            onBlur={handleBlur}
-            onChange={handleChange("ownerName")}
-            isInvalid={Boolean(errors.ownerName) && Boolean(touched.ownerName)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.ownerName) && errors.ownerName}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="signing-date">
-          <TextField
-            placeHolder="Select Contract Signing Date"
-            label={"Signing Date"}
-            fieldType={"input"}
-            type="date"
-            name="signingDate"
-            defaultValue={values.signingDate}
-            onBlur={handleBlur}
-            onChange={handleChange("signingDate")}
-            isInvalid={
-              Boolean(errors.signingDate) && Boolean(touched.signingDate)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.signingDate) && errors.signingDate}
-          </FormHelperText>
-        </FormControl>
-        <FormControl id="start-date">
-          <TextField
-            placeHolder="Enter Contract Start Date"
-            fieldType={"input"}
-            type="date"
-            label={"Start Date"}
-            defaultValue={values.startDate}
-            name="startDate"
-            onBlur={handleBlur}
-            onChange={handleChange("startDate")}
-            isInvalid={Boolean(errors.startDate) && Boolean(touched.startDate)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.startDate) && errors.startDate}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl id="end-date" mr="5%">
-          <TextField
-            placeHolder="Enter Contract End Date"
-            fieldType={"input"}
-            type="date"
-            label={"End Date"}
-            defaultValue={values.endDate}
-            name="endDate"
-            onBlur={handleBlur}
-            onChange={handleChange("endDate")}
-            isInvalid={Boolean(errors.endDate) && Boolean(touched.endDate)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.endDate) && errors.endDate}
-          </FormHelperText>
-        </FormControl>
-        <FormControl id="renewal-date">
-          <TextField
-            placeHolder="Enter Contract Renewal Notification Date"
-            fieldType={"input"}
-            type="date"
-            label={"Renewal Notification Date"}
-            name="renewalNotificationDate"
-            onBlur={handleBlur}
-            defaultValue={values.renewalNotificationDate}
-            onChange={handleChange("renewalNotificationDate")}
-            isInvalid={
-              Boolean(errors.renewalNotificationDate) &&
-              Boolean(touched.renewalNotificationDate)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.renewalNotificationDate) &&
-              errors.renewalNotificationDate}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="monthlyAmount">
-          <TextField
-            as={NumericFormat}
-            allowLeadingZeros
-            thousandSeparator=","
-            placeHolder="Enter Monthly Rental Amount"
-            fieldType={"input"}
-            label={"Monthly Amount"}
-            name="monthlyAmount"
-            onBlur={handleBlur}
-            defaultValue={values.monthlyAmount}
-            onChange={handleChange("monthlyAmount")}
-            isInvalid={
-              Boolean(errors.monthlyAmount) && Boolean(touched.monthlyAmount)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.monthlyAmount) && errors.monthlyAmount}
-          </FormHelperText>
-        </FormControl>
-        <FormControl id="taxAmount">
-          <TextField
-            as={NumericFormat}
-            allowLeadingZeros
-            thousandSeparator=","
-            placeHolder="Enter Monthly Tax Amount"
-            fieldType={"input"}
-            label={"Tax Amount"}
-            name="taxAmount"
-            defaultValue={values.taxAmount}
-            onBlur={handleBlur}
-            onChange={handleChange("taxAmount")}
-            isInvalid={Boolean(errors.taxAmount) && Boolean(touched.taxAmount)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.taxAmount) && errors.taxAmount}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mr="5%" id="managementCharges">
-          <TextField
-            as={NumericFormat}
-            allowLeadingZeros
-            thousandSeparator=","
-            placeHolder="Enter Building Management Charges"
-            fieldType={"input"}
-            label={"Management Charges"}
-            name="managementCharges"
-            onBlur={handleBlur}
-            defaultValue={values.managementCharges}
-            onChange={handleChange("managementCharges")}
-            isInvalid={
-              Boolean(errors.managementCharges) &&
-              Boolean(touched.managementCharges)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.managementCharges) && errors.managementCharges}
-          </FormHelperText>
-        </FormControl>
-        <FormControl id="depositAmount">
-          <TextField
-            as={NumericFormat}
-            allowLeadingZeros
-            thousandSeparator=","
-            placeHolder="Enter Security Deposit Amount"
-            fieldType={"input"}
-            label={"Security Deposit Amount"}
-            name="depositAmount"
-            onBlur={handleBlur}
-            defaultValue={values.depositAmount}
-            onChange={handleChange("depositAmount")}
-            isInvalid={
-              Boolean(errors.depositAmount) && Boolean(touched.depositAmount)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.depositAmount) && errors.depositAmount}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <FormControl id="annualIncrement">
-        <TextField
-          as={NumericFormat}
-          suffix={"%"}
-          placeHolder="Enter Annual Increment"
-          fieldType={"input"}
-          label={"Annual Increment"}
-          name="annualIncrement"
-          defaultValue={values.annualIncrement}
-          onBlur={handleBlur}
-          onChange={handleChange("annualIncrement")}
-          isInvalid={
-            Boolean(errors.annualIncrement) && Boolean(touched.annualIncrement)
-          }
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.annualIncrement) && errors.annualIncrement}
-        </FormHelperText>
-      </FormControl>
-    </>
-  );
-};
-
-const Form2 = ({ handleBlur, handleChange, errors, touched, values }) => {
-  const agentData = [
-    {
-      value: "Atif Mustafa Khan",
-      text: "Atif Mustafa Khan",
-    },
-  ];
-  return (
-    <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
-        Meter Readings And More Info
-      </Heading>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mb={5} id="wapdaMeter" mr={"5%"}>
-          <TextField
-            placeHolder="Enter Wapda Meter Reading"
-            fieldType={"input"}
-            label={"Wapda Meter Reading"}
-            name="wapdaMeter"
-            onBlur={handleBlur}
-            defaultValue={values.wapdaMeter}
-            onChange={handleChange("wapdaMeter")}
-            isInvalid={
-              Boolean(errors.wapdaMeter) && Boolean(touched.wapdaMeter)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.wapdaMeter) && errors.wapdaMeter}
-          </FormHelperText>
-        </FormControl>
-
-        <FormControl mb={5} id="generatorMeter">
-          <TextField
-            placeHolder="Enter Generator Meter Reading"
-            fieldType={"input"}
-            label={"Generator Meter Reading"}
-            name="generatorMeter"
-            onBlur={handleBlur}
-            defaultValue={values.generatorMeter}
-            onChange={handleChange("generatorMeter")}
-            isInvalid={
-              Boolean(errors.generatorMeter) && Boolean(touched.generatorMeter)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.generatorMeter) && errors.generatorMeter}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mb={5} id="waterMeter" mr={"5%"}>
-          <TextField
-            placeHolder="Enter Water Meter Reading"
-            fieldType={"input"}
-            label={"Water Meter Reading"}
-            name="waterMeter"
-            onBlur={handleBlur}
-            defaultValue={values.waterMeter}
-            onChange={handleChange("waterMeter")}
-            isInvalid={
-              Boolean(errors.waterMeter) && Boolean(touched.waterMeter)
-            }
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.waterMeter) && errors.waterMeter}
-          </FormHelperText>
-        </FormControl>
-
-        <FormControl mb={5} id="dueDate">
-          <TextField
-            placeHolder="Enter Monthly Due Date"
-            fieldType={"input"}
-            type="date"
-            label={"Monthly Due Date"}
-            name="dueDate"
-            onBlur={handleBlur}
-            defaultValue={values.dueDate}
-            onChange={handleChange("dueDate")}
-            isInvalid={Boolean(errors.dueDate) && Boolean(touched.dueDate)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.dueDate) && errors.dueDate}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <Flex my={5} flexDirection={{ base: "column", sm: "row" }}>
-        <FormControl mb={5} id="overDue" mr={"5%"}>
-          <TextField
-            placeHolder="Enter Monthly Over Due Date"
-            fieldType={"input"}
-            type="date"
-            label={"Monthly Over Due Date"}
-            name="overDue"
-            onBlur={handleBlur}
-            defaultValue={values.overDue}
-            onChange={handleChange("overDue")}
-            isInvalid={Boolean(errors.overDue) && Boolean(touched.overDue)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.overDue) && errors.overDue}
-          </FormHelperText>
-        </FormControl>
-
-        <FormControl mb={5} id="agentName">
-          <TextField
-            placeHolder="Select Agent Name"
-            data={agentData}
-            label={"Agent Name"}
-            name="agentName"
-            onBlur={handleBlur}
-            defaultValue={values.agentName}
-            onChange={handleChange("agentName")}
-            isInvalid={Boolean(errors.agentName) && Boolean(touched.agentName)}
-          />
-          <FormHelperText color="red">
-            {Boolean(touched.agentName) && errors.agentName}
-          </FormHelperText>
-        </FormControl>
-      </Flex>
-      <FormControl mb={5} id="terminationNotice">
-        <TextField
-          placeHolder="Enter Termination Notice Period(in months)"
-          fieldType={"input"}
-          label={"Termination Notice Period"}
-          name="terminationNotice"
-          onBlur={handleBlur}
-          defaultValue={values.terminationNotice}
-          onChange={handleChange("terminationNotice")}
-          isInvalid={
-            Boolean(errors.terminationNotice) &&
-            Boolean(touched.terminationNotice)
-          }
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.terminationNotice) && errors.terminationNotice}
-        </FormHelperText>
-      </FormControl>
-      <RadioGroup defaultValue={values.monthSecurityAmount} my={4}>
-        <FormLabel>
-          One Month Security amount will not be refunded if apartment will be
-          vacated within 6 months?
-        </FormLabel>
-        <Stack spacing={5} direction="row">
-          <Radio
-            colorScheme="green"
-            value={"yes"}
-            name="monthSecurityAmount"
-            onChange={handleChange("monthSecurityAmount")}
-          >
-            Yes
-          </Radio>
-          <Radio
-            colorScheme="red"
-            value={"no"}
-            name="monthSecurityAmount"
-            onChange={handleChange("monthSecurityAmount")}
-          >
-            No
-          </Radio>
-        </Stack>
-      </RadioGroup>
-      <FormControl id="remarks">
-        <TextField
-          placeHolder="Enter Remarks"
-          fieldType={"textArea"}
-          label={"Remarks"}
-          name="remarks"
-          defaultValue={values.remarks}
-          onBlur={handleBlur}
-          onChange={handleChange("remarks")}
-          isInvalid={Boolean(errors.remarks) && Boolean(touched.remarks)}
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.remarks) && errors.remarks}
-        </FormHelperText>
-      </FormControl>
-    </>
-  );
-};
-
-const Form3 = ({
-  handleBlur,
-  errors,
-  touched,
-  handleChange,
-  setFieldValue,
-  values,
-}) => {
-  return (
-    <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal">
-        Attachments
-      </Heading>
-      <FormControl mb={5} id="images">
-        <FormLabel>Upload Contract Copy Image</FormLabel>
-        <ImageUploader
-          handleChange={handleChange}
-          name={"images"}
-          onBlur={handleBlur}
-          values={values}
-          setFieldValue={setFieldValue}
-        />
-        <FormHelperText color="red">
-          {Boolean(touched.images) && errors.images}
-        </FormHelperText>
-      </FormControl>
-    </>
-  );
-};
+import { useShowTenants } from "@/hooks/useTenant";
+import { ContractInfoForm, MoreInfoForm } from "@/components/ContractForms.js";
+import { useShowInventoryOwners } from "@/hooks/useInventory";
+import { useShowOwnerInventories } from "@/hooks/useOwner";
+import { ImageUploadForm } from "@/components/OwnerAndTenantForms";
+import contractSchema from "@/validators/contract.validator";
+import { useShowAgents } from "@/hooks/useAgent";
+import { useAddContract } from "@/hooks/useContract";
+import appendArrayField from "@/utils/appendArrayField";
+import CustomButton from "@/components/CustomButton";
 
 const AddContract = () => {
+  const [ownerName, setOwnerName] = useState("");
   const [step, setStep] = useState(0);
+  const toast = useToast();
+  const { data: tenants, isLoading: tenantLoading } = useShowTenants();
+  const { data: owners, isLoading: ownerLoading } = useShowInventoryOwners();
+  const { data: agents, isLoading: agentLoading } = useShowAgents();
+  const { mutate: addContract, isLoading: contractLoading } = useAddContract(
+    onSuccess,
+    onError
+  );
+  const tenantData = tenants?.data?.data?.tenants?.map((tenant) => ({
+    value: tenant._id,
+    label: tenant.name,
+  }));
+  const initialValues = {
+    tenants: [],
+    owners: [],
+    inventories: [],
+    signingDate: "",
+    startDate: "",
+    endDate: "",
+    renewalDate: "",
+    monthlyRentalAmount: "",
+    monthlyTaxAmount: "",
+    buildingManagementCharges: "",
+    securityDepositAmount: "",
+    annualRentalIncrease: "",
+    wapdaSubmeterReading: "",
+    generatorSubmeterReading: "",
+    waterSubmeterReading: "",
+    monthlyRentalDueDate: "",
+    monthlyRentalOverDate: "",
+    agent: "",
+    terminationNoticePeriod: "",
+    nonrefundableSecurityDeposit: "yes",
+    images: [],
+    remarks: "",
+  };
+
+  const allOwners = owners?.data?.data?.owners?.map((owner) => ({
+    value: owner?.owners?.map((owner) => owner._id).join(","),
+    label: owner?.owners?.map((owner) => owner.name).join(" - "),
+  }));
+
+  const { data: inventories } = useShowOwnerInventories(ownerName);
+
+  const inventoriesData = inventories?.data?.data?.inventories?.map(
+    (inventory) => {
+      const owners = inventory.owners.map((owner) => owner.name);
+      return {
+        value: inventory._id,
+        label: `${inventory.inventoryType} - ${inventory.floor}${
+          inventory.flatNo
+        }`,
+        owners
+      };
+    }
+  );
+
+  const agentData = agents?.data?.data?.agents?.map((agent) => ({
+    value: agent._id,
+    label: agent.name,
+  }));
+
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
     { title: "Third", description: "Attachments" },
   ];
 
-  const { activeStep, goToNext, goToPrevious } = useSteps({
+  const { activeStep, goToNext, goToPrevious, setActiveStep } = useSteps({
     index: step,
     count: steps.length,
   });
 
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.200");
-  const initialValues = {
-    tenantName: "",
-    ownerName: "",
-    signingDate: "",
-    startDate: "",
-    endDate: "",
-    renewalNotificationDate: "",
-    monthlyAmount: "",
-    taxAmount: "",
-    managementCharges: "",
-    depositAmount: "",
-    annualIncrement: "",
-    wapdaMeter: "",
-    generatorMeter: "",
-    waterMeter: "",
-    dueDate: "",
-    overDue: "",
-    agentName: "",
-    terminationNotice: "",
-    monthSecurityAmount: "yes",
-    images: [],
-    remarks: "",
-  };
 
-  const handleSubmit = (values) => {
-    const withoutPercentageSign = values.annualIncrement.replace("%", "");
-    const withoutMonthlyAmountComma = values.monthlyAmount.replace(/,/g, "");
-    const withoutTaxAmountComma = values.taxAmount.replace(/,/g, "");
-    const withoutManagementChargesComma = values.managementCharges.replace(
-      /,/g,
-      ""
+  const handleSubmit = (values, { resetForm }) => {
+    // Get the values of the arrays
+    const tenantData = values.tenants.map((tenant) => tenant.value);
+
+    // // Convent value to an array
+    const ownerData = Array.from(values.owners.value.split(","));
+
+    // Convert the values to FormData and append the files
+    const formData = new FormData();
+    formData.append("signingDate", values.signingDate);
+    formData.append("startDate", values.startDate);
+    formData.append("endDate", values.endDate);
+    formData.append("renewalDate", values.renewalDate);
+    formData.append("monthlyRentalAmount", values.monthlyRentalAmount);
+    formData.append("monthlyTaxAmount", values.monthlyTaxAmount);
+    formData.append(
+      "buildingManagementCharges",
+      values.buildingManagementCharges
     );
-    const withoutDepositAmountComma = values.depositAmount.replace(/,/g, "");
+    formData.append("securityDepositAmount", values.securityDepositAmount);
+    formData.append("annualRentalIncrease", values.annualRentalIncrease);
+    formData.append("wapdaSubmeterReading", values.wapdaSubmeterReading);
+    formData.append(
+      "generatorSubmeterReading",
+      values.generatorSubmeterReading
+    );
+    formData.append("waterSubmeterReading", values.waterSubmeterReading);
+    formData.append("monthlyRentalDueDate", values.monthlyRentalDueDate);
+    formData.append("monthlyRentalOverDate", values.monthlyRentalOverDate);
+    formData.append("agent", values.agent.value);
+    formData.append("terminationNoticePeriod", values.terminationNoticePeriod);
+    formData.append(
+      "nonrefundableSecurityDeposit",
+      values.nonrefundableSecurityDeposit
+    );
+    formData.append("remarks", values.remarks);
 
-    const newValues = {
-      tenantName: values.tenantName,
-      ownerName: values.ownerName,
-      signingDate: values.signingDate,
-      startDate: values.startDate,
-      endDate: values.endDate,
-      renewalNotificationDate: values.renewalNotificationDate,
-      monthlyAmount: withoutMonthlyAmountComma,
-      taxAmount: withoutTaxAmountComma,
-      managementCharges: withoutManagementChargesComma,
-      depositAmount: withoutDepositAmountComma,
-      annualIncrement: withoutPercentageSign,
-      wapdaMeter: values.wapdaMeter,
-      generatorMeter: values.generatorMeter,
-      waterMeter: values.waterMeter,
-      dueDate: values.dueDate,
-      overDue: values.overDue,
-      agentName: values.agentName,
-      terminationNotice: values.terminationNotice,
-      monthSecurityAmount: values.monthSecurityAmount,
-      images: values.images,
-    };
-    console.log(newValues);
+    // Append the arrays
+    appendArrayField(ownerData, "owners", formData);
+    appendArrayField(tenantData, "tenants", formData);
+    appendArrayField(values.inventories, "inventories", formData);
+    appendArrayField(values.images, "images", formData);
+
+    addContract(formData, {
+      onSuccess: () => {
+        resetForm();
+        setStep(0);
+        setActiveStep(0);
+      },
+    });
   };
+
+  function onSuccess(data) {
+    toast({
+      title: "Congratulation!",
+      description: data?.data?.message,
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+      position: "top",
+    });
+  }
+
+  function onError(error) {
+    toast({
+      title: "An error occurred.",
+      description: error?.response?.data?.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+      position: "top",
+    });
+  }
   useEffect(() => {
     document.title = "Add Contract";
   }, []);
@@ -622,44 +237,7 @@ const AddContract = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          validationSchema={object({
-            tenantName: string().required("Tenant Name is Required!"),
-            ownerName: string().required("Owner Name is Required!"),
-            signingDate: date().required("Signing Date is Required!"),
-            startDate: date().required("Start Date is Required!"),
-            endDate: date().required("End Date is Required!"),
-            renewalNotificationDate: date().required(
-              "Renewal Notification Date is Required!"
-            ),
-            monthlyAmount: string().required("Monthly Amount is Required!"),
-            taxAmount: string().required("Tax Amount is Required!"),
-            managementCharges: string().required(
-              "Management Charges is Required!"
-            ),
-            depositAmount: string().required("Deposit Amount is Required!"),
-            annualIncrement: string().required("Annual Increment is Required!"),
-            wapdaMeter: number()
-              .typeError("That doesn't look like a number!")
-              .positive("Wapda meter number must be a positive number!")
-              .integer("Wapda meter number should be integer!")
-              .required("Wapda Meter is Required!"),
-            generatorMeter: number()
-              .typeError("That doesn't look like a number!")
-              .positive("Generator meter number must be a positive number!")
-              .integer("Generator meter number should be integer!")
-              .required("Generator Meter is Required!"),
-            waterMeter: number()
-              .typeError("That doesn't look like a number")
-              .positive("Water meter number must be a positive number!")
-              .integer("Water meter number should be integer!")
-              .required("Water Meter is Required!"),
-            dueDate: date().required("Due Date is Required!"),
-            overDue: date().required("Over Due is Required!"),
-            agentName: string().required("Agent Name is Required!"),
-            terminationNotice: string().required(
-              "Termination Notice is Required!"
-            ),
-          })}
+          validationSchema={contractSchema}
         >
           {({
             errors,
@@ -674,31 +252,42 @@ const AddContract = () => {
           }) => (
             <>
               {step === 0 && (
-                <Form1
-                  handleChange={handleChange}
+                <ContractInfoForm
                   handleBlur={handleBlur}
+                  handleChange={handleChange}
+                  setFieldValue={setFieldValue}
                   errors={errors}
                   touched={touched}
                   values={values}
+                  searchOneData={tenantData}
+                  searchTwoData={allOwners}
+                  comboData={inventoriesData}
+                  setOwnerName={setOwnerName}
+                  tenantLoading={tenantLoading}
+                  ownerLoading={ownerLoading}
                 />
               )}
               {step === 1 && (
-                <Form2
+                <MoreInfoForm
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   errors={errors}
                   touched={touched}
                   values={values}
+                  agentData={agentData}
+                  agentLoading={agentLoading}
+                  setFieldValue={setFieldValue}
                 />
               )}
               {step === 2 && (
-                <Form3
+                <ImageUploadForm
                   errors={errors}
                   touched={touched}
                   handleBlur={handleBlur}
                   handleChange={handleChange}
                   values={values}
                   setFieldValue={setFieldValue}
+                  label={"Upload Contract Copy Image"}
                 />
               )}
 
@@ -709,39 +298,38 @@ const AddContract = () => {
                   flexDirection={{ base: "column", sm: "row" }}
                 >
                   <Flex>
-                    <Button
+                    <CustomButton
                       onClick={() => {
                         setStep(step - 1);
                         goToPrevious();
                       }}
                       isDisabled={step === 0}
-                      colorScheme="teal"
+                      colorScheme="teal.300"
                       variant="solid"
                       w="7rem"
                       mr="5%"
-                    >
-                      Back
-                    </Button>
-                    <Button
+                      text={"Back"}
+                    />
+                    <CustomButton
                       w="7rem"
-                      isDisabled={step === 2}
+                      isDisabled={step === 3}
                       onClick={() => {
                         setStep(step + 1);
                         goToNext();
                       }}
-                      colorScheme="teal"
+                      colorScheme="teal.300"
                       variant="outline"
-                    >
-                      Next
-                    </Button>
+                      text={"Next"}
+                    />
                   </Flex>
                   {step === 2 && (
                     <Button
                       w="7rem"
                       mt={{ base: "5%", sm: "0" }}
-                      colorScheme="green"
+                      colorScheme="blue"
                       variant="solid"
                       type="submit"
+                      isLoading={contractLoading}
                       isDisabled={!isValid || !dirty}
                       onClick={() => {
                         goToNext();
