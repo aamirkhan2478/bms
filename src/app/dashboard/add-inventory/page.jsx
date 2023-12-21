@@ -23,21 +23,21 @@ const AddInventory = () => {
   const data = [
     {
       value: "Flat",
-      text: "Flat",
+      label: "Flat",
     },
     {
       value: "Shop",
-      text: "Shop",
+      label: "Shop",
     },
     {
       value: "Office",
-      text: "Office",
+      label: "Office",
     },
   ];
 
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.400");
-  const { mutate } = useAddInventory(onSuccess, onError);
+  const { mutate, isLoading } = useAddInventory(onSuccess, onError);
   const toast = useToast();
 
   const initialValues = {
@@ -46,8 +46,16 @@ const AddInventory = () => {
     flatNo: "",
   };
 
-  const clickHandler = (values) => {
-    mutate(values);
+  const clickHandler = (values, { resetForm }) => {
+    const convertedValues = {
+      ...values,
+      inventoryType: values.inventoryType.value,
+    };
+    mutate(convertedValues, {
+      onSuccess: () => {
+        resetForm();
+      },
+    });
   };
 
   useEffect(() => {
@@ -100,7 +108,7 @@ const AddInventory = () => {
           initialValues={initialValues}
           onSubmit={clickHandler}
           validationSchema={object({
-            inventoryType: string().required("Inventory Type is required!"),
+            inventoryType: object().required("Inventory type is required!"),
             floor: string().required("Floor number is required!"),
             flatNo: string()
               .matches(
@@ -110,7 +118,15 @@ const AddInventory = () => {
               .required("The flat/shop/office number is required!"),
           })}
         >
-          {({ touched, dirty, isValid, errors, handleBlur, handleChange }) => (
+          {({
+            touched,
+            dirty,
+            isValid,
+            errors,
+            handleBlur,
+            handleChange,
+            setFieldValue,
+          }) => (
             <>
               <Form>
                 <Flex direction={"column"} gap={5}>
@@ -125,8 +141,9 @@ const AddInventory = () => {
                         Boolean(errors.inventoryType) &&
                         Boolean(touched.inventoryType)
                       }
+                      errorBorderColor="orange.500"
                       onBlur={handleBlur}
-                      onChange={handleChange("inventoryType")}
+                      onChange={(e) => setFieldValue("inventoryType", e)}
                     />
                     <FormHelperText color="red">
                       {Boolean(touched.inventoryType) && errors.inventoryType}
@@ -173,6 +190,7 @@ const AddInventory = () => {
                     alignSelf={"start"}
                     type="submit"
                     isDisabled={!isValid || !dirty}
+                    isLoading={isLoading}
                   />
                 </Flex>
               </Form>
