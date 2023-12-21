@@ -13,6 +13,10 @@ const sellInventory = (values) => {
   return axios.put("/inventory/sell", values);
 };
 
+const showOwners = () => {
+  return axios.get("/inventory/show-owners");
+};
+
 export const useAddInventory = (onSuccess, onError) => {
   return useMutation(inventory, {
     onSuccess,
@@ -29,4 +33,8 @@ export const useSellInventory = (onSuccess, onError) => {
     onSuccess,
     onError,
   });
+};
+
+export const useShowInventoryOwners = () => {
+  return useQuery("show-owners", showOwners);
 };
