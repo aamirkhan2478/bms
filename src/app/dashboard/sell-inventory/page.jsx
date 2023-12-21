@@ -134,7 +134,7 @@ const SellInventory = () => {
                       data={mappingInventories}
                       placeHolder={"Select Inventory"}
                       name={"inventories"}
-                      label={"Inventory Type"}
+                      label={"Inventories"}
                       isInvalid={
                         Boolean(errors.inventories) &&
                         Boolean(touched.inventories)
@@ -155,7 +155,7 @@ const SellInventory = () => {
                       data={mappingOwners}
                       placeHolder={"Select Owner"}
                       name={"owners"}
-                      label={"Owner"}
+                      label={"Owners"}
                       isInvalid={
                         Boolean(errors.owners) && Boolean(touched.owners)
                       }
