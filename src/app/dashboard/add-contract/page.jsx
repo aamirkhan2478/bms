@@ -39,11 +39,12 @@ import appendArrayField from "@/utils/appendArrayField";
 import CustomButton from "@/components/CustomButton";
 
 const AddContract = () => {
-  const [ownerName, setOwnerName] = useState("");
+  // const [ownerName, setOwnerName] = useState("");
   const [step, setStep] = useState(0);
   const toast = useToast();
   const { data: tenants, isLoading: tenantLoading } = useShowTenants();
-  const { data: owners, isLoading: ownerLoading } = useShowInventoryOwners();
+  const { data: inventories, isLoading: ownerLoading } =
+    useShowInventoryOwners();
   const { data: agents, isLoading: agentLoading } = useShowAgents();
   const { mutate: addContract, isLoading: contractLoading } = useAddContract(
     onSuccess,
@@ -56,7 +57,7 @@ const AddContract = () => {
   const initialValues = {
     tenants: [],
     owners: [],
-    inventories: [],
+    inventory: "",
     signingDate: "",
     startDate: "",
     endDate: "",
@@ -78,22 +79,13 @@ const AddContract = () => {
     remarks: "",
   };
 
-  const allOwners = owners?.data?.data?.owners?.map((owner) => ({
-    value: owner?.owners?.map((owner) => owner._id).join(","),
-    label: owner?.owners?.map((owner) => owner.name).join(" - "),
-  }));
-
-  const { data: inventories } = useShowOwnerInventories(ownerName);
-
-  const inventoriesData = inventories?.data?.data?.inventories?.map(
+  const inventoriesData = inventories?.data?.data?.inventoriesWithOwners?.map(
     (inventory) => {
-      const owners = inventory.owners.map((owner) => owner.name);
+      const ownersIds = inventory.owners.map((owner) => owner._id);
+
       return {
-        value: inventory._id,
-        label: `${inventory.inventoryType} - ${inventory.floor}${
-          inventory.flatNo
-        }`,
-        owners
+        value: { ownerIds: ownersIds.join(","), inventoryId: inventory._id },
+        label: `${inventory.inventoryType} - ${inventory.floor}${inventory.flatNo}`,
       };
     }
   );
@@ -120,12 +112,12 @@ const AddContract = () => {
   const handleSubmit = (values, { resetForm }) => {
     // Get the values of the arrays
     const tenantData = values.tenants.map((tenant) => tenant.value);
-
-    // // Convent value to an array
-    const ownerData = Array.from(values.owners.value.split(","));
+    // Convent value to an array
+    const ownerData = Array.from(values.inventory.value.ownerIds.split(","));
 
     // Convert the values to FormData and append the files
     const formData = new FormData();
+    formData.append("inventory", values.inventory.value.inventoryId);
     formData.append("signingDate", values.signingDate);
     formData.append("startDate", values.startDate);
     formData.append("endDate", values.endDate);
@@ -153,13 +145,10 @@ const AddContract = () => {
       values.nonrefundableSecurityDeposit
     );
     formData.append("remarks", values.remarks);
-
     // Append the arrays
     appendArrayField(ownerData, "owners", formData);
     appendArrayField(tenantData, "tenants", formData);
-    appendArrayField(values.inventories, "inventories", formData);
     appendArrayField(values.images, "images", formData);
-
     addContract(formData, {
       onSuccess: () => {
         resetForm();
@@ -260,9 +249,7 @@ const AddContract = () => {
                   touched={touched}
                   values={values}
                   searchOneData={tenantData}
-                  searchTwoData={allOwners}
-                  comboData={inventoriesData}
-                  setOwnerName={setOwnerName}
+                  searchTwoData={inventoriesData}
                   tenantLoading={tenantLoading}
                   ownerLoading={ownerLoading}
                 />
