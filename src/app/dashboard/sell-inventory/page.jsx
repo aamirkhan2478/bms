@@ -48,12 +48,26 @@ const SellInventory = () => {
   }));
 
   const clickHandler = (values, { resetForm }) => {
+    const { inventories, owners, purchaseDate } = values;
+
+    // Mapping inventories and owners
+    const newInventories = inventories.map((item) => ({
+      inventory: item.value,
+      purchaseDate: purchaseDate,
+    }));
+
+    const newOwners = owners.map((item) => ({
+      owner: item.value,
+      purchaseDate: purchaseDate,
+    }));
+
+    // Creating new data
     const newData = {
-      inventories: values.inventories.map((item) => item.value),
-      owners: values.owners.map((item) => item.value),
-      purchaseDate: values.purchaseDate,
+      inventories: newInventories,
+      owners: newOwners,
     };
 
+    // Sending data to server
     mutate(newData, {
       onSuccess: () => {
         resetForm();
