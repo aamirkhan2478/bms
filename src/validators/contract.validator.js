@@ -3,7 +3,6 @@ const { object, string, date, number, array } = require("yup");
 
 const contractSchema = object({
   tenants: array().required("Tenants are Required!"),
-  inventories: array().required("Inventories are Required!"),
   signingDate: date().required("Signing Date is Required!"),
   startDate: date().required("Start Date is Required!"),
   endDate: date().required("End Date is Required!"),
