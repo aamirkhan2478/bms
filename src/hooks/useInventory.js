@@ -13,8 +13,8 @@ const sellInventory = (values) => {
   return axios.put("/inventory/sell", values);
 };
 
-const showOwners = () => {
-  return axios.get("/inventory/show-owners");
+const shownInventoriesWithOwners = () => {
+  return axios.get("/inventory/show-inventories-with-owners");
 };
 
 export const useAddInventory = (onSuccess, onError) => {
@@ -36,5 +36,5 @@ export const useSellInventory = (onSuccess, onError) => {
 };
 
 export const useShowInventoryOwners = () => {
-  return useQuery("show-owners", showOwners);
+  return useQuery("show-inventories-with-owners", shownInventoriesWithOwners);
 };
