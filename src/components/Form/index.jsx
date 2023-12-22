@@ -26,7 +26,6 @@ const Form = ({
   handleChange,
   handleBlur,
   setFieldValue,
-  setOwnerName,
 }) => {
   const changeHandle = (name) => (event) => {
     let value = event.target.value;
@@ -37,11 +36,6 @@ const Form = ({
   };
 
   const changeSelect = (name) => (event) => {
-    setFieldValue(name, event);
-  };
-
-  const handleSelect = (name) => (event) => {
-    setOwnerName(event.value);
     setFieldValue(name, event);
   };
 
@@ -158,10 +152,11 @@ const Form = ({
                   onChange={
                     name === "name" || name === "father"
                       ? changeHandle(name)
-                      : selectChange || name === "tenants" || name === "agents"
+                      : selectChange ||
+                        name === "tenants" ||
+                        name === "agents" ||
+                        name === "inventory"
                       ? changeSelect(name)
-                      : selectChange || name === "owners"
-                      ? handleSelect(name)
                       : handleChange(name)
                   }
                   isInvalid={Boolean(errors[name]) && Boolean(touched[name])}
