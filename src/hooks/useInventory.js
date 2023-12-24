@@ -10,7 +10,7 @@ const showInventories = () => {
 };
 
 const sellInventory = (values) => {
-  return axios.put("/inventory/sell", values);
+  return axios.post("/inventory/sell", values);
 };
 
 const shownInventoriesWithOwners = () => {
