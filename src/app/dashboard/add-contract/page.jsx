@@ -1,21 +1,10 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import {
-  Box,
   ButtonGroup,
   Button,
   Heading,
   Flex,
-  Step,
-  StepDescription,
-  StepIcon,
-  StepIndicator,
-  StepNumber,
-  StepSeparator,
-  StepStatus,
-  StepTitle,
-  Stepper,
   useSteps,
   Breadcrumb,
   BreadcrumbItem,
@@ -30,16 +19,19 @@ import { Formik } from "formik";
 import { useShowTenants } from "@/hooks/useTenant";
 import { ContractInfoForm, MoreInfoForm } from "@/components/ContractForms.js";
 import { useShowInventoryOwners } from "@/hooks/useInventory";
-import { useShowOwnerInventories } from "@/hooks/useOwner";
 import { ImageUploadForm } from "@/components/OwnerAndTenantForms";
-import contractSchema from "@/validators/contract.validator";
+import {
+  contractInfoFormSchema,
+  imagesFormSchema,
+  moreInfoFormSchema,
+} from "@/validators/contract.validator";
 import { useShowAgents } from "@/hooks/useAgent";
 import { useAddContract } from "@/hooks/useContract";
 import appendArrayField from "@/utils/appendArrayField";
 import CustomButton from "@/components/CustomButton";
+import Stepper from "@/components/Stepper";
 
 const AddContract = () => {
-  // const [ownerName, setOwnerName] = useState("");
   const [step, setStep] = useState(0);
   const toast = useToast();
   const { data: tenants, isLoading: tenantLoading } = useShowTenants();
@@ -203,30 +195,17 @@ const AddContract = () => {
         </BreadcrumbItem>
       </Breadcrumb>
       <CustomBox>
-        <Stepper index={activeStep} display={{ base: "none", md: "flex" }}>
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepIndicator>
-                <StepStatus
-                  complete={<StepIcon />}
-                  incomplete={<StepNumber />}
-                  active={<StepNumber />}
-                />
-              </StepIndicator>
-
-              <Box flexShrink="0">
-                <StepTitle>{step.title}</StepTitle>
-                <StepDescription>{step.description}</StepDescription>
-              </Box>
-
-              <StepSeparator />
-            </Step>
-          ))}
-        </Stepper>
+        <Stepper steps={steps} activeStep={activeStep} />
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          validationSchema={contractSchema}
+          validationSchema={
+            step === 0
+              ? contractInfoFormSchema
+              : step === 1
+              ? moreInfoFormSchema
+              : imagesFormSchema
+          }
         >
           {({
             errors,
@@ -299,7 +278,7 @@ const AddContract = () => {
                     />
                     <CustomButton
                       w="7rem"
-                      isDisabled={step === 3}
+                      isDisabled={!isValid || !dirty || step === 2}
                       onClick={() => {
                         setStep(step + 1);
                         goToNext();
