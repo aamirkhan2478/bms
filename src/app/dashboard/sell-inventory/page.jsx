@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
-import { array, date, object } from "yup";
+import { date, object } from "yup";
 
 const SellInventory = () => {
   const { data: inventories, isLoading: inventoryLoading } =
@@ -30,8 +30,8 @@ const SellInventory = () => {
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.400");
   const initialValues = {
-    inventories: [],
-    owners: [],
+    inventoryId: "",
+    ownerId: "",
     purchaseDate: "",
   };
 
@@ -48,31 +48,15 @@ const SellInventory = () => {
   }));
 
   const clickHandler = (values, { resetForm }) => {
-    const { inventories, owners, purchaseDate } = values;
-
-    // Mapping inventories and owners
-    const newInventories = inventories.map((item) => ({
-      inventory: item.value,
-      purchaseDate: purchaseDate,
-    }));
-
-    const newOwners = owners.map((item) => ({
-      owner: item.value,
-      purchaseDate: purchaseDate,
-    }));
-
-    // Creating new data
-    const newData = {
-      inventories: newInventories,
-      owners: newOwners,
+    const inventory = values.inventoryId.value;
+    const owner = values.ownerId.value;
+    const data = {
+      inventoryId: inventory,
+      ownerId: owner,
+      purchaseDate: values.purchaseDate,
     };
 
-    // Sending data to server
-    mutate(newData, {
-      onSuccess: () => {
-        resetForm();
-      },
-    });
+    mutate(data);
   };
 
   function onSuccess(data) {
@@ -125,8 +109,6 @@ const SellInventory = () => {
           initialValues={initialValues}
           onSubmit={clickHandler}
           validationSchema={object({
-            inventories: array().required("Inventories is required!"),
-            owners: array().required("Owner is required!"),
             purchaseDate: date().required("Purchase Date is required!"),
           })}
         >
@@ -147,20 +129,19 @@ const SellInventory = () => {
                       component={TextField}
                       data={mappingInventories}
                       placeHolder={"Select Inventory"}
-                      name={"inventories"}
-                      label={"Inventories"}
+                      name={"inventoryId"}
+                      label={"Inventory"}
                       isInvalid={
-                        Boolean(errors.inventories) &&
-                        Boolean(touched.inventories)
+                        Boolean(errors.inventoryId) &&
+                        Boolean(touched.inventoryId)
                       }
                       onBlur={handleBlur}
-                      onChange={(e) => setFieldValue("inventories", e)}
-                      isMulti
+                      onChange={(e) => setFieldValue("inventoryId", e)}
                       isLoading={inventoryLoading}
                       isDisabled={inventoryLoading}
                     />
                     <FormHelperText color="red">
-                      {Boolean(touched.inventories) && errors.inventories}
+                      {Boolean(touched.inventoryId) && errors.inventoryId}
                     </FormHelperText>
                   </FormControl>
                   <FormControl id="owner" isRequired>
@@ -168,19 +149,18 @@ const SellInventory = () => {
                       component={TextField}
                       data={mappingOwners}
                       placeHolder={"Select Owner"}
-                      name={"owners"}
-                      label={"Owners"}
+                      name={"ownerId"}
+                      label={"Owner"}
                       isInvalid={
-                        Boolean(errors.owners) && Boolean(touched.owners)
+                        Boolean(errors.ownerId) && Boolean(touched.ownerId)
                       }
                       onBlur={handleBlur}
-                      onChange={(e) => setFieldValue("owners", e)}
-                      isMulti
+                      onChange={(e) => setFieldValue("ownerId", e)}
                       isLoading={ownerLoading}
                       isDisabled={ownerLoading}
                     />
                     <FormHelperText color="red">
-                      {Boolean(touched.owners) && errors.owners}
+                      {Boolean(touched.ownerId) && errors.ownerId}
                     </FormHelperText>
                   </FormControl>
                   <FormControl id="purchaseDate" isRequired>
