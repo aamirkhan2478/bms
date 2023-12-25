@@ -1,6 +1,6 @@
 import { array, date, object, string } from "yup";
 
-export const ownerTenantSchema = object({
+export const personalInfoSchema = object({
   name: string()
     .matches(
       /^(?=.{3,70}$)(?![a-z])(?!.*[_.]{2})[a-zA-Z ]+(?<![_.])$/,
@@ -19,15 +19,21 @@ export const ownerTenantSchema = object({
   cnicExpiry: date()
     .min(new Date(), "CNIC expiry date must be in the future!")
     .required("CNIC expiry date is required"),
+  phoneNumber: array(),
+  emergencyNumber: array(),
   whatsapp: array(),
   email: string().email("Invalid Email"),
   currentAddress: string().required("Current Address is Required!"),
   permanentAddress: string().required("Permanent Address is Required!"),
-  phoneNumber: array(),
-  emergencyNumber: array(),
-  images: array(),
+});
+
+export const bankInfoSchema = object({
   bankIbnNumber: string().matches(
     /^[a-zA-Z0-9]{24}$/,
     "IBN number should be 24 character long and not contain any special character and spaces!"
   ),
+});
+
+export const imagesSchema = object({
+  images: array(),
 });
