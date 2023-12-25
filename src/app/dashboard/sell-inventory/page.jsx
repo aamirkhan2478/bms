@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import TextField from "@/components/TextField";
 import { useSellInventory, useShowInventories } from "@/hooks/useInventory";
 import { useShowOwners } from "@/hooks/useOwner";
+import mappingArray from "@/utils/mappingArray";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -35,17 +36,18 @@ const SellInventory = () => {
     purchaseDate: "",
   };
 
-  const mappingInventories = inventories?.data?.data?.inventories?.map(
-    (item) => ({
-      value: item._id,
-      label: `${item.inventoryType} - ${item.floor}${item.flatNo}`,
-    })
+  const mappingInventories = mappingArray(
+    inventories?.data?.data?.inventories,
+    "_id",
+    (inventory) =>
+      `${inventory.inventoryType} - ${inventory.floor}${inventory.flatNo}`
   );
 
-  const mappingOwners = owners?.data?.data?.owners?.map((item) => ({
-    value: item._id,
-    label: `${item.name}`,
-  }));
+  const mappingOwners = mappingArray(
+    owners?.data?.data?.owners,
+    "_id",
+    (owner) => owner.name
+  );
 
   const clickHandler = (values, { resetForm }) => {
     const inventory = values.inventoryId.value;
