@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import {
   ButtonGroup,
-  Button,
   Heading,
   Flex,
   useSteps,
@@ -30,6 +29,7 @@ import { useAddContract } from "@/hooks/useContract";
 import appendArrayField from "@/utils/appendArrayField";
 import CustomButton from "@/components/CustomButton";
 import Stepper from "@/components/Stepper";
+import mappingArray from "@/utils/mappingArray";
 
 const AddContract = () => {
   const [step, setStep] = useState(0);
@@ -42,10 +42,30 @@ const AddContract = () => {
     onSuccess,
     onError
   );
-  const tenantData = tenants?.data?.data?.tenants?.map((tenant) => ({
-    value: tenant._id,
-    label: tenant.name,
-  }));
+
+  const tenantData = mappingArray(
+    tenants?.data?.data?.tenants,
+    "_id",
+    (tenant) => tenant.name
+  );
+
+  const inventoriesData = mappingArray(
+    inventories?.data?.data?.inventoriesWithOwners,
+    "",
+    (inventory) =>
+      `${inventory.inventoryType} - ${inventory.floor}${inventory.flatNo}`,
+    (inventory) => ({
+      ownerIds: inventory.owners.map((owner) => owner._id).join(","),
+      inventoryId: inventory._id,
+    })
+  );
+
+  const agentData = mappingArray(
+    agents?.data?.data?.agents,
+    "_id",
+    (agent) => agent.name
+  );
+
   const initialValues = {
     tenants: [],
     owners: [],
@@ -71,22 +91,6 @@ const AddContract = () => {
     remarks: "",
   };
 
-  const inventoriesData = inventories?.data?.data?.inventoriesWithOwners?.map(
-    (inventory) => {
-      const ownersIds = inventory.owners.map((owner) => owner._id);
-
-      return {
-        value: { ownerIds: ownersIds.join(","), inventoryId: inventory._id },
-        label: `${inventory.inventoryType} - ${inventory.floor}${inventory.flatNo}`,
-      };
-    }
-  );
-
-  const agentData = agents?.data?.data?.agents?.map((agent) => ({
-    value: agent._id,
-    label: agent.name,
-  }));
-
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
@@ -102,11 +106,6 @@ const AddContract = () => {
   let secondaryText = useColorModeValue("gray.400", "gray.200");
 
   const handleSubmit = (values, { resetForm }) => {
-    // Get the values of the arrays
-    const tenantData = values.tenants.map((tenant) => tenant.value);
-    // Convent value to an array
-    const ownerData = Array.from(values.inventory.value.ownerIds.split(","));
-
     // Convert the values to FormData and append the files
     const formData = new FormData();
     formData.append("inventory", values.inventory.value.inventoryId);
@@ -137,10 +136,19 @@ const AddContract = () => {
       values.nonrefundableSecurityDeposit
     );
     formData.append("remarks", values.remarks);
+    
+    // Get the values of the arrays
+    const tenantData = values.tenants.map((tenant) => tenant.value);
+    
+    // Convent value to an array
+    const ownerData = Array.from(values.inventory.value.ownerIds.split(","));
+
     // Append the arrays
     appendArrayField(ownerData, "owners", formData);
     appendArrayField(tenantData, "tenants", formData);
     appendArrayField(values.images, "images", formData);
+    
+    // Add the contract
     addContract(formData, {
       onSuccess: () => {
         resetForm();
