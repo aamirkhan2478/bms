@@ -2,20 +2,9 @@
 
 import { useEffect, useState } from "react";
 import {
-  Box,
   ButtonGroup,
-  Button,
   Heading,
   Flex,
-  Step,
-  StepDescription,
-  StepIcon,
-  StepIndicator,
-  StepNumber,
-  StepSeparator,
-  StepStatus,
-  StepTitle,
-  Stepper,
   useSteps,
   Breadcrumb,
   BreadcrumbItem,
@@ -33,10 +22,15 @@ import {
   JobInfoForm,
   PersonalInfoForm,
 } from "@/components/OwnerAndTenantForms";
-import { ownerTenantSchema } from "@/validators/owner_tenant.validator";
+import {
+  bankInfoSchema,
+  imagesSchema,
+  personalInfoSchema,
+} from "@/validators/owner_tenant.validator";
 import { useAddOwner } from "@/hooks/useOwner";
 import CustomButton from "@/components/CustomButton";
 import appendArrayField from "@/utils/appendArrayField";
+import Stepper from "@/components/Stepper";
 
 const AddOwner = () => {
   const [step, setStep] = useState(0);
@@ -163,30 +157,17 @@ const AddOwner = () => {
         </BreadcrumbItem>
       </Breadcrumb>
       <CustomBox>
-        <Stepper index={activeStep} display={{ base: "none", md: "flex" }}>
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepIndicator>
-                <StepStatus
-                  complete={<StepIcon />}
-                  incomplete={<StepNumber />}
-                  active={<StepNumber />}
-                />
-              </StepIndicator>
-
-              <Box flexShrink="0">
-                <StepTitle>{step.title}</StepTitle>
-                <StepDescription>{step.description}</StepDescription>
-              </Box>
-
-              <StepSeparator />
-            </Step>
-          ))}
-        </Stepper>
+        <Stepper steps={steps} activeStep={activeStep} />
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          validationSchema={ownerTenantSchema}
+          validationSchema={
+            step === 0
+              ? personalInfoSchema
+              : step === 2
+              ? bankInfoSchema
+              : imagesSchema
+          }
         >
           {({
             errors,
@@ -256,7 +237,6 @@ const AddOwner = () => {
                         goToPrevious();
                       }}
                       isDisabled={step === 0}
-                      colorScheme="teal.300"
                       variant="solid"
                       w="7rem"
                       mr="5%"
@@ -264,20 +244,19 @@ const AddOwner = () => {
                     />
                     <CustomButton
                       w="7rem"
-                      isDisabled={step === 3}
+                      isDisabled={!isValid || !dirty || step === 3}
                       onClick={() => {
                         setStep(step + 1);
                         goToNext();
                       }}
-                      colorScheme="teal.300"
                       variant="outline"
                       text={"Next"}
                     />
                   </Flex>
                   {step === 3 && (
-                    <Button
+                    <CustomButton
+                      text={"Submit"}
                       w="7rem"
-                      mt={{ base: "5%", sm: "0" }}
                       colorScheme="blue"
                       variant="solid"
                       type="submit"
@@ -287,9 +266,7 @@ const AddOwner = () => {
                         handleSubmit(values);
                       }}
                       isLoading={isLoading}
-                    >
-                      Submit
-                    </Button>
+                    />
                   )}
                 </Flex>
               </ButtonGroup>
