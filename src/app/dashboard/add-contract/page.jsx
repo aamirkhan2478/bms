@@ -270,7 +270,6 @@ const AddContract = () => {
                         goToPrevious();
                       }}
                       isDisabled={step === 0}
-                      colorScheme="teal.300"
                       variant="solid"
                       w="7rem"
                       mr="5%"
@@ -283,27 +282,24 @@ const AddContract = () => {
                         setStep(step + 1);
                         goToNext();
                       }}
-                      colorScheme="teal.300"
                       variant="outline"
                       text={"Next"}
                     />
                   </Flex>
                   {step === 2 && (
-                    <Button
+                    <CustomButton
+                      text={"Submit"}
                       w="7rem"
-                      mt={{ base: "5%", sm: "0" }}
                       colorScheme="blue"
                       variant="solid"
                       type="submit"
-                      isLoading={contractLoading}
                       isDisabled={!isValid || !dirty}
                       onClick={() => {
                         goToNext();
                         handleSubmit(values);
                       }}
-                    >
-                      Submit
-                    </Button>
+                      isLoading={contractLoading}
+                    />
                   )}
                 </Flex>
               </ButtonGroup>
