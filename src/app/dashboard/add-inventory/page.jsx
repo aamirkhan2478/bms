@@ -103,7 +103,7 @@ const AddInventory = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <CustomBox heading={"Add Inventory"}>
+      <CustomBox heading={"Add Inventory"} maxWidth={800}>
         <Formik
           initialValues={initialValues}
           onSubmit={clickHandler}
