@@ -9,6 +9,11 @@ const showInventories = () => {
   return axios.get("/inventory/all");
 };
 
+const showInventory = ({ queryKey }) => {
+  const id = queryKey[1];
+  return axios.get(`/inventory/${id}`);
+};
+
 const sellInventory = (values) => {
   return axios.post("/inventory/sell", values);
 };
@@ -26,6 +31,10 @@ export const useAddInventory = (onSuccess, onError) => {
 
 export const useShowInventories = () => {
   return useQuery("show-inventories", showInventories);
+};
+
+export const useShowInventory = (id) => {
+  return useQuery(["show-inventory", id], showInventory);
 };
 
 export const useSellInventory = (onSuccess, onError) => {
