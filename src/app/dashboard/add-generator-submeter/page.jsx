@@ -62,7 +62,7 @@ const GeneratorSubmeter = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <CustomBox heading={"Add Generator Submeter"}>
+      <CustomBox heading={"Add Generator Submeter"} maxWidth={800}>
         <Formik initialValues={initialValues}>
           {({ errors, touched, values, handleBlur, handleChange }) => (
             <>
