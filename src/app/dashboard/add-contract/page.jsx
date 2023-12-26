@@ -136,10 +136,10 @@ const AddContract = () => {
       values.nonrefundableSecurityDeposit
     );
     formData.append("remarks", values.remarks);
-    
+
     // Get the values of the arrays
     const tenantData = values.tenants.map((tenant) => tenant.value);
-    
+
     // Convent value to an array
     const ownerData = Array.from(values.inventory.value.ownerIds.split(","));
 
@@ -147,7 +147,7 @@ const AddContract = () => {
     appendArrayField(ownerData, "owners", formData);
     appendArrayField(tenantData, "tenants", formData);
     appendArrayField(values.images, "images", formData);
-    
+
     // Add the contract
     addContract(formData, {
       onSuccess: () => {
@@ -202,7 +202,7 @@ const AddContract = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <CustomBox>
+      <CustomBox maxWidth={800}>
         <Stepper steps={steps} activeStep={activeStep} />
         <Formik
           initialValues={initialValues}
