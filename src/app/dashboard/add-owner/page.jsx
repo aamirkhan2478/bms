@@ -156,7 +156,7 @@ const AddOwner = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <CustomBox>
+      <CustomBox maxWidth={800}>
         <Stepper steps={steps} activeStep={activeStep} />
         <Formik
           initialValues={initialValues}
