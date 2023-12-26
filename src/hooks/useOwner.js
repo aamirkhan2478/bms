@@ -9,11 +9,6 @@ const showOwners = () => {
   return axios.get("/owner/all");
 };
 
-const showInventories = ({ queryKey }) => {
-  const ownerIds = queryKey[1];
-  return axios.get(`/owner/show-inventories/?ownerIds=${ownerIds}`);
-};
-
 export const useAddOwner = (onSuccess, onError) => {
   return useMutation(owner, {
     onSuccess,
@@ -23,8 +18,4 @@ export const useAddOwner = (onSuccess, onError) => {
 
 export const useShowOwners = () => {
   return useQuery("show-owners", showOwners);
-};
-
-export const useShowOwnerInventories = (ownerIds) => {
-  return useQuery(["show-owner-inventories", ownerIds], showInventories);
 };
