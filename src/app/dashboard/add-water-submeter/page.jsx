@@ -63,7 +63,7 @@ const WaterSubmeter = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <CustomBox heading={"Add Water Submeter"}>
+      <CustomBox heading={"Add Water Submeter"} maxWidth={800}>
         <Formik initialValues={initialValues}>
           {({ errors, touched, values, handleBlur, handleChange }) => (
             <>
