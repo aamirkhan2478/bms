@@ -2,6 +2,7 @@ import { Box, CloseButton, Flex, useColorModeValue } from "@chakra-ui/react";
 import NavItem from "./NavItem";
 import { IoMdPersonAdd } from "react-icons/io";
 import {
+  BsBuildingFill,
   BsBuildingFillAdd,
   BsPersonFillAdd,
   BsSpeedometer,
@@ -23,6 +24,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
       name: "Add Inventory",
       icon: BsBuildingFillAdd,
       path: "/dashboard/add-inventory",
+    },
+    {
+      name: "Show Inventories",
+      icon: BsBuildingFill,
+      path: "/dashboard/show-inventories/all",
     },
     // {
     //   name: "Add Wapda Submeter",
