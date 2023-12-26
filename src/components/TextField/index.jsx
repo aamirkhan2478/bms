@@ -18,6 +18,7 @@ const TextField = ({
   data,
   placeHolder,
   helperText,
+  helperColorText,
   lml,
   lmr,
   lmx,
@@ -35,13 +36,13 @@ const TextField = ({
               placeholder={placeHolder}
               fontSize="sm"
               size="lg"
-              _focus={{ outlineColor: "teal.300" }}
-              _placeholder={{ color: "gray.500" }}
+              errorBorderColor="red.300"
+              focusBorderColor="teal.500"
               {...rest}
             />
             {rightElement}
             {helperText && (
-              <FormHelperText color={"gray.500"} ml={3}>
+              <FormHelperText color={helperColorText} ml={3}>
                 {helperText}
               </FormHelperText>
             )}
@@ -65,13 +66,12 @@ const TextField = ({
             placeholder={placeHolder}
             fontSize="sm"
             size="lg"
-            outline={"none"}
-            _focus={{ outlineColor: "teal.300" }}
-            _placeholder={{ color: "gray.500" }}
+            errorBorderColor="red.300"
+            focusBorderColor="teal.500"
             {...rest}
           />
           {helperText && (
-            <FormHelperText color={"gray.500"} ml={3}>
+            <FormHelperText color={helperColorText} ml={3}>
               {helperText}
             </FormHelperText>
           )}
@@ -86,8 +86,8 @@ const TextField = ({
             borderRadius="15px"
             fontSize="sm"
             size="lg"
-            _focus={{ outlineColor: "teal.300" }}
-            _placeholder={{ color: "gray.500" }}
+            errorBorderColor="red.300"
+            focusBorderColor="teal.500"
             {...rest}
           />
         </>
@@ -105,15 +105,13 @@ const TextField = ({
             chakraStyles={{
               borderRadius: "15px",
               fontSize: "sm",
-              _focus: { outlineColor: "teal.300" },
-              _placeholder: { color: "gray.500" },
             }}
-            focusBorderColor="teal.300"
-            colorScheme="teal"
+            focusBorderColor="teal.500"
+            errorBorderColor="red.300"
             {...rest}
           />
           {helperText && (
-            <FormHelperText color={"gray.500"} ml={3}>
+            <FormHelperText color={helperColorText} ml={3}>
               {helperText}
             </FormHelperText>
           )}
