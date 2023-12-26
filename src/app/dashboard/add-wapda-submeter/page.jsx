@@ -54,7 +54,7 @@ const WapdaSubmeter = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <CustomBox heading={"Add Wapda Submeter"}>
+      <CustomBox heading={"Add Wapda Submeter"} maxWidth={800}>
         <Formik initialValues={initialValues}>
           {({ errors, touched, values, handleBlur, handleChange }) => (
             <>
