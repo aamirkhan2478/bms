@@ -31,8 +31,8 @@ const SellInventory = () => {
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.400");
   const initialValues = {
-    inventoryId: "",
-    ownerId: "",
+    inventoryId: {},
+    ownerId: {},
     purchaseDate: "",
   };
 
@@ -49,7 +49,7 @@ const SellInventory = () => {
     (owner) => owner.name
   );
 
-  const clickHandler = (values, { resetForm }) => {
+  const clickHandler = (values) => {
     const inventory = values.inventoryId.value;
     const owner = values.ownerId.value;
     const data = {
@@ -106,11 +106,13 @@ const SellInventory = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <CustomBox heading={"Sell Inventory"}>
+      <CustomBox heading={"Sell Inventory"} maxWidth={800}>
         <Formik
           initialValues={initialValues}
           onSubmit={clickHandler}
           validationSchema={object({
+            inventoryId: object().required("Inventory is required!"),
+            ownerId: object().required("Owner is required!"),
             purchaseDate: date().required("Purchase Date is required!"),
           })}
         >
@@ -141,10 +143,11 @@ const SellInventory = () => {
                       onChange={(e) => setFieldValue("inventoryId", e)}
                       isLoading={inventoryLoading}
                       isDisabled={inventoryLoading}
+                      helperText={
+                        Boolean(touched.inventoryId) && errors.inventoryId
+                      }
+                      helperColorText={"red"}
                     />
-                    <FormHelperText color="red">
-                      {Boolean(touched.inventoryId) && errors.inventoryId}
-                    </FormHelperText>
                   </FormControl>
                   <FormControl id="owner" isRequired>
                     <Field
@@ -160,10 +163,9 @@ const SellInventory = () => {
                       onChange={(e) => setFieldValue("ownerId", e)}
                       isLoading={ownerLoading}
                       isDisabled={ownerLoading}
+                      helperText={Boolean(touched.ownerId) && errors.ownerId}
+                      helperColorText={"red"}
                     />
-                    <FormHelperText color="red">
-                      {Boolean(touched.ownerId) && errors.ownerId}
-                    </FormHelperText>
                   </FormControl>
                   <FormControl id="purchaseDate" isRequired>
                     <Field
@@ -179,10 +181,11 @@ const SellInventory = () => {
                       }
                       onBlur={handleBlur}
                       onChange={handleChange("purchaseDate")}
+                      helperText={
+                        Boolean(touched.purchaseDate) && errors.purchaseDate
+                      }
+                      helperColorText={"red"}
                     />
-                    <FormHelperText color="red">
-                      {Boolean(touched.purchaseDate) && errors.purchaseDate}
-                    </FormHelperText>
                   </FormControl>
 
                   <CustomButton
