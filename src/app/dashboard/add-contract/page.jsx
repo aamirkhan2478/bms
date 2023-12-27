@@ -33,6 +33,7 @@ import mappingArray from "@/utils/mappingArray";
 
 const AddContract = () => {
   const [step, setStep] = useState(0);
+  const [ownerNames, setOwnerNames] = useState([]);
   const toast = useToast();
   const { data: tenants, isLoading: tenantLoading } = useShowTenants();
   const { data: inventories, isLoading: ownerLoading } =
@@ -55,11 +56,15 @@ const AddContract = () => {
     (inventory) =>
       `${inventory.inventoryType} - ${inventory.floor}${inventory.flatNo}`,
     (inventory) => ({
-      ownerIds: inventory.owners.map((owner) => owner._id).join(","),
+      ownerIds: inventory.ownerInventory
+        .map((owner) => owner.ownerId)
+        .join(","),
       inventoryId: inventory._id,
+      ownerNames: inventory.ownerInventory.map((owner) => owner.ownerName),
     })
   );
 
+  console.log(inventoriesData);
   const agentData = mappingArray(
     agents?.data?.data?.agents,
     "_id",
@@ -232,6 +237,8 @@ const AddContract = () => {
                   handleBlur={handleBlur}
                   handleChange={handleChange}
                   setFieldValue={setFieldValue}
+                  setOwnerNames={setOwnerNames}
+                  ownerNames={ownerNames}
                   errors={errors}
                   touched={touched}
                   values={values}
