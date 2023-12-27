@@ -10,8 +10,8 @@ export const ContractInfoForm = ({
   setFieldValue,
   searchOneData,
   searchTwoData,
-  comboData,
-  setOwnerName,
+  setOwnerNames,
+  ownerNames,
   tenantLoading,
   ownerLoading,
 }) => {
@@ -37,6 +37,11 @@ export const ContractInfoForm = ({
       flexBasis: { md: "48%", sm: "100%" },
       data: searchTwoData,
       isLoading: ownerLoading,
+    },
+    {
+      isListView: true,
+      flexBasis: "100%",
+      listData: ownerNames,
     },
     {
       id: "contract-signing-date",
@@ -157,7 +162,7 @@ export const ContractInfoForm = ({
           handleBlur={handleBlur}
           handleChange={handleChange}
           setFieldValue={setFieldValue}
-          setOwnerName={setOwnerName}
+          setOwnerNames={setOwnerNames}
         />
       </Flex>
     </>
