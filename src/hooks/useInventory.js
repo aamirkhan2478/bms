@@ -5,8 +5,13 @@ const inventory = (values) => {
   return axios.post("/inventory/add", values);
 };
 
-const showInventories = () => {
-  return axios.get("/inventory/all");
+const showInventories = ({ queryKey }) => {
+  const search = queryKey[1];
+  const limit = queryKey[2];
+  const page = queryKey[3];
+  return axios.get(
+    `/inventory/all?search=${search}&limit=${limit}&page=${page}`
+  );
 };
 
 const showInventory = ({ queryKey }) => {
@@ -29,8 +34,8 @@ export const useAddInventory = (onSuccess, onError) => {
   });
 };
 
-export const useShowInventories = () => {
-  return useQuery("show-inventories", showInventories);
+export const useShowInventories = (search = "", limit = 5, page = 1) => {
+  return useQuery(["show-inventories", search, limit, page], showInventories);
 };
 
 export const useShowInventory = (id) => {
