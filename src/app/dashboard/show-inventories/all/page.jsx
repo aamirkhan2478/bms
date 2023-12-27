@@ -1,4 +1,5 @@
 "use client";
+import AlertDialog from "@/components/AlertDialog";
 import CustomBox from "@/components/CustomBox";
 import DataTable from "@/components/DataTable";
 import Layout from "@/components/Layout";
@@ -12,22 +13,39 @@ import {
   Heading,
   IconButton,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useRef } from "react";
 import { MdDelete, MdEdit, MdRemoveRedEye } from "react-icons/md";
 
 const ShowInventories = () => {
   const router = useRouter();
-  const { data, isLoading } = useShowInventories();
+  const searchParams = useSearchParams();
+  const { isOpen, onOpen: openDialog, onClose } = useDisclosure();
+  const cancelRef = useRef();
+  const searchTerm = searchParams.get("searchTerm") || "";
+  const currentPage = parseInt(searchParams.get("currentPage")) || 1;
+  const itemsPerPage = parseInt(searchParams.get("itemsPerPage")) || 5;
+
+  const { data, isLoading } = useShowInventories(
+    searchTerm,
+    itemsPerPage,
+    currentPage
+  );
+
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.400");
 
   const headers = [
     { name: "Inventory Type", key: "inventoryType" },
     {
-      name: "Flat(s)/Shop(s)/Office(s) No.",
+      name: "Floor",
       key: "floor",
-      mergeWith: "flatNo",
+    },
+    {
+      name: "Flat(s)/Shop(s)/Office(s) No.",
+      key: "flatNo",
     },
     { name: "Created By", key: "createdBy" },
     {
@@ -54,7 +72,7 @@ const ShowInventories = () => {
             variant={"ghost"}
             size={"sm"}
             onClick={() =>
-              router.push(`/dashboard/show-inventories/${item._id}`)
+              router.push(`/dashboard/show-inventories/${item._id}/edit`)
             }
           />
           <IconButton
@@ -62,9 +80,7 @@ const ShowInventories = () => {
             colorScheme="red"
             variant={"ghost"}
             size={"sm"}
-            onClick={() =>
-              router.push(`/dashboard/show-inventories/${item._id}`)
-            }
+            onClick={() => openDialog()}
           />
         </Flex>
       ),
@@ -72,6 +88,14 @@ const ShowInventories = () => {
   ];
   return (
     <Layout>
+      <AlertDialog
+        isOpen={isOpen}
+        cancelRef={cancelRef}
+        confirmButtonText={"Yes, Delete"}
+        dialogBody={"Are you sure you want Delete this Inventory?"}
+        dialogHeader={"Delete Inventory"}
+        onClose={onClose}
+      />
       <Heading>Show Inventory List</Heading>
       <Breadcrumb>
         <BreadcrumbItem color={mainText}>
@@ -97,8 +121,12 @@ const ShowInventories = () => {
       <CustomBox>
         <DataTable
           data={data?.data?.data?.inventories}
+          totalInventory={data?.data?.data?.totalInventory}
           headers={headers}
           isLoading={isLoading}
+          searchTerm={searchTerm}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
         />
       </CustomBox>
     </Layout>
