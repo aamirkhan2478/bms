@@ -1,6 +1,4 @@
-// DataTable.js
-
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState, useTransition } from "react";
 import {
   Table,
   Thead,
@@ -21,75 +19,77 @@ import {
   BiSearch,
   BiArrowFromLeft,
   BiArrowFromRight,
-  BiSort,
 } from "react-icons/bi";
 import TextField from "../TextField";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-const DataTable = ({ data, headers, isLoading }) => {
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-  //   const [itemsPerPage, setItemsPerPage] = useState(5);
+const DataTable = ({
+  data,
+  headers,
+  isLoading,
+  searchTerm,
+  currentPage,
+  itemsPerPage,
+  totalInventory,
+}) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const searchTerm = searchParams.get("searchTerm") || "";
-  const currentPage = parseInt(searchParams.get("currentPage")) || 1;
-  const itemsPerPage = parseInt(searchParams.get("itemsPerPage")) || 5;
-
-  // Filter data based on search term
-  const filteredData = data?.filter((item) =>
-    Object.values(item).some(
-      (value) =>
-        typeof value === "string" &&
-        value.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
-  // Function to sort data based on sortConfig
-  const sortData = (dataToSort) => {
-    if (sortConfig.key) {
-      return [...dataToSort].sort((a, b) => {
-        const aValue = a[sortConfig.key];
-        const bValue = b[sortConfig.key];
-
-        if (typeof aValue === "number" && typeof bValue === "number") {
-          // Numeric comparison
-          return sortConfig.direction === "asc"
-            ? aValue - bValue
-            : bValue - aValue;
-        } else {
-          // String comparison
-          return sortConfig.direction === "asc"
-            ? aValue.localeCompare(bValue)
-            : bValue.localeCompare(aValue);
-        }
-      });
-    }
-
-    return dataToSort;
-  };
-
-  // Sort data based on the selected column and order
-  const sortedData = sortData(filteredData);
-
-  // Paginate data
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedData?.slice(indexOfFirstItem, indexOfLastItem);
+  const [inputValue, setInputValue] = useState("");
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
 
   // Change page
   const paginate = (pageNumber) => {
-    router.push(
+    router.replace(
       `?currentPage=${pageNumber}&searchTerm=${searchTerm}&itemsPerPage=${itemsPerPage}`
     );
   };
 
-  // Function to handle column sorting
-  const handleSort = (key) => {
-    const direction =
-      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
-    setSortConfig({ key, direction });
-  };
+  const handleSearchParams = useCallback(
+    (debouncedValue) => {
+      let params = new URLSearchParams(window.location.search);
+      if (debouncedValue.length > 0) {
+        params.set("searchTerm", debouncedValue);
+      } else {
+        params.delete("searchTerm");
+      }
+      startTransition(() => {
+        router.replace(`${pathname}?${params.toString()}`);
+      });
+    },
+    [pathname, router]
+  );
+
+  // EFFECT: Set Initial Params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const searchQuery = params.get("searchTerm") ?? "";
+    setInputValue(searchQuery);
+  }, []);
+
+  // EFFECT: Set Mounted
+  useEffect(() => {
+    if (debouncedValue.length > 0 && !mounted) {
+      setMounted(true);
+    }
+  }, [debouncedValue, mounted]);
+
+  // EFFECT: Debounce Input Value
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(inputValue);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [inputValue]);
+
+  // EFFECT: Search Params
+  useEffect(() => {
+    if (mounted) handleSearchParams(debouncedValue);
+  }, [debouncedValue, handleSearchParams, mounted]);
 
   return (
     <Stack spacing={4}>
@@ -97,7 +97,7 @@ const DataTable = ({ data, headers, isLoading }) => {
         <TextField
           fieldType={"group"}
           placeHolder={"Search"}
-          value={searchTerm}
+          value={inputValue}
           colorScheme={"teal"}
           leftElement={
             <InputLeftElement>
@@ -110,16 +110,10 @@ const DataTable = ({ data, headers, isLoading }) => {
               />
             </InputLeftElement>
           }
-          onChange={(e) => {
-            router.push(
-              `?searchTerm=${
-                e.target.value
-              }&currentPage=${1}&itemsPerPage=${itemsPerPage}`
-            );
-          }}
+          onChange={(e) => setInputValue(e.target.value)}
         />
       </Flex>
-      {isLoading ? (
+      {isLoading || isPending ? (
         <Flex justifyContent={"center"} alignItems={"center"}>
           <Spinner color="teal" />
         </Flex>
@@ -129,36 +123,20 @@ const DataTable = ({ data, headers, isLoading }) => {
             <Table variant="striped">
               <Thead>
                 <Tr>
-                  {headers?.map((header) => (
+                  {headers?.map((header, index) => (
                     <>
-                      <Th
-                        key={header.key}
-                        onClick={() => handleSort(header.key)}
-                        cursor="pointer"
-                        _hover={{ color: "blue.500" }}
-                      >
-                        <Box display={"flex"}>
-                          {header.name}
-                          {sortConfig.key === header.key && (
-                            <BiSort
-                              style={{
-                                marginLeft: "0.5em",
-                                color: "gray.300",
-                                fontSize: "1em",
-                              }}
-                            />
-                          )}
-                        </Box>
+                      <Th key={index}>
+                        <Box display={"flex"}>{header.name}</Box>
                       </Th>
                     </>
                   ))}
                 </Tr>
               </Thead>
               <Tbody>
-                {currentItems?.map((item) => (
+                {data?.map((item) => (
                   <Tr key={item._id}>
-                    {headers?.map((header) => (
-                      <Td key={header.key}>
+                    {headers?.map((header, index) => (
+                      <Td key={index}>
                         {item[header.key]}
                         {header.mergeWith && item[header.mergeWith]}
                         {header.render && header.render(item)}
@@ -178,7 +156,7 @@ const DataTable = ({ data, headers, isLoading }) => {
             <Select
               value={itemsPerPage}
               onChange={(e) => {
-                router.push(
+                router.replace(
                   `?currentPage=${1}&searchTerm=${searchTerm}&itemsPerPage=${
                     e.target.value
                   }`
@@ -197,13 +175,13 @@ const DataTable = ({ data, headers, isLoading }) => {
                 isDisabled={currentPage === 1}
               />
               <Text>{`Page ${currentPage} of ${Math.ceil(
-                sortedData?.length / itemsPerPage
+                totalInventory / itemsPerPage
               )}`}</Text>
               <IconButton
                 icon={<BiArrowFromLeft />}
                 onClick={() => paginate(currentPage + 1)}
                 isDisabled={
-                  currentPage === Math.ceil(sortedData?.length / itemsPerPage)
+                  currentPage === Math.ceil(totalInventory / itemsPerPage)
                 }
               />
             </Flex>
