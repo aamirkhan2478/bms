@@ -1,5 +1,4 @@
 import {
-  FormHelperText,
   FormControl,
   Checkbox,
   Flex,
@@ -13,11 +12,16 @@ import {
   Table,
   Tbody,
   Td,
+  List,
+  UnorderedList,
+  ListItem,
+  ListIcon,
 } from "@chakra-ui/react";
 import { Field } from "formik";
 import TextField from "../TextField";
 import { NumericFormat, PatternFormat } from "react-number-format";
 import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
+import { MdPerson } from "react-icons/md";
 
 const Form = ({
   formFields,
@@ -26,6 +30,7 @@ const Form = ({
   handleChange,
   handleBlur,
   setFieldValue,
+  setOwnerNames,
 }) => {
   const changeHandle = (name) => (event) => {
     let value = event.target.value;
@@ -36,6 +41,7 @@ const Form = ({
   };
 
   const changeSelect = (name) => (event) => {
+    setOwnerNames(event.value.ownerNames);
     setFieldValue(name, event);
   };
 
@@ -52,7 +58,8 @@ const Form = ({
             selectChange,
             comboSelect,
             isCheckbox,
-            checkboxData,
+            isListView,
+            listData,
             radioData,
             isRadio,
             numberFormat,
@@ -77,50 +84,25 @@ const Form = ({
                   onBlur={handleBlur}
                   onChange={handleChange(name)}
                   isInvalid={Boolean(errors[name]) && Boolean(touched[name])}
+                  helperText={Boolean(touched[name]) && errors[name]}
+                  helperColorText={"red"}
                   {...props}
                 />
-                <FormHelperText color="red">
-                  {Boolean(touched[name]) && errors[name]}
-                </FormHelperText>
               </>
-            ) : isCheckbox ? (
-              <Flex gap={"1rem"} wrap={"wrap"}>
-                {checkboxData && (
-                  <Table>
-                    <Thead>
-                      <Tr>
-                        <Th>Office(s)/Shop(s)/Flat(s)</Th>
-                        <Th>Owner(s)</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {checkboxData &&
-                        checkboxData.map((item, index) => {
-                          return (
-                            <Tr>
-                              <Td>
-                                <Checkbox
-                                  key={index}
-                                  colorScheme={item.colorScheme}
-                                  value={item.value}
-                                  name={name}
-                                  onChange={handleChange(name)}
-                                  defaultChecked={item.defaultChecked}
-                                  {...props}
-                                >
-                                  {item.label}
-                                </Checkbox>
-                              </Td>
-                              <Td>
-                                {item.owners ? item.owners.join(", ") : "N/A"}
-                              </Td>
-                            </Tr>
-                          );
-                        })}
-                    </Tbody>
-                  </Table>
-                )}
-              </Flex>
+            ) : isListView ? (
+              <>
+                <UnorderedList listStyleType={"none"}>
+                  {listData &&
+                    listData.map((item, index) => {
+                      return (
+                        <ListItem key={index}>
+                          <ListIcon as={MdPerson} color="green.500" />
+                          {item}
+                        </ListItem>
+                      );
+                    })}
+                </UnorderedList>
+              </>
             ) : isRadio ? (
               <RadioGroup my={4}>
                 <FormLabel>{props.label}</FormLabel>
@@ -160,11 +142,10 @@ const Form = ({
                       : handleChange(name)
                   }
                   isInvalid={Boolean(errors[name]) && Boolean(touched[name])}
+                  helperText={Boolean(touched[name]) && errors[name]}
+                  helperColorText={"red"}
                   {...props}
                 />
-                <FormHelperText color="red">
-                  {Boolean(touched[name]) && errors[name]}
-                </FormHelperText>
               </>
             )}
           </FormControl>
