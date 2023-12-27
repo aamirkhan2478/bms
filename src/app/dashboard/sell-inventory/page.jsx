@@ -12,7 +12,6 @@ import {
   BreadcrumbLink,
   Flex,
   FormControl,
-  FormHelperText,
   Heading,
   useColorModeValue,
   useToast,
@@ -22,8 +21,10 @@ import { useEffect } from "react";
 import { date, object } from "yup";
 
 const SellInventory = () => {
-  const { data: inventories, isLoading: inventoryLoading } =
-    useShowInventories();
+  const { data: inventories, isLoading: inventoryLoading } = useShowInventories(
+    "",
+    999999999999999999
+  );
   const { data: owners, isLoading: ownerLoading } = useShowOwners();
   const { mutate, isLoading } = useSellInventory(onSuccess, onError);
   const toast = useToast();
