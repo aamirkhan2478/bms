@@ -1,7 +1,7 @@
 "use client";
 import { Box, Heading, useColorModeValue } from "@chakra-ui/react";
 
-const CustomBox = ({ children, heading, ...rest }) => {
+const CustomBox = ({ children, heading, icon, ...rest }) => {
   return (
     <Box
       borderWidth="1px"
@@ -12,7 +12,15 @@ const CustomBox = ({ children, heading, ...rest }) => {
       bg={useColorModeValue("white", "dark")}
       {...rest}
     >
-      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
+      <Heading
+        w="100%"
+        textAlign={"center"}
+        fontWeight="normal"
+        mb="2%"
+        display={"flex"}
+        justifyContent={"center"}
+      >
+        {icon}
         {heading}
       </Heading>
       {children}
