@@ -19,6 +19,11 @@ axios.interceptors.response.use(
     // Do something with response error
     if (error.response.status === 401) {
       localStorage.removeItem("user");
+      axios.post("/user/refresh-token").then((res) => {
+        if (res.status === 200) {
+          localStorage.setItem("user", JSON.stringify(res.data.data.user));
+        }
+      });
     }
 
     return Promise.reject(error);
