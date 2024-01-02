@@ -1,17 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  ButtonGroup,
-  Heading,
-  Flex,
-  useSteps,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
+import { ButtonGroup, Flex, useSteps, useToast } from "@chakra-ui/react";
 
 import Layout from "@/components/Layout";
 import CustomBox from "@/components/CustomBox";
@@ -31,6 +21,7 @@ import { useAddOwner } from "@/hooks/useOwner";
 import CustomButton from "@/components/CustomButton";
 import appendArrayField from "@/utils/appendArrayField";
 import Stepper from "@/components/Stepper";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const AddOwner = () => {
   const [step, setStep] = useState(0);
@@ -47,9 +38,6 @@ const AddOwner = () => {
     index: step,
     count: steps.length,
   });
-
-  let mainText = useColorModeValue("gray.700", "gray.200");
-  let secondaryText = useColorModeValue("gray.400", "gray.200");
 
   const initialValues = {
     name: "",
@@ -138,24 +126,12 @@ const AddOwner = () => {
 
   return (
     <Layout>
-      <Heading>Add Owner</Heading>
-      <Breadcrumb>
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={secondaryText}
-            textDecoration={"none"}
-          >
-            Add Owner
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink href="#" color={mainText}>
-            Show Owner lists
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb
+        firstLink={"Add Owner"}
+        secondLink={"Show Owners"}
+        heading={"Add Owner"}
+        path={"/dashboard/show-owners/all"}
+      />
       <CustomBox maxWidth={800}>
         <Stepper steps={steps} activeStep={activeStep} />
         <Formik
