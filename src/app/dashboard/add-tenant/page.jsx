@@ -3,16 +3,10 @@
 import { useEffect, useState } from "react";
 import {
   ButtonGroup,
-  Heading,
   Flex,
   useSteps,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-
 import Layout from "@/components/Layout";
 import CustomBox from "@/components/CustomBox";
 import { Formik } from "formik";
@@ -31,6 +25,7 @@ import {
   personalInfoSchema,
 } from "@/validators/owner_tenant.validator";
 import Stepper from "@/components/Stepper";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const AddTenant = () => {
   const [step, setStep] = useState(0);
@@ -48,8 +43,6 @@ const AddTenant = () => {
     count: steps.length,
   });
 
-  let mainText = useColorModeValue("gray.700", "gray.200");
-  let secondaryText = useColorModeValue("gray.400", "gray.200");
 
   const initialValues = {
     name: "",
@@ -138,24 +131,12 @@ const AddTenant = () => {
 
   return (
     <Layout>
-      <Heading>Add Tenant</Heading>
-      <Breadcrumb>
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={secondaryText}
-            textDecoration={"none"}
-          >
-            Add Tenant
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink href="#" color={mainText}>
-            Show Tenant lists
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb
+        firstLink={"Add Tenant"}
+        secondLink={"Show Tenants"}
+        heading={"Add Tenant"}
+        path={"/dashboard/show-tenants/all"}
+      />
       <CustomBox maxWidth={800}>
         <Stepper steps={steps} activeStep={activeStep} />
         <Formik
