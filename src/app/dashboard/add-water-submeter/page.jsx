@@ -1,17 +1,10 @@
 "use client";
+import Breadcrumb from "@/components/Breadcrumb";
 import CustomBox from "@/components/CustomBox";
 import CustomButton from "@/components/CustomButton";
 import Layout from "@/components/Layout";
 import TextField from "@/components/TextField";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  FormControl,
-  FormHelperText,
-  Heading,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { FormControl, FormHelperText } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { useEffect } from "react";
 
@@ -41,28 +34,14 @@ const WaterSubmeter = () => {
     document.title = "Add Water Submeter";
   }, []);
 
-  let mainText = useColorModeValue("gray.700", "gray.200");
-  let secondaryText = useColorModeValue("gray.400", "gray.400");
   return (
     <Layout>
-      <Heading>Add Water Submeter</Heading>
-      <Breadcrumb>
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={secondaryText}
-            textDecoration={"none"}
-          >
-            Add Water Submeter
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink href="#" color={mainText}>
-            Add Inventory
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb
+        firstLink={"Add Water Submeter"}
+        secondLink={"Add Inventory"}
+        heading={"Add Water Submeter"}
+        path={"/dashboard/add-inventory"}
+      />
       <CustomBox heading={"Add Water Submeter"} maxWidth={800}>
         <Formik initialValues={initialValues}>
           {({ errors, touched, values, handleBlur, handleChange }) => (
