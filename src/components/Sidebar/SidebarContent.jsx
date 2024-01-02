@@ -1,6 +1,6 @@
 import { Box, CloseButton, Flex, useColorModeValue } from "@chakra-ui/react";
 import NavItem from "./NavItem";
-import { IoMdPersonAdd } from "react-icons/io";
+import { IoMdPerson, IoMdPersonAdd } from "react-icons/io";
 import {
   BsBuildingFill,
   BsBuildingFillAdd,
@@ -46,6 +46,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
     //   path: "/dashboard/add-water-submeter",
     // },
     { name: "Add Owner", icon: IoMdPersonAdd, path: "/dashboard/add-owner" },
+    {
+      name: "Show Owners",
+      icon: IoMdPerson,
+      path: "/dashboard/show-owners/all",
+    },
     {
       name: "Add Tenant",
       icon: BsPersonFillAdd,
