@@ -3,12 +3,7 @@ import Image from "next/image";
 import { FiTrash } from "react-icons/fi";
 import { MdUpload } from "react-icons/md";
 
-function ImageUploader({
-  name,
-  onBlur,
-  values,
-  setFieldValue,
-}) {
+function ImageUploader({ name, onBlur, values, setFieldValue }) {
   // Function to handle file selection
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
@@ -21,6 +16,7 @@ function ImageUploader({
     newFiles.splice(index, 1);
     setFieldValue("images", newFiles);
   };
+
   return (
     <Box>
       <input
@@ -42,7 +38,7 @@ function ImageUploader({
         {values?.images?.map((file, index) => (
           <Box key={index}>
             <Image
-              src={URL.createObjectURL(file)}
+              src={file.name ? URL.createObjectURL(file) : file}
               alt={`Uploaded ${index}`}
               width={200}
               height={200}
