@@ -1,4 +1,5 @@
 "use client";
+import Breadcrumb from "@/components/Breadcrumb";
 import CustomBox from "@/components/CustomBox";
 import CustomButton from "@/components/CustomButton";
 import Layout from "@/components/Layout";
@@ -6,16 +7,7 @@ import TextField from "@/components/TextField";
 import { useSellInventory, useShowInventories } from "@/hooks/useInventory";
 import { useShowOwners } from "@/hooks/useOwner";
 import mappingArray from "@/utils/mappingArray";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Flex,
-  FormControl,
-  Heading,
-  useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
+import { Flex, FormControl, useToast } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { date, object } from "yup";
@@ -29,8 +21,6 @@ const SellInventory = () => {
   const { mutate, isLoading } = useSellInventory(onSuccess, onError);
   const toast = useToast();
 
-  let mainText = useColorModeValue("gray.700", "gray.200");
-  let secondaryText = useColorModeValue("gray.400", "gray.400");
   const initialValues = {
     inventoryId: {},
     ownerId: {},
@@ -89,24 +79,12 @@ const SellInventory = () => {
 
   return (
     <Layout>
-      <Heading>Sell Inventory</Heading>
-      <Breadcrumb>
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={secondaryText}
-            textDecoration={"none"}
-          >
-            Sell Inventory
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink href="#" color={mainText}>
-            Show Sold Inventory List
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb
+        firstLink={"Sell Inventory"}
+        secondLink={"Show Sold Inventories"}
+        heading={"Sell Inventory"}
+        path={"/dashboard/show-sold-inventories/all"}
+      />
       <CustomBox heading={"Sell Inventory"} maxWidth={800}>
         <Formik
           initialValues={initialValues}
