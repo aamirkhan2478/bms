@@ -1,18 +1,9 @@
 import {
   FormControl,
-  Checkbox,
-  Flex,
   RadioGroup,
   FormLabel,
   Stack,
   Radio,
-  Thead,
-  Th,
-  Tr,
-  Table,
-  Tbody,
-  Td,
-  List,
   UnorderedList,
   ListItem,
   ListIcon,
@@ -41,7 +32,10 @@ const Form = ({
   };
 
   const changeSelect = (name) => (event) => {
-    setOwnerNames(event.value.ownerNames);
+    if (name === "inventory") {
+      setOwnerNames(event.value.ownerNames);
+      setFieldValue(name, event);
+    }
     setFieldValue(name, event);
   };
 
