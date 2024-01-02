@@ -1,20 +1,13 @@
 "use client";
 import AlertDialog from "@/components/AlertDialog";
+import Breadcrumb from "@/components/Breadcrumb";
 import CustomBox from "@/components/CustomBox";
 import DataTable from "@/components/DataTable";
 import Layout from "@/components/Layout";
+import TableIconButton from "@/components/TableIconButton";
 import { useShowInventories } from "@/hooks/useInventory";
 import dateFormat from "@/utils/dateFormat";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Flex,
-  Heading,
-  IconButton,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef } from "react";
 import { MdDelete, MdEdit, MdRemoveRedEye } from "react-icons/md";
@@ -34,8 +27,30 @@ const ShowInventories = () => {
     currentPage
   );
 
-  let mainText = useColorModeValue("gray.700", "gray.200");
-  let secondaryText = useColorModeValue("gray.400", "gray.400");
+  const iconData = [
+    {
+      icon: <MdRemoveRedEye />,
+      colorScheme: "blue",
+      variant: "ghost",
+      size: "sm",
+      onClick: (item) => router.push(`/dashboard/show-inventories/${item._id}`),
+    },
+    {
+      icon: <MdEdit />,
+      colorScheme: "cyan",
+      variant: "ghost",
+      size: "sm",
+      onClick: (item) =>
+        router.push(`/dashboard/show-inventories/${item._id}/edit`),
+    },
+    {
+      icon: <MdDelete />,
+      colorScheme: "red",
+      variant: "ghost",
+      size: "sm",
+      onClick: () => openDialog(),
+    },
+  ];
 
   const headers = [
     { name: "Inventory Type", key: "inventoryType" },
@@ -55,35 +70,7 @@ const ShowInventories = () => {
     {
       name: "Action",
       key: "action",
-      render: (item) => (
-        <Flex gap={2} alignItems={"center"}>
-          <IconButton
-            icon={<MdRemoveRedEye />}
-            colorScheme="blue"
-            variant={"ghost"}
-            size={"sm"}
-            onClick={() =>
-              router.push(`/dashboard/show-inventories/${item._id}`)
-            }
-          />
-          <IconButton
-            icon={<MdEdit />}
-            colorScheme="cyan"
-            variant={"ghost"}
-            size={"sm"}
-            onClick={() =>
-              router.push(`/dashboard/show-inventories/${item._id}/edit`)
-            }
-          />
-          <IconButton
-            icon={<MdDelete />}
-            colorScheme="red"
-            variant={"ghost"}
-            size={"sm"}
-            onClick={() => openDialog()}
-          />
-        </Flex>
-      ),
+      render: (item) => <TableIconButton data={iconData} item={item} />,
     },
   ];
   return (
@@ -96,32 +83,16 @@ const ShowInventories = () => {
         dialogHeader={"Delete Inventory"}
         onClose={onClose}
       />
-      <Heading>Show Inventory List</Heading>
-      <Breadcrumb>
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={secondaryText}
-            textDecoration={"none"}
-          >
-            Show Inventories
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={mainText}
-            onClick={() => router.push("/dashboard/add-inventory")}
-          >
-            Add Inventory
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb
+        heading={"Show Inventory List"}
+        firstLink={"Show Inventories"}
+        secondLink={"Add Inventory"}
+        path={"/dashboard/add-inventory"}
+      />
       <CustomBox>
         <DataTable
           data={data?.data?.data?.inventories}
-          totalInventory={data?.data?.data?.totalInventory}
+          total={data?.data?.data?.totalInventory}
           headers={headers}
           isLoading={isLoading}
           searchTerm={searchTerm}
