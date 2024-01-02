@@ -46,7 +46,7 @@ export const PersonalInfoForm = ({
       isRequired: true,
       flexBasis: { md: "48%", sm: "100%" },
       numberField: true,
-      defaultValue: values.cnic,
+      defaultValue: values?.cnic,
     },
     {
       id: "cnic-expiry",
@@ -161,7 +161,7 @@ export const JobInfoForm = ({
       flexBasis: "100%",
     },
     {
-      id: "title",
+      id: "jobOrganization",
       label: `Organization Name`,
       name: "jobOrganization",
       fieldType: "input",
