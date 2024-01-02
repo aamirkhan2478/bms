@@ -30,7 +30,7 @@ const DataTable = ({
   searchTerm,
   currentPage,
   itemsPerPage,
-  totalInventory,
+  total,
 }) => {
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
@@ -175,13 +175,13 @@ const DataTable = ({
                 isDisabled={currentPage === 1}
               />
               <Text>{`Page ${currentPage} of ${Math.ceil(
-                totalInventory / itemsPerPage
+                total / itemsPerPage
               )}`}</Text>
               <IconButton
                 icon={<BiArrowFromLeft />}
                 onClick={() => paginate(currentPage + 1)}
                 isDisabled={
-                  currentPage === Math.ceil(totalInventory / itemsPerPage)
+                  currentPage === Math.ceil(total / itemsPerPage)
                 }
               />
             </Flex>
