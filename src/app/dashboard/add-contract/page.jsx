@@ -2,13 +2,8 @@
 import { useEffect, useState } from "react";
 import {
   ButtonGroup,
-  Heading,
   Flex,
   useSteps,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 
@@ -30,6 +25,7 @@ import appendArrayField from "@/utils/appendArrayField";
 import CustomButton from "@/components/CustomButton";
 import Stepper from "@/components/Stepper";
 import mappingArray from "@/utils/mappingArray";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const AddContract = () => {
   const [step, setStep] = useState(0);
@@ -64,7 +60,6 @@ const AddContract = () => {
     })
   );
 
-  console.log(inventoriesData);
   const agentData = mappingArray(
     agents?.data?.data?.agents,
     "_id",
@@ -106,9 +101,6 @@ const AddContract = () => {
     index: step,
     count: steps.length,
   });
-
-  let mainText = useColorModeValue("gray.700", "gray.200");
-  let secondaryText = useColorModeValue("gray.400", "gray.200");
 
   const handleSubmit = (values, { resetForm }) => {
     // Convert the values to FormData and append the files
@@ -189,24 +181,12 @@ const AddContract = () => {
   }, []);
   return (
     <Layout>
-      <Heading>Add Contract</Heading>
-      <Breadcrumb>
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={secondaryText}
-            textDecoration={"none"}
-          >
-            Add Contract
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink href="#" color={mainText}>
-            Show Contract lists
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb
+        firstLink={"Add Contract"}
+        secondLink={"Show Contracts"}
+        heading={"Add Contract"}
+        path={"/dashboard/show-contracts/all"}
+      />
       <CustomBox maxWidth={800}>
         <Stepper steps={steps} activeStep={activeStep} />
         <Formik
