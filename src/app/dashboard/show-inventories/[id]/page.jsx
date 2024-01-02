@@ -84,35 +84,29 @@ const ShowInventory = () => {
             <Divider mb={6} />
             {inventory?.status === "sold" ? (
               <>
-                {inventory?.sellInventory.map((sell, index) => (
+                {inventory?.owners.map((owner, index) => (
                   <>
-                    {sell.isActive && (
-                      <Box
-                        key={index}
-                        mb={4}
-                        display={"flex"}
-                        flexDirection={"column"}
-                      >
-                        <Box display={"flex"} gap={2} alignItems={"center"}>
-                          <Box
-                            as={BiCalendar}
-                            fontSize={24}
-                            color={"blue.300"}
-                          />
-                          <Text fontSize={24}>
-                            <strong>Sold Date:</strong>{" "}
-                            {dateFormat(sell.purchaseDate)}
-                          </Text>
-                        </Box>
-                        <Box display={"flex"} gap={2} alignItems={"center"}>
-                          <Box as={BiUser} fontSize={24} color={"blue.300"} />
-                          <Text fontSize={24}>
-                            <strong>Owner Name:</strong> {sell.ownerName}
-                          </Text>
-                        </Box>
-                        <Divider my={6} />
+                    <Box
+                      key={index}
+                      mb={4}
+                      display={"flex"}
+                      flexDirection={"column"}
+                    >
+                      <Box display={"flex"} gap={2} alignItems={"center"}>
+                        <Box as={BiCalendar} fontSize={24} color={"blue.300"} />
+                        <Text fontSize={24}>
+                          <strong>Sold Date:</strong>{" "}
+                          {dateFormat(owner.purchaseDate)}
+                        </Text>
                       </Box>
-                    )}
+                      <Box display={"flex"} gap={2} alignItems={"center"}>
+                        <Box as={BiUser} fontSize={24} color={"blue.300"} />
+                        <Text fontSize={24}>
+                          <strong>Owner Name:</strong> {owner.ownerName}
+                        </Text>
+                      </Box>
+                      <Divider my={6} />
+                    </Box>
                   </>
                 ))}
               </>
