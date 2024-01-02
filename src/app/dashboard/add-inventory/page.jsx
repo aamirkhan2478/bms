@@ -1,20 +1,11 @@
 "use client";
+import Breadcrumb from "@/components/Breadcrumb";
 import CustomBox from "@/components/CustomBox";
 import CustomButton from "@/components/CustomButton";
 import Layout from "@/components/Layout";
 import TextField from "@/components/TextField";
 import { useAddInventory } from "@/hooks/useInventory";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Flex,
-  FormControl,
-  FormHelperText,
-  Heading,
-  useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
+import { Flex, FormControl, FormHelperText, useToast } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { object, string } from "yup";
@@ -35,8 +26,6 @@ const AddInventory = () => {
     },
   ];
 
-  let mainText = useColorModeValue("gray.700", "gray.200");
-  let secondaryText = useColorModeValue("gray.400", "gray.400");
   const { mutate, isLoading } = useAddInventory(onSuccess, onError);
   const toast = useToast();
 
@@ -85,24 +74,12 @@ const AddInventory = () => {
   }
   return (
     <Layout>
-      <Heading>Add Inventory</Heading>
-      <Breadcrumb>
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink
-            href="#"
-            color={secondaryText}
-            textDecoration={"none"}
-          >
-            Add Inventory
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem color={mainText}>
-          <BreadcrumbLink href="#" color={mainText}>
-            Show Inventory List
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <Breadcrumb
+        firstLink={"Add Inventory"}
+        secondLink={"Show Inventories"}
+        heading={"Add Inventory"}
+        path={"/dashboard/show-inventories/all"}
+      />
       <CustomBox heading={"Add Inventory"} maxWidth={800}>
         <Formik
           initialValues={initialValues}
