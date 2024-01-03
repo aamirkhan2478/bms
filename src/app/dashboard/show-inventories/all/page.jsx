@@ -41,15 +41,15 @@ const ShowInventories = () => {
       variant: "ghost",
       size: "sm",
       onClick: (item) =>
-        router.push(`/dashboard/show-inventories/${item._id}/edit`),
+        router.push(`/dashboard/show-inventories/${item._id}/update`),
     },
-    {
-      icon: <MdDelete />,
-      colorScheme: "red",
-      variant: "ghost",
-      size: "sm",
-      onClick: () => openDialog(),
-    },
+    // {
+    //   icon: <MdDelete />,
+    //   colorScheme: "red",
+    //   variant: "ghost",
+    //   size: "sm",
+    //   onClick: () => openDialog(),
+    // },
   ];
 
   const headers = [
