@@ -25,7 +25,7 @@ import { useShowOwner, useUpdateOwner } from "@/hooks/useOwner";
 import CustomButton from "@/components/CustomButton";
 import Stepper from "@/components/Stepper";
 import Breadcrumb from "@/components/Breadcrumb";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
 import dateFormat from "@/utils/dateFormat";
 
@@ -35,6 +35,7 @@ const UpdateOwner = () => {
   const { mutate, isLoading } = useUpdateOwner(onSuccess, onError, id);
   const toast = useToast();
   const clientQuery = useQueryClient();
+  const router = useRouter();
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
@@ -98,14 +99,13 @@ const UpdateOwner = () => {
     // Call the mutation
     mutate(values, {
       onSuccess: () => {
-        setStep(0);
-        setActiveStep(0);
+        clientQuery.invalidateQueries("show-owner");
       },
     });
   };
 
   function onSuccess(data) {
-    clientQuery.invalidateQueries("show-owner");
+    router.push("/dashboard/show-owners/all");
     toast({
       title: "Congratulation!",
       description: data?.data?.message,
