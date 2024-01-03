@@ -1,11 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  ButtonGroup,
-  Flex,
-  useSteps,
-  useToast,
-} from "@chakra-ui/react";
+import { ButtonGroup, Flex, useSteps, useToast } from "@chakra-ui/react";
 
 import Layout from "@/components/Layout";
 import CustomBox from "@/components/CustomBox";
@@ -31,7 +26,10 @@ const AddContract = () => {
   const [step, setStep] = useState(0);
   const [ownerNames, setOwnerNames] = useState([]);
   const toast = useToast();
-  const { data: tenants, isLoading: tenantLoading } = useShowTenants();
+  const { data: tenants, isLoading: tenantLoading } = useShowTenants(
+    "",
+    999999999999999999
+  );
   const { data: inventories, isLoading: ownerLoading } =
     useShowInventoryOwners();
   const { data: agents, isLoading: agentLoading } = useShowAgents();
