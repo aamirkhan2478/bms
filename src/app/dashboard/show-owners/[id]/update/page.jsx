@@ -26,7 +26,7 @@ import CustomButton from "@/components/CustomButton";
 import Stepper from "@/components/Stepper";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useParams } from "next/navigation";
-import { QueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import dateFormat from "@/utils/dateFormat";
 
 const UpdateOwner = () => {
@@ -34,7 +34,7 @@ const UpdateOwner = () => {
   const { data, isLoading: isOwnerLoading } = useShowOwner(id);
   const { mutate, isLoading } = useUpdateOwner(onSuccess, onError, id);
   const toast = useToast();
-  const clientQuery = new QueryClient();
+  const clientQuery = useQueryClient();
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
@@ -59,7 +59,6 @@ const UpdateOwner = () => {
   }, [data?.data?.data?.owner]);
 
   if (!data || !data.data || !data.data.data) {
-    // You can return a loading indicator or an error message here
     return (
       <Layout>
         <Flex justifyContent="center" alignItems="center" h="100vh">
@@ -235,7 +234,7 @@ const UpdateOwner = () => {
                     />
                     <CustomButton
                       w="7rem"
-                      isDisabled={!isValid || !dirty || step === 2}
+                      isDisabled={step === 2}
                       onClick={() => {
                         setStep(step + 1);
                         goToNext();
