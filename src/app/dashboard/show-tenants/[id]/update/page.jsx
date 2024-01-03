@@ -25,7 +25,7 @@ import { useShowTenant, useUpdateTenant } from "@/hooks/useTenant";
 import CustomButton from "@/components/CustomButton";
 import Stepper from "@/components/Stepper";
 import Breadcrumb from "@/components/Breadcrumb";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
 import dateFormat from "@/utils/dateFormat";
 
@@ -35,6 +35,7 @@ const UpdateTenant = () => {
   const { mutate, isLoading } = useUpdateTenant(onSuccess, onError, id);
   const toast = useToast();
   const clientQuery = useQueryClient();
+  const router = useRouter();
   const steps = [
     { title: "First", description: "Personal Info" },
     { title: "Second", description: "Job Details" },
@@ -98,14 +99,13 @@ const UpdateTenant = () => {
     // Call the mutation
     mutate(values, {
       onSuccess: () => {
-        setStep(0);
-        setActiveStep(0);
+        clientQuery.invalidateQueries("show-tenant");
       },
     });
   };
 
   function onSuccess(data) {
-    clientQuery.invalidateQueries("show-tenant");
+    router.push("/dashboard/show-tenants/all");
     toast({
       title: "Congratulation!",
       description: data?.data?.message,
