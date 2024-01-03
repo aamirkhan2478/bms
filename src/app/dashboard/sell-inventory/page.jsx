@@ -17,7 +17,10 @@ const SellInventory = () => {
     "",
     999999999999999999
   );
-  const { data: owners, isLoading: ownerLoading } = useShowOwners();
+  const { data: owners, isLoading: ownerLoading } = useShowOwners(
+    "",
+    999999999999999999
+  );
   const { mutate, isLoading } = useSellInventory(onSuccess, onError);
   const toast = useToast();
 
