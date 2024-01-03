@@ -24,7 +24,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { MdDelete, MdEdit, MdImage, MdRemoveRedEye } from "react-icons/md";
-import { QueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
 const ShowOwners = () => {
   const router = useRouter();
@@ -40,7 +40,7 @@ const ShowOwners = () => {
   const currentPage = parseInt(searchParams.get("currentPage")) || 1;
   const itemsPerPage = parseInt(searchParams.get("itemsPerPage")) || 5;
   const toast = useToast();
-  const clientQuery = new QueryClient();
+  const clientQuery = useQueryClient();
   const { data, isLoading } = useShowOwners(
     searchTerm,
     itemsPerPage,
@@ -139,13 +139,13 @@ const ShowOwners = () => {
       onClick: (item) =>
         router.push(`/dashboard/show-owners/${item._id}/update`),
     },
-    {
-      icon: <MdDelete />,
-      colorScheme: "red",
-      variant: "ghost",
-      size: "sm",
-      onClick: () => openDialog(),
-    },
+    // {
+    //   icon: <MdDelete />,
+    //   colorScheme: "red",
+    //   variant: "ghost",
+    //   size: "sm",
+    //   onClick: () => openDialog(),
+    // },
     {
       icon: <MdImage />,
       colorScheme: "purple",
