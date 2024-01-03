@@ -4,6 +4,7 @@ import { IoMdPerson, IoMdPersonAdd } from "react-icons/io";
 import {
   BsBuildingFill,
   BsBuildingFillAdd,
+  BsPersonFill,
   BsPersonFillAdd,
   BsSpeedometer,
 } from "react-icons/bs";
@@ -55,6 +56,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
       name: "Add Tenant",
       icon: BsPersonFillAdd,
       path: "/dashboard/add-tenant",
+    },
+    {
+      name: "Show Tenants",
+      icon: BsPersonFill,
+      path: "/dashboard/show-tenants/all",
     },
     { name: "Sell Inventory", icon: MdSell, path: "/dashboard/sell-inventory" },
     {
