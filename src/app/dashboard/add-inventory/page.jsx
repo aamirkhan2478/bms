@@ -2,11 +2,11 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import CustomBox from "@/components/CustomBox";
 import CustomButton from "@/components/CustomButton";
+import Form from "@/components/Form";
 import Layout from "@/components/Layout";
-import TextField from "@/components/TextField";
 import { useAddInventory } from "@/hooks/useInventory";
-import { Flex, FormControl, FormHelperText, useToast } from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
+import { useToast } from "@chakra-ui/react";
+import { Form as FormikForm, Formik } from "formik";
 import { useEffect } from "react";
 import { object, string } from "yup";
 
@@ -23,6 +23,36 @@ const AddInventory = () => {
     {
       value: "Office",
       label: "Office",
+    },
+  ];
+
+  const formFields = [
+    {
+      id: "inventory",
+      name: "inventoryType",
+      isRequired: true,
+      label: "Inventory Type",
+      flexBasis: "100%",
+      selectChange: true,
+      data,
+    },
+    {
+      id: "floor-no",
+      name: "floor",
+      isRequired: true,
+      label: "Floor No.",
+      flexBasis: "100%",
+      fieldType: "input",
+      placeHolder: "Enter floor no.",
+    },
+    {
+      id: "flat-no",
+      name: "flatNo",
+      isRequired: true,
+      label: "Flat/Shop/Office No.",
+      flexBasis: "100%",
+      fieldType: "input",
+      placeHolder: "Enter Flat/Shop/Office No.",
     },
   ];
 
@@ -104,74 +134,24 @@ const AddInventory = () => {
             handleChange,
             setFieldValue,
           }) => (
-            <>
-              <Form>
-                <Flex direction={"column"} gap={5}>
-                  <FormControl id="inventory" isRequired>
-                    <Field
-                      as={TextField}
-                      data={data}
-                      placeHolder={"Select Inventory Type"}
-                      name={"inventoryType"}
-                      label={"Inventory Type"}
-                      isInvalid={
-                        Boolean(errors.inventoryType) &&
-                        Boolean(touched.inventoryType)
-                      }
-                      errorBorderColor="orange.500"
-                      onBlur={handleBlur}
-                      onChange={(e) => setFieldValue("inventoryType", e)}
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(touched.inventoryType) && errors.inventoryType}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl id="Floor-no" isRequired>
-                    <Field
-                      as={TextField}
-                      fieldType={"input"}
-                      placeHolder={"Enter floor no."}
-                      name={"floor"}
-                      label={"Floor No."}
-                      isInvalid={
-                        Boolean(errors.floor) && Boolean(touched.floor)
-                      }
-                      onBlur={handleBlur}
-                      onChange={handleChange("floor")}
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(touched.floor) && errors.floor}
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl id="inventory-number" isRequired>
-                    <Field
-                      as={TextField}
-                      placeHolder={"Enter flat/shop/office no."}
-                      name={"flatNo"}
-                      fieldType={"input"}
-                      label={"Flat/Shop/Office No."}
-                      isInvalid={
-                        Boolean(errors.flatNo) && Boolean(touched.flatNo)
-                      }
-                      onBlur={handleBlur}
-                      onChange={handleChange("flatNo")}
-                    />
-                    <FormHelperText color="red">
-                      {Boolean(touched.flatNo) && errors.flatNo}
-                    </FormHelperText>
-                  </FormControl>
-
-                  <CustomButton
-                    text={"Add Inventory"}
-                    w={"20%"}
-                    alignSelf={"start"}
-                    type="submit"
-                    isDisabled={!isValid || !dirty}
-                    isLoading={isLoading}
-                  />
-                </Flex>
-              </Form>
-            </>
+            <FormikForm>
+              <Form
+                errors={errors}
+                formFields={formFields}
+                handleBlur={handleBlur}
+                handleChange={handleChange}
+                setFieldValue={setFieldValue}
+                touched={touched}
+              />
+              <CustomButton
+                text={"Add Inventory"}
+                w={"20%"}
+                alignSelf={"start"}
+                type="submit"
+                isDisabled={!isValid || !dirty}
+                isLoading={isLoading}
+              />
+            </FormikForm>
           )}
         </Formik>
       </CustomBox>
