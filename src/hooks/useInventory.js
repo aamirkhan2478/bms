@@ -27,6 +27,10 @@ const shownInventoriesWithOwners = () => {
   return axios.get("/inventory/show-inventories-with-owners");
 };
 
+const updateInventory = (id) => (values) => {
+  return axios.patch(`/inventory/${id}/update`, values);
+};
+
 export const useAddInventory = (onSuccess, onError) => {
   return useMutation(inventory, {
     onSuccess,
@@ -51,4 +55,11 @@ export const useSellInventory = (onSuccess, onError) => {
 
 export const useShowInventoryOwners = () => {
   return useQuery("show-inventories-with-owners", shownInventoriesWithOwners);
+};
+
+export const useUpdateInventory = (onSuccess, onError, id) => {
+  return useMutation(updateInventory(id), {
+    onSuccess,
+    onError,
+  });
 };
