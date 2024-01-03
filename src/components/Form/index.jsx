@@ -131,7 +131,8 @@ const Form = ({
                       : selectChange ||
                         name === "tenants" ||
                         name === "agents" ||
-                        name === "inventory"
+                        name === "inventory" ||
+                        name === "inventoryType"
                       ? changeSelect(name)
                       : handleChange(name)
                   }
