@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import {
   Table,
   Thead,
@@ -167,6 +167,7 @@ const DataTable = ({
               <option value={5}>5 per page</option>
               <option value={10}>10 per page</option>
               <option value={15}>15 per page</option>
+              <option value={20}>20 per page</option>
             </Select>
             <Flex gap={3} justifyContent={"center"} alignItems={"center"}>
               <IconButton
