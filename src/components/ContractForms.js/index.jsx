@@ -1,5 +1,6 @@
 import { Flex, Heading } from "@chakra-ui/react";
 import Form from "../Form";
+import { useEffect } from "react";
 
 export const ContractInfoForm = ({
   handleBlur,
@@ -14,7 +15,17 @@ export const ContractInfoForm = ({
   ownerNames,
   tenantLoading,
   ownerLoading,
+  result,
+  setResult,
 }) => {
+  useEffect(() => {
+    const managementCharges = Number(
+      values.buildingManagementCharges.replace(/,/g, "")
+    );
+    const monthlyAmount = Number(values.monthlyRentalAmount.replace(/,/g, ""));
+    const total = (managementCharges + monthlyAmount) * 2;
+    setResult(isNaN(total) ? "Invalid Input" : total);
+  }, [values.monthlyRentalAmount, values.buildingManagementCharges]);
   const formFields = [
     {
       id: "tenant-name",
@@ -94,7 +105,7 @@ export const ContractInfoForm = ({
       flexBasis: { md: "48%", sm: "100%" },
       isRequired: true,
       numberFormat: true,
-      defaultValue: values.monthlyAmount,
+      defaultValue: values.monthlyRentalAmount,
     },
     {
       id: "tax-amount",
@@ -107,7 +118,7 @@ export const ContractInfoForm = ({
       flexBasis: { md: "48%", sm: "100%" },
       isRequired: true,
       numberFormat: true,
-      defaultValue: values.taxAmount,
+      defaultValue: values.monthlyTaxAmount,
     },
     {
       id: "management-charges",
@@ -120,7 +131,7 @@ export const ContractInfoForm = ({
       flexBasis: { md: "48%", sm: "100%" },
       isRequired: true,
       numberFormat: true,
-      defaultValue: values.managementCharges,
+      defaultValue: values.buildingManagementCharges,
     },
     {
       id: "deposit-amount",
@@ -133,7 +144,8 @@ export const ContractInfoForm = ({
       flexBasis: { md: "48%", sm: "100%" },
       isRequired: true,
       numberFormat: true,
-      defaultValue: values.depositAmount,
+      value: result,
+      readOnly: true,
     },
     {
       id: "annual-increment",
@@ -145,7 +157,7 @@ export const ContractInfoForm = ({
       flexBasis: "100%",
       isRequired: true,
       numberFormat: true,
-      defaultValue: values.annualIncrement,
+      defaultValue: values.annualRentalIncrease,
     },
   ];
 
@@ -210,7 +222,7 @@ export const MoreInfoForm = ({
       fieldType: "input",
       label: "Monthly Due Date",
       name: "monthlyRentalDueDate",
-      defaultValue: values.dueDate,
+      defaultValue: values.monthlyRentalDueDate,
       isRequired: true,
       flexBasis: { md: "48%", sm: "100%" },
     },
@@ -220,7 +232,7 @@ export const MoreInfoForm = ({
       fieldType: "input",
       label: "Monthly Over Due Date",
       name: "monthlyRentalOverDate",
-      defaultValue: values.overDue,
+      defaultValue: values.monthlyRentalOverDate,
       isRequired: true,
       flexBasis: { md: "48%", sm: "100%" },
     },
