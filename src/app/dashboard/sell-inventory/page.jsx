@@ -2,13 +2,13 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import CustomBox from "@/components/CustomBox";
 import CustomButton from "@/components/CustomButton";
+import Form from "@/components/Form";
 import Layout from "@/components/Layout";
-import TextField from "@/components/TextField";
 import { useSellInventory, useShowInventories } from "@/hooks/useInventory";
 import { useShowOwners } from "@/hooks/useOwner";
 import mappingArray from "@/utils/mappingArray";
-import { Flex, FormControl, useToast } from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
+import { useToast } from "@chakra-ui/react";
+import { Form as ChakraForm, Formik } from "formik";
 import { useEffect } from "react";
 import { date, object } from "yup";
 
@@ -42,6 +42,33 @@ const SellInventory = () => {
     "_id",
     (owner) => owner.name
   );
+
+  const formFields = [
+    {
+      name: "inventoryId",
+      label: "Inventory",
+      data: mappingInventories,
+      isRequired: true,
+      flexBasis: "100%",
+      selectChange: true,
+    },
+    {
+      name: "ownerId",
+      label: "Owner",
+      data: mappingOwners,
+      isRequired: true,
+      flexBasis: "100%",
+      selectChange: true,
+    },
+    {
+      name: "purchaseDate",
+      label: "Purchase Date",
+      fieldType: "input",
+      type: "date",
+      isRequired: true,
+      flexBasis: "100%",
+    },
+  ];
 
   const clickHandler = (values) => {
     const inventory = values.inventoryId.value;
@@ -108,78 +135,25 @@ const SellInventory = () => {
             setFieldValue,
           }) => (
             <>
-              <Form>
-                <Flex direction={"column"} gap={5}>
-                  <FormControl id="inventory" isRequired>
-                    <Field
-                      component={TextField}
-                      data={mappingInventories}
-                      placeHolder={"Select Inventory"}
-                      name={"inventoryId"}
-                      label={"Inventory"}
-                      isInvalid={
-                        Boolean(errors.inventoryId) &&
-                        Boolean(touched.inventoryId)
-                      }
-                      onBlur={handleBlur}
-                      onChange={(e) => setFieldValue("inventoryId", e)}
-                      isLoading={inventoryLoading}
-                      isDisabled={inventoryLoading}
-                      helperText={
-                        Boolean(touched.inventoryId) && errors.inventoryId
-                      }
-                      helperColorText={"red"}
-                    />
-                  </FormControl>
-                  <FormControl id="owner" isRequired>
-                    <Field
-                      component={TextField}
-                      data={mappingOwners}
-                      placeHolder={"Select Owner"}
-                      name={"ownerId"}
-                      label={"Owner"}
-                      isInvalid={
-                        Boolean(errors.ownerId) && Boolean(touched.ownerId)
-                      }
-                      onBlur={handleBlur}
-                      onChange={(e) => setFieldValue("ownerId", e)}
-                      isLoading={ownerLoading}
-                      isDisabled={ownerLoading}
-                      helperText={Boolean(touched.ownerId) && errors.ownerId}
-                      helperColorText={"red"}
-                    />
-                  </FormControl>
-                  <FormControl id="purchaseDate" isRequired>
-                    <Field
-                      as={TextField}
-                      placeHolder={"Select Purchase Date"}
-                      name={"purchaseDate"}
-                      fieldType={"input"}
-                      type="date"
-                      label={"Purchase Date"}
-                      isInvalid={
-                        Boolean(errors.purchaseDate) &&
-                        Boolean(touched.purchaseDate)
-                      }
-                      onBlur={handleBlur}
-                      onChange={handleChange("purchaseDate")}
-                      helperText={
-                        Boolean(touched.purchaseDate) && errors.purchaseDate
-                      }
-                      helperColorText={"red"}
-                    />
-                  </FormControl>
+              <ChakraForm>
+                <Form
+                  errors={errors}
+                  formFields={formFields}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
+                  setFieldValue={setFieldValue}
+                  touched={touched}
+                />
 
-                  <CustomButton
-                    text={"Sell Inventory"}
-                    w={{ base: "", md: "20%" }}
-                    alignSelf={"start"}
-                    type="submit"
-                    isDisabled={!isValid || !dirty}
-                    isLoading={isLoading}
-                  />
-                </Flex>
-              </Form>
+                <CustomButton
+                  text={"Sell Inventory"}
+                  w={{ base: "", md: "20%" }}
+                  alignSelf={"start"}
+                  type="submit"
+                  isDisabled={!isValid || !dirty}
+                  isLoading={isLoading}
+                />
+              </ChakraForm>
             </>
           )}
         </Formik>
