@@ -12,7 +12,6 @@ export const contractInfoFormSchema = object({
   buildingManagementCharges: string().required(
     "Management Charges is Required!"
   ),
-  securityDepositAmount: string().required("Deposit Amount is Required!"),
   annualRentalIncrease: string().required("Annual Increment is Required!"),
 });
 
