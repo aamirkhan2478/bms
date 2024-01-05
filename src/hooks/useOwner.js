@@ -14,7 +14,7 @@ const showOwners = ({ queryKey }) => {
 
 const showOwner = ({ queryKey }) => {
   const id = queryKey[1];
-  return axios.get(`/owner/${id}`);
+  return axios.get(`/owner/${id}/show`);
 };
 
 const updateOwner = (id) => (values) => {
@@ -24,6 +24,11 @@ const updateOwner = (id) => (values) => {
 const updateImage = (id) => (values) => {
   return axios.patch(`/owner/${id}/update-images`, values);
 };
+
+const expiredCnic = () => {
+  return axios.get("/owner/expired-cnic");
+};
+
 export const useAddOwner = (onSuccess, onError) => {
   return useMutation(owner, {
     onSuccess,
@@ -51,4 +56,8 @@ export const useUpdateImage = (onSuccess, onError, id) => {
     onSuccess,
     onError,
   });
+};
+
+export const useOwnerExpiredCnic = () => {
+  return useQuery("expired-cnic", expiredCnic);
 };
