@@ -5,7 +5,7 @@ const tenant = (values) => {
   return axios.post("/tenant/add", values);
 };
 
-const showTenants = ({queryKey}) => {
+const showTenants = ({ queryKey }) => {
   const search = queryKey[1];
   const limit = queryKey[2];
   const page = queryKey[3];
@@ -14,7 +14,7 @@ const showTenants = ({queryKey}) => {
 
 const showTenant = ({ queryKey }) => {
   const id = queryKey[1];
-  return axios.get(`/tenant/${id}`);
+  return axios.get(`/tenant/${id}/show`);
 };
 
 const updateTenant = (id) => (values) => {
@@ -25,6 +25,10 @@ const updateImage = (id) => (values) => {
   return axios.patch(`/tenant/${id}/update-images`, values);
 };
 
+const expiredCnic = () => {
+  return axios.get("/tenant/expired-cnic");
+};
+
 export const useAddTenant = (onSuccess, onError) => {
   return useMutation(tenant, {
     onSuccess,
@@ -32,7 +36,7 @@ export const useAddTenant = (onSuccess, onError) => {
   });
 };
 
-export const useShowTenants = (search="", limit=5, page=1) => {
+export const useShowTenants = (search = "", limit = 5, page = 1) => {
   return useQuery(["show-tenants", search, limit, page], showTenants);
 };
 
@@ -52,4 +56,8 @@ export const useUpdateImage = (onSuccess, onError, id) => {
     onSuccess,
     onError,
   });
+};
+
+export const useTenantExpiredCnic = () => {
+  return useQuery("expired-cnic", expiredCnic);
 };
