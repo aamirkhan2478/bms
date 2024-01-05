@@ -16,7 +16,7 @@ const showInventories = ({ queryKey }) => {
 
 const showInventory = ({ queryKey }) => {
   const id = queryKey[1];
-  return axios.get(`/inventory/${id}`);
+  return axios.get(`/inventory/${id}/show`);
 };
 
 const sellInventory = (values) => {
@@ -30,6 +30,14 @@ const shownInventoriesWithOwners = () => {
 const updateInventory = (id) => (values) => {
   return axios.patch(`/inventory/${id}/update`, values);
 };
+
+const inventoryOpenForSell = () => {
+  return axios.get("/inventory/open-for-sell");
+}
+
+const vacantInventories = () => {
+  return axios.get("/inventory/vacant-inventories");
+}
 
 export const useAddInventory = (onSuccess, onError) => {
   return useMutation(inventory, {
@@ -62,4 +70,12 @@ export const useUpdateInventory = (onSuccess, onError, id) => {
     onSuccess,
     onError,
   });
+};
+
+export const useInventoryOpenForSell = () => {
+  return useQuery("inventory-open-for-sell", inventoryOpenForSell);
+};
+
+export const useVacantInventories = () => {
+  return useQuery("vacant-inventories", vacantInventories);
 };
