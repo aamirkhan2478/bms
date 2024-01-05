@@ -25,6 +25,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 const AddContract = () => {
   const [step, setStep] = useState(0);
   const [ownerNames, setOwnerNames] = useState([]);
+  const [result, setResult] = useState("");
   const toast = useToast();
   const { data: tenants, isLoading: tenantLoading } = useShowTenants(
     "",
@@ -75,13 +76,12 @@ const AddContract = () => {
     monthlyRentalAmount: "",
     monthlyTaxAmount: "",
     buildingManagementCharges: "",
-    securityDepositAmount: "",
     annualRentalIncrease: "",
     wapdaSubmeterReading: "",
     generatorSubmeterReading: "",
     waterSubmeterReading: "",
-    monthlyRentalDueDate: "",
-    monthlyRentalOverDate: "",
+    monthlyRentalDueDate: "3",
+    monthlyRentalOverDate: "5",
     agent: "",
     terminationNoticePeriod: "",
     nonrefundableSecurityDeposit: "yes",
@@ -114,7 +114,7 @@ const AddContract = () => {
       "buildingManagementCharges",
       values.buildingManagementCharges
     );
-    formData.append("securityDepositAmount", values.securityDepositAmount);
+    formData.append("securityDepositAmount", result);
     formData.append("annualRentalIncrease", values.annualRentalIncrease);
     formData.append("wapdaSubmeterReading", values.wapdaSubmeterReading);
     formData.append(
@@ -224,6 +224,8 @@ const AddContract = () => {
                   searchTwoData={inventoriesData}
                   tenantLoading={tenantLoading}
                   ownerLoading={ownerLoading}
+                  result={result}
+                  setResult={setResult}
                 />
               )}
               {step === 1 && (
