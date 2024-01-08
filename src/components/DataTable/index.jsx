@@ -42,7 +42,7 @@ const DataTable = ({
   // Change page
   const paginate = (pageNumber) => {
     router.replace(
-      `?currentPage=${pageNumber}&searchTerm=${searchTerm}&itemsPerPage=${itemsPerPage}`
+      `?currentPage=${pageNumber}&itemsPerPage=${itemsPerPage}`
     );
   };
 
@@ -157,7 +157,7 @@ const DataTable = ({
               value={itemsPerPage}
               onChange={(e) => {
                 router.replace(
-                  `?currentPage=${1}&searchTerm=${searchTerm}&itemsPerPage=${
+                  `?currentPage=${1}&itemsPerPage=${
                     e.target.value
                   }`
                 );
