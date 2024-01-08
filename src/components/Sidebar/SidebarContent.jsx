@@ -15,6 +15,7 @@ import {
   MdSell,
 } from "react-icons/md";
 import { FaMeteor } from "react-icons/fa";
+import { FaBuildingUser } from "react-icons/fa6";
 import Image from "next/image";
 import logo from "@/../public/bms_logo.png";
 
@@ -63,6 +64,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
       path: "/dashboard/show-tenants/all",
     },
     { name: "Sell Inventory", icon: MdSell, path: "/dashboard/sell-inventory" },
+    {
+      name: "Sold Inventories",
+      icon: FaBuildingUser,
+      path: "/dashboard/sold-inventories/all",
+    },
     {
       name: "Add Contract",
       icon: MdAssignment,
