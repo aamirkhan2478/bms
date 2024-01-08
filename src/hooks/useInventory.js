@@ -33,11 +33,24 @@ const updateInventory = (id) => (values) => {
 
 const inventoryOpenForSell = () => {
   return axios.get("/inventory/open-for-sell");
-}
+};
 
 const vacantInventories = () => {
   return axios.get("/inventory/vacant-inventories");
-}
+};
+
+const soldInventories = ({ queryKey }) => {
+  const search = queryKey[1];
+  const limit = queryKey[2];
+  const page = queryKey[3];
+  return axios.get(
+    `/inventory/sold-inventories/all?search=${search}&limit=${limit}&page=${page}`
+  );
+};
+
+const updateStatus = (id) => (values) => {
+  return axios.patch(`/inventory/update-status/${id}`, values);
+};
 
 export const useAddInventory = (onSuccess, onError) => {
   return useMutation(inventory, {
@@ -78,4 +91,15 @@ export const useInventoryOpenForSell = () => {
 
 export const useVacantInventories = () => {
   return useQuery("vacant-inventories", vacantInventories);
+};
+
+export const useSoldInventories = (search = "", limit = 5, page = 1) => {
+  return useQuery(["sold-inventories", search, limit, page], soldInventories);
+};
+
+export const useUpdateStatus = (onSuccess, onError, id) => {
+  return useMutation(updateStatus(id), {
+    onSuccess,
+    onError,
+  });
 };
